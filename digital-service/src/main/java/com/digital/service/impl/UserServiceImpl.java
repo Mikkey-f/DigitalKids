@@ -6,7 +6,7 @@ import com.digital.config.JwtConfig;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.mapper.UserMapper;
 import com.digital.model.entity.User;
-import com.digital.model.vo.LoginUerVo;
+import com.digital.model.vo.LoginUserVo;
 import com.digital.result.Result;
 import com.digital.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public Result<LoginUerVo> loginUser(String phoneNum, String password) {
+    public Result<LoginUserVo> loginUser(String phoneNum, String password) {
         if (phoneNum == null || password == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_NULL.getMessage());
         }
@@ -112,10 +112,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
 
         String token = jwtConfig.createToken(phoneNum);
-        LoginUerVo loginUerVo = new LoginUerVo();
-        BeanUtils.copyProperties(user, loginUerVo);
-        loginUerVo.setToken(token);
+        LoginUserVo loginUserVo = new LoginUserVo();
+        BeanUtils.copyProperties(user, loginUserVo);
+        loginUserVo.setToken(token);
 
-        return Result.success(loginUerVo);
+        return Result.success(loginUserVo);
     }
 }

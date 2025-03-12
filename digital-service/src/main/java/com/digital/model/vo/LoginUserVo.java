@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @CreateTime: 2025-03-12  20:14
  */
 @Data
-public class LoginUerVo implements Serializable {
+public class LoginUserVo implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 用户 id
