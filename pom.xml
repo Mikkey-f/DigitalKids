@@ -14,7 +14,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>digital-common</module>
-        <module>digital-models</module>
         <module>digital-service</module>
     </modules>
     <properties>
