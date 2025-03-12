@@ -8,9 +8,12 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultErrorEnum {
-    PARAM_IS_NULL(1, "参数不能为空"),
-    ACCOUNT_IS_REPEAT(2, "账户重复"),
-    PHONE_NUMBER_IS_REPEAT(3, "电话号码已经注册");
+    PARAM_IS_NULL(101, "参数不能为空"),
+    ACCOUNT_IS_REPEAT(102, "账户重复"),
+    PHONE_NUMBER_IS_REPEAT(103, "电话号码已经注册"),
+    NEED_RIGHT_AUTH(104, "权限不足"),
+    NO_AUTH_ERROR(105, "认证失败"),
+    SUCCESS(500, "成功!");
     Integer code;
     String message;
 
