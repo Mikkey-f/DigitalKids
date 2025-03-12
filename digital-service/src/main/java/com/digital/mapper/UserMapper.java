@@ -1,7 +1,7 @@
 package com.digital.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.digital.model.entity.Users;
+import com.digital.model.entity.User;
 
 /**
 * @author 普罗米修斯
@@ -9,7 +9,7 @@ import com.digital.model.entity.Users;
 * @createDate 2025-03-12 08:57:55
 * @Entity com.digital.entity.Users
 */
-public interface UsersMapper extends BaseMapper<Users> {
+public interface UserMapper extends BaseMapper<User> {
 
 }
 

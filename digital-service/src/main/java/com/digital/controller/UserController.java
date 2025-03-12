@@ -3,7 +3,7 @@ package com.digital.controller;
 import com.digital.enums.ResultSuccessEnum;
 import com.digital.model.request.UserRegisterReq;
 import com.digital.result.Result;
-import com.digital.service.UsersService;
+import com.digital.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    UsersService userService;
+    UserService userService;
 
     /**
      * 用户注册
      * @param userRegisterReq 用户注册请求
      * @return 返回响应
      */
-    @PostMapping("/users/register")
+    @PostMapping("/user/register")
     public Result registerUser(@RequestBody UserRegisterReq userRegisterReq) {
         Result result = userService.registerUser(userRegisterReq.getUsername(), userRegisterReq.getPassword(), userRegisterReq.getAvatar(), userRegisterReq.getPhoneNum());
         result.setMsg(ResultSuccessEnum.REGISTER_SUCCESS.getMsg());

@@ -1,10 +1,9 @@
 package com.digital.service.impl;
 
-import com.digital.model.entity.Users;
+import com.digital.model.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -19,10 +18,10 @@ import java.util.List;
 @Setter
 public class CustomUserDetails implements UserDetails {
 
-    private Users user;
+    private User user;
     private List<GrantedAuthority> authorities;
 
-    public CustomUserDetails(Users user, List<GrantedAuthority> authorities) {
+    public CustomUserDetails(User user, List<GrantedAuthority> authorities) {
         this.user = user;
         this.authorities = authorities;
     }

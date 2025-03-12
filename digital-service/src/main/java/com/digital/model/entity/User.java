@@ -7,14 +7,13 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * @TableName users
  */
 @Data
-@TableName("users")
-public class Users {
+@TableName("user")
+public class User {
     @TableId(type = IdType.AUTO)
     private Long id;
 

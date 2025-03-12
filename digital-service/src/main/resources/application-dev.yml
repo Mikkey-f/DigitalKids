@@ -11,3 +11,12 @@ sky:
 mybatis-plus:
   mapper-locations: classpath:/mappers/*Mapper.xml
   type-aliases-package: com.digital.entity
+config:
+  jwt:
+    # 加密密钥
+    secret: digitalKids
+    # token有效时长
+    expire: 3600
+    # header 名称
+    header: token
+
