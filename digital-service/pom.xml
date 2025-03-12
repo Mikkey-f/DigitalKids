@@ -124,6 +124,12 @@
             <version>3.5.2</version> <!-- 请检查最新版本 -->
         </dependency>
 
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.12.3</version>
+        </dependency>
+
 
     </dependencies>
 
