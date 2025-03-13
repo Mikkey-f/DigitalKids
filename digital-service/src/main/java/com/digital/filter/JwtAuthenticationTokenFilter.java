@@ -1,6 +1,7 @@
 package com.digital.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.aliyun.oss.common.utils.AuthUtils;
 import com.digital.config.JwtConfig;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.result.Result;
@@ -8,6 +9,8 @@ import com.digital.service.impl.CustomUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,25 +61,35 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 2 解析 token
         String usernameFromToken;
         usernameFromToken = jwtConfig.getUsernameFromToken(token);
-        if (!StringUtils.hasText(usernameFromToken)) {
-            returnJson(response, JSON.toJSONString(ResultErrorEnum.TOKEN_ERROR));
-            return;
+        // 如果是游客 guestId_bd7130c67a674c6bb9decb847cd21bf1
+        // 不是游客会是 phoneNum
+
+        // 是游客就放行
+        String[] split = usernameFromToken.split("_");
+        if (split.length == 2) {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("anonymousUser", null, AuthorityUtils.createAuthorityList("ROLE_GUEST"));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        } else {
+            if (!StringUtils.hasText(usernameFromToken)) {
+                returnJson(response, JSON.toJSONString(ResultErrorEnum.TOKEN_ERROR));
+                return;
+            }
+
+            CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(usernameFromToken);
+
+            // 3 获取 userId 用户信息
+            if (Objects.isNull(userDetails)) {
+                returnJson(response, JSON.toJSONString(ResultErrorEnum.TOKEN_ERROR));
+                return;
+            }
+
+            // 4 封装 Authentication
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+            // 5 存入 SecurityContextHolder
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
-
-        CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(usernameFromToken);
-
-        // 3 获取 userId 用户信息
-        if (Objects.isNull(userDetails)) {
-            returnJson(response, JSON.toJSONString(ResultErrorEnum.TOKEN_ERROR));
-            return;
-        }
-
-        // 4 封装 Authentication
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-        // 5 存入 SecurityContextHolder
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         // 放行
         filterChain.doFilter(request, response);

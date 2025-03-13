@@ -42,4 +42,6 @@ public class LoginUserVo implements Serializable {
     private String location;
 
     private String token;
+
+    private String role;
 }
