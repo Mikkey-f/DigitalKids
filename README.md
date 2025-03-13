@@ -2,7 +2,7 @@
 
 ### 1 架构
 
-![](D:\workSpace\ideaWorkspace\digitalKids\images\image-20250311193135106.png)
+https://github.com/Mikkey-f/DigitalKids/blob/main/images/image-20250311193135106.png
 
 - digital-common 为一些项目常量，例如自定义注解，常量，异常，回复，工具类
 - digital-models 为一些实体类封装，entity request vo 分别为实体类，前端请求封装，返回实体封装
@@ -16,6 +16,7 @@
 ## 2 更进
 
 - 根据情况每周会开会更进进度
+
 
 ## 3 数据库
 - 表在db.sql中
