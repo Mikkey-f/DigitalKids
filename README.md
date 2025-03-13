@@ -16,3 +16,9 @@ https://github.com/Mikkey-f/DigitalKids/blob/main/images/image-20250311193135106
 ## 2 更进
 
 - 根据情况每周会开会更进进度
+
+
+## 3 数据库
+- 表在db.sql中
+- 建议测试user写 (name:test, avatar:test, phone:test, password:123456)
+- 后面开发时，直接在db.sql后面加入你的建表和数据插入语句就行了
