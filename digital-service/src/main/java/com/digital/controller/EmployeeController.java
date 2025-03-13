@@ -1,4 +1,4 @@
-package com.digital.controller.admin;
+package com.digital.controller;
 
 
 import com.digital.result.Result;
