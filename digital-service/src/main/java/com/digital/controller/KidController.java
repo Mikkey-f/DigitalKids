@@ -1,8 +1,9 @@
 package com.digital.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import com.digital.model.entity.Kid;
 import com.digital.model.request.KidAddReq;
+import com.digital.model.request.KidUpdateReq;
 import com.digital.result.Result;
 import com.digital.service.KidService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,17 +43,14 @@ public class KidController {
     //添加儿童的信息
     @PostMapping("/kids")
     public Result<?> addKid(@RequestBody KidAddReq kidAddReq) {
-        Result result = kidService.add(kidAddReq.getAvatar(),kidAddReq.getNickname(),kidAddReq.getBirthdate(),kidAddReq.getHeight(),kidAddReq.getWeight());
+        Result result = kidService.add(kidAddReq.getUser_id(), kidAddReq.getAvatar(),kidAddReq.getNickname(),kidAddReq.getBirthdate(),kidAddReq.getHeight(),kidAddReq.getWeight());
         return result;
     }
 
     //修改儿童信息
     @PutMapping("/kids")
-    public Result<?> updateKid(@RequestBody Kid kid) {
-        if (kid.getId() == null) {
-            return Result.error("ID不能为空");
-        }
-        boolean isUpdated = kidService.updateById(kid);
-        return isUpdated ? Result.success(null) : Result.error( "修改失败");
+    public Result<?> updateKid(@RequestBody KidUpdateReq kidUpdateReq) {
+        Result result = kidService.update(kidUpdateReq.getId(), kidUpdateReq.getAvatar(), kidUpdateReq.getNickname(), kidUpdateReq.getBirthdate(), kidUpdateReq.getHeight(), kidUpdateReq.getWeight());
+        return result;
     }
 }

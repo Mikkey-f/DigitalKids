@@ -5,8 +5,8 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class KidAddReq {
-    private Long user_id;
+public class KidUpdateReq {
+    private Long id;
 
     private String avatar;
 

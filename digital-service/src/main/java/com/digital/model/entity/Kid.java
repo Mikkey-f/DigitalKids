@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 @TableName("Kid")
 public class Kid {
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     private Long userId;
