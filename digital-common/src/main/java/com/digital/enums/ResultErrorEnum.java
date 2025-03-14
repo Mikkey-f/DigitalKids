@@ -22,8 +22,6 @@ public enum ResultErrorEnum {
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
 
-
-
     SUCCESS(500, "成功!");
     Integer code;
     String message;
