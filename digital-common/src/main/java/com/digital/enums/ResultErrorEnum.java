@@ -19,7 +19,10 @@ public enum ResultErrorEnum {
     THIS_USER_NOT_REGISTER(108, "没有注册"),
     PASSWORD_ERROR(109, "密码错误"),
     PARAM_INPUT_TOO_SHORT(110, "参数长度太短"),
+
     W_PARAM_IS_NULL(201, "儿童不能为空"),
+
+
 
     SUCCESS(500, "成功!");
     Integer code;

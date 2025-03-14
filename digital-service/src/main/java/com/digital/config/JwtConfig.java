@@ -78,10 +78,17 @@ public class JwtConfig {
      */
     public String getUsernameFromToken(String token) {
         Claims tokenClaim = getTokenClaim(token);
+<<<<<<< HEAD
         if(tokenClaim==null){
             return null;
         }else{
             return  tokenClaim.getSubject();
+=======
+        if(tokenClaim == null){
+            return null;
+        }else{
+            return tokenClaim.getSubject();
+>>>>>>> 3e1045ede3b7b3d2e0b41ee8184db19d5df6faad
         }
     }
 
