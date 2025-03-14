@@ -1,7 +1,9 @@
 package com.digital.filter;
 
 import com.alibaba.fastjson.JSON;
+
 import com.aliyun.oss.common.utils.AuthUtils;
+
 import com.digital.config.JwtConfig;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.result.Result;
@@ -9,8 +11,10 @@ import com.digital.service.impl.CustomUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -61,6 +65,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 2 解析 token
         String usernameFromToken;
         usernameFromToken = jwtConfig.getUsernameFromToken(token);
+
         // 如果是游客 guestId_bd7130c67a674c6bb9decb847cd21bf1
         // 不是游客会是 phoneNum
 
@@ -90,6 +95,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // 5 存入 SecurityContextHolder
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+
 
         // 放行
         filterChain.doFilter(request, response);

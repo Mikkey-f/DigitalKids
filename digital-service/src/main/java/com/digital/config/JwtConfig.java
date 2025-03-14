@@ -78,6 +78,7 @@ public class JwtConfig {
      */
     public String getUsernameFromToken(String token) {
         Claims tokenClaim = getTokenClaim(token);
+
         if(tokenClaim == null){
             return null;
         }else{
