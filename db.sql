@@ -18,10 +18,7 @@ CREATE TABLE user_role (
                            user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                            role_id VARCHAR(255) NOT NULL
 );
-CREATE TABLE user (
-                      user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                      role_id VARCHAR(255) NOT NULL
-);
+
 create table user
 (
     id          bigint auto_increment
@@ -53,3 +50,16 @@ INSERT INTO user_role (user_id, role_id) VALUES
     (1, 2);
 
 
+
+DROP TABLE IF EXISTS `Kid`;
+CREATE TABLE `Kid` (
+                       `id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '孩子唯一标识',
+                       `user_id` BIGINT NOT NULL COMMENT '关联的用户ID',
+                       `avatar` VARCHAR(500) COLLATE utf8mb4_bin DEFAULT '/default_avatar.png' COMMENT '头像URL',
+                       `nickname` VARCHAR(50) COLLATE utf8mb4_bin NOT NULL COMMENT '昵称',
+                       `birthdate` VARCHAR(50) COMMENT '生日',
+                       `height` DECIMAL(4,2) COMMENT '身高(单位：米)',
+                       `weight` DECIMAL(5,2) COMMENT '体重(单位：千克)',
+                       `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                       `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='孩子信息表';
