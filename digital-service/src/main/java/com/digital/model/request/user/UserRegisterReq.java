@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class UserRegisterReq {
 
-    private String username;
+    private String name;
 
     private String password;
 

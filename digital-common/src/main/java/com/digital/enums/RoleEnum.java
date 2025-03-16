@@ -10,10 +10,10 @@ import org.springframework.util.ObjectUtils;
  */
 @Getter
 public enum RoleEnum {
-    ADMIN(001, "admin"),
-    USER(002, "user"),
-    GUEST(003, "guest"),
-    BAN(004, "ban");
+    ADMIN(1, "admin"),
+    USER(2, "user"),
+    GUEST(3, "guest"),
+    BAN(4, "ban");
 
     private int code;
     private String value;

@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digital.config.JwtConfig;
 import com.digital.enums.ResultErrorEnum;
+import com.digital.enums.RoleEnum;
 import com.digital.exception.BusinessException;
+import com.digital.mapper.RoleMapper;
 import com.digital.mapper.UserMapper;
+import com.digital.model.entity.Role;
 import com.digital.model.entity.User;
 import com.digital.model.vo.user.GetUserVo;
 import com.digital.model.vo.user.LoginUserVo;
@@ -21,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -34,11 +38,15 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    RoleMapper roleMapper;
 
     @Autowired
     JwtConfig jwtConfig;
@@ -51,8 +59,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private AuthenticationManager authenticationManager;
 
     @Override
-    public Result registerUser(String username, String password, String avatar, String phoneNumber, String role) {
-        if (username == null || password == null || avatar == null || phoneNumber == null || role == null) {
+    public Result registerUser(String username, String password, String avatar, String phoneNumber,
+                               String role, Object gender) {
+        if (username == null || password == null || avatar == null || phoneNumber == null || role == null || gender == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_NULL.getMessage());
         }
 
@@ -78,8 +87,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setPhone(phoneNumber);
         user.setAvatar(avatar);
         user.setRole(role);
+        user.setGender(gender);
         userMapper.insert(user);
-
+        usersQueryWrapper.clear();
+        RoleEnum roleEnum = RoleEnum.getEnumByValue(role);
+        Role insertRole = new Role();
+        insertRole.setId((long) roleEnum.getCode());
+        insertRole.setName(roleEnum.getValue());
+        roleMapper.insert(insertRole);
         return Result.success();
     }
 

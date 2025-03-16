@@ -41,7 +41,8 @@ public class UserController {
      */
     @PostMapping("/register")
     public Result registerUser(@RequestBody UserRegisterReq userRegisterReq) {
-        Result result = userService.registerUser(userRegisterReq.getUsername(), userRegisterReq.getPassword(), userRegisterReq.getAvatar(), userRegisterReq.getPhone(), userRegisterReq.getRole());
+        Result result = userService.registerUser(userRegisterReq.getName(), userRegisterReq.getPassword(), userRegisterReq.getAvatar(), userRegisterReq.getPhone(),
+                userRegisterReq.getRole(), userRegisterReq.getGender());
         result.setMsg(ResultSuccessEnum.REGISTER_SUCCESS.getMsg());
         return result;
     }
@@ -204,6 +205,11 @@ public class UserController {
         return Result.success(userPage);
     }
 
+    /**
+     * 用户获取userVO
+     * @param pageReq
+     * @return
+     */
     @PostMapping("/list/page/vo")
     public Result<Page<GetUserVo>> listUserVOByPage(@RequestBody PageReq pageReq) {
         if (pageReq == null) {
