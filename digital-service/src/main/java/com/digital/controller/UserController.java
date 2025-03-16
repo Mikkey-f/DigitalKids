@@ -34,7 +34,7 @@ public class UserController {
      */
     @PostMapping("/register")
     public Result registerUser(@RequestBody UserRegisterReq userRegisterReq) {
-        Result result = userService.registerUser(userRegisterReq.getUsername(), userRegisterReq.getPassword(), userRegisterReq.getAvatar(), userRegisterReq.getPhoneNum());
+        Result result = userService.registerUser(userRegisterReq.getUsername(), userRegisterReq.getPassword(), userRegisterReq.getAvatar(), userRegisterReq.getPhoneNum(), userRegisterReq.getRole());
         result.setMsg(ResultSuccessEnum.REGISTER_SUCCESS.getMsg());
         return result;
     }
@@ -56,4 +56,6 @@ public class UserController {
         }
         return userService.loginUser(phoneNum, userPassword);
     }
+
+    
 }

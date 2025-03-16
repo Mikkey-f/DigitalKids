@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 /**
@@ -43,8 +45,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private AuthenticationManager authenticationManager;
 
     @Override
-    public Result registerUser(String username, String password, String avatar, String phoneNumber) {
-        if (username == null || password == null || avatar == null || phoneNumber == null) {
+    public Result registerUser(String username, String password, String avatar, String phoneNumber, String role) {
+        if (username == null || password == null || avatar == null || phoneNumber == null || role == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_NULL.getMessage());
         }
 
@@ -69,6 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setName(username);
         user.setPhone(phoneNumber);
         user.setAvatar(avatar);
+        user.setRole(role);
         userMapper.insert(user);
 
         return Result.success();
@@ -117,5 +120,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         loginUserVo.setToken(token);
 
         return Result.success(loginUserVo);
+    }
+
+    @Override
+    public User getLoginUser(HttpServletRequest request) throws Exception {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = null;
+        if (principal instanceof CustomUserDetails) {
+            CustomUserDetails customUserDetails = (CustomUserDetails) principal;
+            user = customUserDetails.getUser();
+            if (user == null) {
+                throw new Exception(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
+            }
+            return user;
+        } else {
+            return null;
+        }
     }
 }

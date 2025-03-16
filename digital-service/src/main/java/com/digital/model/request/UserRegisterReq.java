@@ -18,4 +18,6 @@ public class UserRegisterReq {
 
     private String phoneNum;
 
+    private String role;
+
 }
