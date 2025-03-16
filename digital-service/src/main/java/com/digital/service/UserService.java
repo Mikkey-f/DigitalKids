@@ -2,10 +2,12 @@ package com.digital.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.digital.model.entity.User;
-import com.digital.model.vo.LoginUserVo;
+import com.digital.model.vo.user.GetUserVo;
+import com.digital.model.vo.user.LoginUserVo;
 import com.digital.result.Result;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author: Mikkeyf
@@ -17,5 +19,11 @@ public interface UserService extends IService<User> {
 
     Result<LoginUserVo> loginUser(String phoneNum, String password);
 
-    User getLoginUser(HttpServletRequest request) throws Exception;
+    User getLoginUser(HttpServletRequest request);
+
+    LoginUserVo getLoginUserVO(User user);
+
+    GetUserVo getUserVo(User user);
+
+    List<GetUserVo> getUserVO(List<User> userList);
 }

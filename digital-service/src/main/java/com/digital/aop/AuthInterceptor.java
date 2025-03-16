@@ -3,6 +3,7 @@ package com.digital.aop;
 import com.digital.annotation.AuthCheck;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.enums.RoleEnum;
+import com.digital.exception.BusinessException;
 import com.digital.model.entity.User;
 import com.digital.service.UserService;
 import org.apache.commons.lang3.ObjectUtils;
@@ -45,30 +46,30 @@ public class AuthInterceptor {
         // 获取当前登录用户
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
-            throw new Exception(ResultErrorEnum.NO_AUTH_ERROR.getMessage());
+            throw new BusinessException(ResultErrorEnum.NO_AUTH_ERROR);
         }
         // 鉴定权限
         if (StringUtils.isNotBlank(mustRole)) {
             // 要求身份，通过注解得到
             RoleEnum mustUserRoleEnum = RoleEnum.getEnumByValue(mustRole);
             if (mustUserRoleEnum == null) {
-                throw new Exception(ResultErrorEnum.NO_AUTH_ERROR.getMessage());
+                throw new BusinessException(ResultErrorEnum.NO_AUTH_ERROR);
             }
             String userRole = loginUser.getRole();
             // 如果被封号
             if (RoleEnum.BAN.getValue().equals(userRole)) {
-                throw new Exception(ResultErrorEnum.NO_AUTH_ERROR.getMessage());
+                throw new BusinessException(ResultErrorEnum.NO_AUTH_ERROR);
             }
             // 排除游客访问
             if (RoleEnum.USER.equals(mustUserRoleEnum)) {
                 if (!userRole.equals(RoleEnum.ADMIN.getValue()) && !userRole.equals(RoleEnum.USER.getValue())) {
-                    throw new Exception(ResultErrorEnum.NO_AUTH_ERROR.getMessage());
+                    throw new BusinessException(ResultErrorEnum.NO_AUTH_ERROR);
                 }
             }
 
             if (RoleEnum.ADMIN.equals(mustUserRoleEnum)) {
                 if (!userRole.equals(mustRole)) {
-                    throw new Exception(ResultErrorEnum.NO_AUTH_ERROR.getMessage());
+                    throw new BusinessException(ResultErrorEnum.NO_AUTH_ERROR);
                 }
             }
         }

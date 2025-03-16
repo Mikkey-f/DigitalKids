@@ -1,10 +1,7 @@
-package com.digital.model.vo;
+package com.digital.model.vo.guest;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 

@@ -1,8 +1,34 @@
-package com.digital.model.vo;
+package com.digital.model.vo.kid;
+
+import lombok.Data;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
 *@Author: Mikkeyf
 *@CreateTime: 2025-03-16  14:35
 */
-public class CreateKidVo {
+@Data
+public class CreateKidVo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private Long id;
+
+    private Long userId;
+
+    private String avatar;
+
+    private String nickname;
+
+    private String birthdate;
+
+    private BigDecimal height;
+
+    private BigDecimal weight;
+
+    private Date createTime;
+
+    private Date updateTime;
 }

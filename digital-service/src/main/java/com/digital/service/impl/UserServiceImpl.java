@@ -1,12 +1,15 @@
 package com.digital.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digital.config.JwtConfig;
 import com.digital.enums.ResultErrorEnum;
+import com.digital.exception.BusinessException;
 import com.digital.mapper.UserMapper;
 import com.digital.model.entity.User;
-import com.digital.model.vo.LoginUserVo;
+import com.digital.model.vo.user.GetUserVo;
+import com.digital.model.vo.user.LoginUserVo;
 import com.digital.result.Result;
 import com.digital.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +23,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Author: Mikkeyf
@@ -123,18 +129,50 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public User getLoginUser(HttpServletRequest request) throws Exception {
+    public User getLoginUser(HttpServletRequest request) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = null;
         if (principal instanceof CustomUserDetails) {
             CustomUserDetails customUserDetails = (CustomUserDetails) principal;
             user = customUserDetails.getUser();
             if (user == null) {
-                throw new Exception(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
+                throw new BusinessException(ResultErrorEnum.NOT_LOGIN_USER);
             }
             return user;
         } else {
             return null;
         }
+    }
+
+    @Override
+    public LoginUserVo getLoginUserVO(User user) {
+        if (user == null) {
+            return null;
+        }
+        LoginUserVo loginUserVO = new LoginUserVo();
+        BeanUtils.copyProperties(user, loginUserVO);
+        return loginUserVO;
+    }
+
+    @Override
+    public GetUserVo getUserVo(User user) {
+        if (user == null) {
+            return null;
+        }
+        GetUserVo userVO = new GetUserVo();
+        BeanUtils.copyProperties(user, userVO);
+        return userVO;
+    }
+
+    @Override
+    public List<GetUserVo> getUserVO(List<User> userList) {
+        if (CollectionUtils.isEmpty(userList)) {
+            return new ArrayList<>();
+        }
+        List<GetUserVo> userVOList = new ArrayList<>();
+        for (User user : userList) {
+            userVOList.add(getUserVo(user));
+        }
+        return userVOList;
     }
 }

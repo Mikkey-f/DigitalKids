@@ -20,6 +20,7 @@ public enum ResultErrorEnum {
     PASSWORD_ERROR(109, "密码错误"),
     PARAM_INPUT_TOO_SHORT(110, "参数长度太短"),
     NOT_LOGIN_USER(111, "无登录用户"),
+    OPERATION_ERROR(112, "操作错误"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
 

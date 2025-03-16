@@ -1,4 +1,4 @@
-package com.digital.model.request;
+package com.digital.model.request.kid;
 
 import lombok.Data;
 
