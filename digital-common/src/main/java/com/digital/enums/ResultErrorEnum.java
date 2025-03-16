@@ -21,6 +21,7 @@ public enum ResultErrorEnum {
     PARAM_INPUT_TOO_SHORT(110, "参数长度太短"),
     NOT_LOGIN_USER(111, "无登录用户"),
     OPERATION_ERROR(112, "操作错误"),
+    NOT_ALLOW_ADD_SAME_THING(113, "不能添加同一个物品"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
 

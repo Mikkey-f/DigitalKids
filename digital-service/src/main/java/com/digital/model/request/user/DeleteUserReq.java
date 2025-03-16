@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @CreateTime: 2025-03-16  15:18
  */
 @Data
-public class DeleteReq implements Serializable {
+public class DeleteUserReq implements Serializable {
 
     /**
      * id

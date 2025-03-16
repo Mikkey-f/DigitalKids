@@ -1,20 +1,26 @@
 package com.digital.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.digital.annotation.AuthCheck;
 import com.digital.constant.UserConstant;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.enums.ResultSuccessEnum;
 import com.digital.exception.BusinessException;
+import com.digital.model.entity.Favorite;
 import com.digital.model.entity.User;
+import com.digital.model.request.favorite.FavorAddReq;
 import com.digital.model.request.page.PageReq;
 import com.digital.model.request.user.*;
+import com.digital.model.vo.favorite.FavoriteVo;
 import com.digital.model.vo.user.GetUserVo;
 import com.digital.model.vo.user.LoginUserVo;
 import com.digital.result.Result;
+import com.digital.service.FavoriteService;
 import com.digital.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +39,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    FavoriteService favoriteService;
 
     /**
      * 用户注册
@@ -71,6 +80,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/get/login")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<LoginUserVo> getLoginUser(HttpServletRequest request) {
         User user = userService.getLoginUser(request);
         return Result.success(userService.getLoginUserVO(user));
@@ -102,9 +112,9 @@ public class UserController {
      * @param request
      * @return
      */
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result<Boolean> deleteUser(@RequestBody DeleteReq deleteRequest, HttpServletRequest request) {
+    public Result<Boolean> deleteUser(@RequestBody DeleteUserReq deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ResultErrorEnum.PARAM_IS_ERROR);
         }
@@ -161,6 +171,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/get/vo")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetUserVo> getUserVOById(long id, HttpServletRequest request) {
         Result<User> response = getUserById(id, request);
         User user = response.getData();
@@ -175,6 +186,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/update/my")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<Boolean> updateMyUser(@RequestBody UserUpdateMyReq userUpdateMyRequest,
                                               HttpServletRequest request) {
         if (userUpdateMyRequest == null) {
@@ -227,5 +239,57 @@ public class UserController {
         userVOPage.setRecords(userVO);
         return Result.success(userVOPage);
     }
+
+    /**
+     * 为当前用户添加收藏
+     * @param favorAddReq
+     * @return
+     */
+    @PostMapping("/favorite/add")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    public Result addFavorite(@RequestBody FavorAddReq favorAddReq) {
+        if (favorAddReq == null) {
+            throw new BusinessException(ResultErrorEnum.PARAM_IS_ERROR);
+        }
+
+        Favorite favorite = new Favorite();
+        QueryWrapper<Favorite> eq = new QueryWrapper<Favorite>().eq("user_id", favorAddReq.getUserId()).eq("target_id", favorAddReq.getTargetId()).eq("target_type", favorAddReq.getTargetType());
+        Favorite one = favoriteService.getOne(eq);
+        if (one != null) {
+            throw new BusinessException(ResultErrorEnum.NOT_ALLOW_ADD_SAME_THING);
+        }
+        BeanUtils.copyProperties(favorAddReq, favorite);
+        boolean save = favoriteService.save(favorite);
+        if (!save) {
+            throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
+        }
+
+        return Result.success(ResultErrorEnum.SUCCESS.getMessage());
+    }
+
+    /**
+     * 删除某个收藏
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/favorite/delete/{id}")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    public Result deleteFavoriteById(@PathVariable long id) {
+        boolean b = favoriteService.removeById(id);
+        return Result.success(ResultErrorEnum.SUCCESS.getMessage());
+    }
+
+//    @PostMapping("/favorite/list/page")
+//    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+//    public Result<Page<FavoriteVo>> listFavoriteByPage(@RequestBody PageReq pageReq) {
+//        long current = pageReq.getCurrent();
+//        long size = pageReq.getPageSize();
+//        Page<Favorite> favoritePage = favoriteService.page(new Page<>(current, size));
+//        Page<FavoriteVo> favoriteVOPage = new Page<>(current, size, favoritePage.getTotal());
+//        List<FavoriteVo> favoriteVO = favoriteService.getFavoriteVoList(favoritePage.getRecords());
+//        favoriteVOPage.setRecords(favoriteVO);
+//        return Result.success(favoriteVOPage);
+//    }
+
 }
 
