@@ -1,4 +1,4 @@
-package com.digital.model.vo;
+package com.digital.model.vo.user;
 
 import lombok.Data;
 

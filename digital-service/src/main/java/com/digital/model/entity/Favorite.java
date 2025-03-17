@@ -1,46 +1,33 @@
 package com.digital.model.entity;
 
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.Getter;
+
+import java.util.Date;
 
 /**
- * @TableName users
+ * @Author: Mikkeyf
+ * @CreateTime: 2025-03-16  17:26
  */
 @Data
-@TableName("user")
-@Getter
-public class User {
+@TableName("favorite")
+public class Favorite {
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
-    private String name;
+    private Integer targetId;
 
-    private String password;
+    private Long userId;
 
-    private String avatar;
-
-    private Object gender;
-
-    private String phone;
-
-    private String location;
-
-    private String role;
-
-    @TableField("is_delete")
-    private String isDelete;
+    @TableField("target_type")
+    private String targetType;
 
     @TableField("create_time")
     private Date createTime;
 
     @TableField("update_time")
     private Date updateTime;
-
-
 }

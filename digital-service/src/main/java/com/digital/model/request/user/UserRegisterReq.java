@@ -1,4 +1,4 @@
-package com.digital.model.request;
+package com.digital.model.request.user;
 
 /**
  * @Author: Mikkeyf
@@ -7,15 +7,19 @@ package com.digital.model.request;
 
 import lombok.Data;
 
+
 @Data
 public class UserRegisterReq {
 
-    private String username;
+    private String name;
 
     private String password;
 
     private String avatar;
 
-    private String phoneNum;
+    private String phone;
 
+    private String role;
+
+    private Object gender;
 }

@@ -1,4 +1,4 @@
-package com.digital.model.request;
+package com.digital.model.request.user;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class UserLoginReq implements Serializable {
     private static final long serialVersionUID = 3191241716373120793L;
 
-    private String phoneNum;
+    private String phone;
 
-    private String userPassword;
+    private String password;
 }

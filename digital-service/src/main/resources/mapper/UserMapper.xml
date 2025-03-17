@@ -12,12 +12,14 @@
             <result property="gender" column="gender" />
             <result property="phone" column="phone" />
             <result property="location" column="location" />
+            <result property="role" column="role"/>
+            <result property="isDelete" column="is_delete"/>
             <result property="createTime" column="create_time" />
             <result property="updateTime" column="update_time" />
     </resultMap>
 
     <sql id="Base_Column_List">
         id,name,password,avatar,gender,phone,
-        location,create_time,update_time
+        location,role,is_delete,create_time,update_time
     </sql>
 </mapper>
