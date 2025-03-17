@@ -8,7 +8,8 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultSuccessEnum {
-    REGISTER_SUCCESS(1, "注册成功");
+    REGISTER_SUCCESS(1, "注册成功"),
+    ADD_SUCCESS(2, "添加成功");
 
     private int code;
     private String msg;

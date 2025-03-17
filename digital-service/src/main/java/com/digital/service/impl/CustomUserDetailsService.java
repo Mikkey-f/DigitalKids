@@ -3,6 +3,7 @@ package com.digital.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.digital.enums.ResultErrorEnum;
+import com.digital.exception.BusinessException;
 import com.digital.mapper.*;
 import com.digital.model.entity.*;
 import com.digital.result.Result;
@@ -39,11 +40,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username){
         // 查询用户信息
         User user = userRepository.selectOne(new QueryWrapper<User>().eq("name",username));
         if (user == null) {
-            throw new UsernameNotFoundException("spring security:用户不存在");
+            throw new BusinessException(ResultErrorEnum.NOT_LOGIN_USER);
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
 
