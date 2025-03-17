@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Service
 public class KidServiceImpl extends ServiceImpl<KidMapper, Kid>
         implements KidService {
-
+    //添加儿童的具体逻辑
     @Override
     public Result add(Long user_id, String avatar, String nickname, String birthdate, BigDecimal height, BigDecimal weight) {
         if (avatar == null || avatar.isEmpty()) {
@@ -38,6 +38,7 @@ public class KidServiceImpl extends ServiceImpl<KidMapper, Kid>
         kid.setHeight(height);
         kid.setWeight(weight);
 /*
+        后期处理
         // 转换日期格式（假设 birthdate 是字符串，需转为 Date）
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -55,7 +56,7 @@ public class KidServiceImpl extends ServiceImpl<KidMapper, Kid>
 
         return Result.success("添加成功");
     }
-
+    //修改儿童的具体逻辑
     @Override
     public Result update(Long id, String avatar, String nickname, String birthdate, BigDecimal height, BigDecimal weight) {
         // 参数基础校验

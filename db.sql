@@ -63,3 +63,12 @@ CREATE TABLE `Kid` (
                        `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                        `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='孩子信息表';
+
+DROP TABLE IF EXISTS `parenting_encyclopedia`;
+CREATE TABLE parenting_encyclopedia (
+                                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                        stage INT NOT NULL COMMENT '0:备孕期, 1:孕产期管理, 2:产褥期, 3:产后恢复, 4:0-1岁宝宝, 5:1-2岁宝宝, 6:2-3岁宝宝, 7:3-5岁宝宝, 8:5-10岁宝宝, 9:10-15岁宝宝',
+                                        user_id BIGINT NOT NULL,
+                                        title VARCHAR(255) NOT NULL,
+                                        content TEXT NOT NULL
+);
