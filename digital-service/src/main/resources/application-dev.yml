@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 sky:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -26,3 +26,6 @@ spring:
       group-id: digitalKids-consumer-group
       enable-auto-commit: true
       auto-commit-interval: 3000
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 1s
