@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,12 +28,13 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class SearchController {
+
     @Autowired
     private ElasticsearchService elasticsearchService;
     @Autowired
     private UserService userService;
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public Result<List<SearchVo>> search(@RequestBody SearchReq searchReq) {
         SearchResult searchResult = elasticsearchService.searchEncyclopedia(
                 searchReq.getKeyword(), (int) (searchReq.getPageReq().getCurrent() - 1), (int) searchReq.getPageReq().getPageSize()

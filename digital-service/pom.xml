@@ -152,6 +152,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>7.15.0</version> <!-- 确保与你的Elasticsearch服务器版本兼容 -->
+        </dependency>
     </dependencies>
 
     <build>
