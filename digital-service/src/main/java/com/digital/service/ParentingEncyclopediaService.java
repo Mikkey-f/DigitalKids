@@ -2,6 +2,9 @@ package com.digital.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.digital.model.entity.ParentingEncyclopedia;
+import com.digital.model.request.parentingEncyclopedia.AddParentingEncyclopediaReq;
+import com.digital.model.request.parentingEncyclopedia.UpdateParentingEncyclopediaReq;
+import com.digital.result.Result;
 
 /**
 * @author wc198
@@ -10,4 +13,11 @@ import com.digital.model.entity.ParentingEncyclopedia;
 */
 public interface ParentingEncyclopediaService extends IService<ParentingEncyclopedia> {
 
+    Result get(Integer stage);
+
+    Result delete(Integer id);
+
+    Result EncyclopediaUpdate(UpdateParentingEncyclopediaReq updateParentingEncyclopediaReq);
+
+    Result Add(AddParentingEncyclopediaReq addParentingEncyclopediaReq);
 }

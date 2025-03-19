@@ -17,4 +17,5 @@ public class KidUpdateReq {
     private BigDecimal height;
 
     private BigDecimal weight;
+    private static final long serialVersionUID = 1L;
 }

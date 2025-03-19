@@ -10,9 +10,11 @@
             <result property="userId" column="user_id" />
             <result property="title" column="title" />
             <result property="content" column="content" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,stage,user_id,title,content
+        id,stage,user_id,title,content,create_time,update_time
     </sql>
 </mapper>
