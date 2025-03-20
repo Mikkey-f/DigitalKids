@@ -20,6 +20,7 @@ public class ParentingEncyclopediaController {
     @Autowired
     ParentingEncyclopediaService parentingEncyclopediaService;
 
+    //得到相应stage的所有育儿百科
     @GetMapping("/{stage}")
     @AuthCheck(mustRole = "guest")
     public Result<GetParentingEncyclopediaVo> getParentingEncyclopedia(@PathVariable Integer stage) {
@@ -27,6 +28,7 @@ public class ParentingEncyclopediaController {
         return result;
     }
 
+    //删除对应id的育儿百科
     @DeleteMapping("/{id}")
     @AuthCheck(mustRole = "admin")
     public Result deleteParentingEncyclopedia(@PathVariable Integer id) {
@@ -34,6 +36,7 @@ public class ParentingEncyclopediaController {
         return result;
     }
 
+    //修改育儿百科内容
     @PutMapping
     @AuthCheck(mustRole = "admin")
     public Result<UpdateParentingEncyclopediaVo> updateParentingEncyclopediaVoResult(@RequestBody UpdateParentingEncyclopediaReq updateParentingEncyclopediaReq) {
@@ -41,6 +44,7 @@ public class ParentingEncyclopediaController {
         return result;
     }
 
+    //添加育儿百科
     @PostMapping
     @AuthCheck(mustRole = "admin")
     public Result<AddParentingEncyclopediaVo> addParentingEncyclopediaVoResult(@RequestBody AddParentingEncyclopediaReq addParentingEncyclopediaReq) {

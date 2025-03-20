@@ -82,6 +82,9 @@ public class ParentingEncyclopediaServiceImpl extends ServiceImpl<ParentingEncyc
             if (req.getId() == null) {
                 return Result.error(ResultErrorEnum.W_ENCYCLOPEDIA_ID_IS_NULL.getMessage());
             }
+            if (req.getStage() < 0 || req.getStage() > 9) {
+                return Result.error(ResultErrorEnum.W_ENCYCLOPEDIA_STAGE_IS_NULL.getMessage());
+            }
 
             // 2. 查询现有记录
             ParentingEncyclopedia entity = parentingEncyclopediaMapper.selectById(req.getId());
