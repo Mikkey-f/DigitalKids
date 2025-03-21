@@ -49,7 +49,7 @@ public class KidController {
     @AuthCheck(mustRole = "user")
     public Result<?> deleteKid(@PathVariable Long id) {
         boolean isRemoved = kidService.removeById(id);
-        return isRemoved ? Result.success(null) : Result.error("删除失败");
+        return isRemoved ? Result.success() : Result.error("删除失败");
     }
 
     //添加儿童的信息
