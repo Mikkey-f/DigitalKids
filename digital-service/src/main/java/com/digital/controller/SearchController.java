@@ -7,16 +7,14 @@ import com.digital.model.entity.User;
 import com.digital.model.request.search.SearchReq;
 import com.digital.model.vo.search.SearchVo;
 import com.digital.model.vo.user.GetUserVo;
+import com.digital.model.vo.user.SearchUserVo;
 import com.digital.result.Result;
 import com.digital.service.UserService;
 import com.digital.service.impl.ElasticsearchService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
  * @Author: Mikkeyf
  * @CreateTime: 2025-03-18  20:42
  */
-@Controller
+@RestController
 public class SearchController {
 
     @Autowired
@@ -50,9 +48,9 @@ public class SearchController {
             for (ParentingEncyclopedia parentingEncyclopedia : parentingEncyclopediaList) {
                 if (user.getId().equals(parentingEncyclopedia.getUserId())) {
                     SearchVo searchVo = new SearchVo();
-                    GetUserVo getUserVo = new GetUserVo();
-                    BeanUtils.copyProperties(user, getUserVo);
-                    searchVo.setUser(getUserVo);
+                    SearchUserVo searchUserVo = new SearchUserVo();
+                    BeanUtils.copyProperties(user, searchUserVo);
+                    searchVo.setUser(searchUserVo);
                     searchVo.setContent(parentingEncyclopedia.getContent());
                     searchVo.setTitle(parentingEncyclopedia.getTitle());
                     searchVoArrayList.add(searchVo);
