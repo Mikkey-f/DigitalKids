@@ -4,7 +4,8 @@ import com.digital.enums.ResultErrorEnum;
 import com.digital.model.entity.ParentingEncyclopedia;
 import com.digital.model.entity.SearchResult;
 import com.digital.model.entity.User;
-import com.digital.model.request.search.SearchReq;
+import com.digital.model.request.search.SearchAllParEncyReq;
+import com.digital.model.request.search.SearchParEncyByStageReq;
 import com.digital.model.vo.search.SearchVo;
 import com.digital.model.vo.user.GetUserVo;
 import com.digital.model.vo.user.SearchUserVo;
@@ -33,12 +34,28 @@ public class SearchController {
     private UserService userService;
 
     @PostMapping("/search")
-    public Result<List<SearchVo>> search(@RequestBody SearchReq searchReq) {
+    public Result<List<SearchVo>> search(@RequestBody SearchAllParEncyReq searchReq) {
         SearchResult searchResult = elasticsearchService.searchEncyclopedia(
-                searchReq.getKeyword(), (int) (searchReq.getPageReq().getCurrent() - 1), (int) searchReq.getPageReq().getPageSize()
+                searchReq.getKeyword(), -1, (int) (searchReq.getPageReq().getCurrent() - 1), (int) searchReq.getPageReq().getPageSize()
         );
 
         List<ParentingEncyclopedia> parentingEncyclopediaList = searchResult.getParentingEncyclopediaList();
+        return Result.success(getSearchVoList(parentingEncyclopediaList));
+    }
+
+    @PostMapping("/search/stage")
+    public Result<List<SearchVo>> searchByStage(@RequestBody SearchParEncyByStageReq searchParEncyByStageReq) {
+        SearchResult searchResult = elasticsearchService.searchEncyclopedia(
+                searchParEncyByStageReq.getKeyword(), searchParEncyByStageReq.getStage(), (int)(searchParEncyByStageReq.getPageReq().getCurrent() - 1), (int) searchParEncyByStageReq.getPageReq().getPageSize()
+        );
+
+        List<ParentingEncyclopedia> parentingEncyclopediaList = searchResult.getParentingEncyclopediaList();
+
+        return Result.success(getSearchVoList(parentingEncyclopediaList));
+    }
+
+    private List<SearchVo> getSearchVoList(List<ParentingEncyclopedia> parentingEncyclopediaList) {
+
         List<Long> collectUserIds = parentingEncyclopediaList.stream().
                 map(ParentingEncyclopedia::getUserId).
                 collect(Collectors.toList());
@@ -53,10 +70,11 @@ public class SearchController {
                     searchVo.setUser(searchUserVo);
                     searchVo.setContent(parentingEncyclopedia.getContent());
                     searchVo.setTitle(parentingEncyclopedia.getTitle());
+                    searchVo.setCreateTime(parentingEncyclopedia.getCreateTime());
                     searchVoArrayList.add(searchVo);
                 }
             }
         }
-        return Result.success(searchVoArrayList);
+        return searchVoArrayList;
     }
 }

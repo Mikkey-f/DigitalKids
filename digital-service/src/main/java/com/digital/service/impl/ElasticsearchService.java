@@ -44,7 +44,7 @@ public class ElasticsearchService {
         parentingEncyclopediaRepository.deleteById(id);
     }
 
-    public SearchResult searchEncyclopedia(String keyword, int current, int size) {
+    public SearchResult searchEncyclopedia(String keyword, int stage, int current, int size) {
         // 构建一个NativeSearchQuery并添加分页条件、排序条件以及高光区域
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.multiMatchQuery(keyword, "title", "content"))
@@ -60,8 +60,12 @@ public class ElasticsearchService {
         List<ParentingEncyclopedia> list = new ArrayList<>();
         if (searchHits.getTotalHits() != 0) {
             for (SearchHit<ParentingEncyclopedia> searchHit : searchHits) {
+                if (stage != -1) {
+                    if (!searchHit.getContent().getStage().equals(stage)) {
+                        continue;
+                    }
+                }
                 ParentingEncyclopedia post = new ParentingEncyclopedia();
-
                 post.setId(searchHit.getContent().getId());
                 post.setUserId(searchHit.getContent().getUserId());
                 post.setTitle(searchHit.getContent().getTitle());

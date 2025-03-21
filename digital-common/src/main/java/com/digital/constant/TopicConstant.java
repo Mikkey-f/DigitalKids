@@ -8,7 +8,7 @@ public class TopicConstant {
     /**
      * 发布百科
      */
-    public static final String TOPIC_PUBLISH = "publish";
+    public static final String TOPIC_PUBLISH_PARENTING_ENCY = "publish_parenting_enc";
     /**
      * 删除百科
      */

@@ -1,5 +1,8 @@
 package com.digital.service.impl;
 
+
+import com.digital.event.EventProducer;
+import com.digital.model.entity.Event;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +14,8 @@ import com.digital.model.request.parentingEncyclopedia.UpdateParentingEncycloped
 import com.digital.result.Result;
 import com.digital.service.ParentingEncyclopediaService;
 import com.digital.mapper.ParentingEncyclopediaMapper;
+
+import org.apache.poi.ss.formula.functions.Even;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,14 +25,22 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.digital.constant.EntityTypeConstant.PARENTING_ENCYCLOPEDIA;
+import static com.digital.constant.TopicConstant.TOPIC_PUBLISH_PARENTING_ENCY;
+
 /**
 * @description 针对表【parenting_encyclopedia】的数据库操作Service实现
 */
 @Service
 public class ParentingEncyclopediaServiceImpl extends ServiceImpl<ParentingEncyclopediaMapper, ParentingEncyclopedia>
     implements ParentingEncyclopediaService{
+
     @Autowired
     ParentingEncyclopediaMapper parentingEncyclopediaMapper;
+
+    @Autowired
+    EventProducer eventProducer;;
 
     @Override
     public Result get(Integer stage) {
@@ -164,10 +177,16 @@ public class ParentingEncyclopediaServiceImpl extends ServiceImpl<ParentingEncyc
                 return Result.error(ResultErrorEnum.W_FAIL_TO_ADD.getMessage());
             }
 
+            Event event = Event.builder()
+                    .topic(TOPIC_PUBLISH_PARENTING_ENCY)
+                    .fromUserId(req.getUserId())
+                    .entityId(entity.getId())
+                    .entityType(PARENTING_ENCYCLOPEDIA)
+                    .build();
+            eventProducer.fireEvent(event);
+
             // 5. 返回成功结果（可返回生成的ID
-            Result result = Result.success();
-            result.setMsg(ResultSuccessEnum.W_ENCYCLOPEDIA_ADD_SUCCESS.getMsg());
-            return result;
+            return Result.success(ResultSuccessEnum.W_ENCYCLOPEDIA_ADD_SUCCESS.getMsg());
         } catch (DuplicateKeyException e) {
             log.warn("唯一键冲突异常");
             return Result.error(ResultErrorEnum.W_ENCYCLOPEDIA_ID_IS_EXIST.getMessage());
