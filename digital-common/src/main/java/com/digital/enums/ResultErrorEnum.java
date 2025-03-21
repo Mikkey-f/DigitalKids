@@ -24,6 +24,21 @@ public enum ResultErrorEnum {
     NOT_ALLOW_ADD_SAME_THING(113, "不能添加同一个物品"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
+    W_FAIL_TO_SELECT(202,"查询育儿百科失败"),
+    W_FAIL_TO_DELETE(203,"删除育儿百科失败"),
+    W_FAIL_TO_DELETE_NOT_ID(204,"ID为NULL,删除育儿百科失败"),
+    W_FAIL_TO_ADD(205,"添加育儿百科失败"),
+    W_FAIL_TO_UPDATE(206,"修改育儿百科失败"),
+    W_REQUEST_IS_NULL(207,"育儿百科请求为空"),
+    W_ENCYCLOPEDIA_ID_IS_NULL(208,"育儿百科ID为空"),
+    W_ENCYCLOPEDIA_IS_NULL(209,"育儿百科为空"),
+    W_ENCYCLOPEDIA_FAIL_TO_UPDATE(210,"育儿百科更新失败"),
+    W_ENCYCLOPEDIA_USER_ID_IS_NULL(211,"育儿百科ID为空"),
+    W_ENCYCLOPEDIA_TITLE_IS_NULL(212,"育儿百科标题为空"),
+    W_ENCYCLOPEDIA_CONTENT_IS_NULL(213,"育儿百科内容为空"),
+    W_ENCYCLOPEDIA_STAGE_IS_NULL(214,"未选择育儿百科的对应阶段或者不合法"),
+    W_ENCYCLOPEDIA_TITLE_IS_EXIST(215,"有相同的标题存在"),
+    W_ENCYCLOPEDIA_ID_IS_EXIST(216,"有相同的ID存在"),
 
     SUCCESS(500, "成功!");
     Integer code;
