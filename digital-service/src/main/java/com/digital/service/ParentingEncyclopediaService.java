@@ -7,12 +7,9 @@ import com.digital.model.request.parentingEncyclopedia.UpdateParentingEncycloped
 import com.digital.result.Result;
 
 /**
-* @author wc198
 * @description 针对表【parenting_encyclopedia】的数据库操作Service
-* @createDate 2025-03-18 17:15:56
 */
 public interface ParentingEncyclopediaService extends IService<ParentingEncyclopedia> {
-
     Result get(Integer stage);
 
     Result delete(Integer id);

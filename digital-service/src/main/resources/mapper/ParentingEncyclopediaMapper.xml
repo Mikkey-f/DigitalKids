@@ -15,6 +15,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,stage,user_id,title,content,create_time,update_time
+        id,stage,user_id,title,content,create_time,
+        update_time
     </sql>
 </mapper>

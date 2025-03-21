@@ -4,48 +4,55 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Date;
 
 /**
- * 
- * @TableName parenting_encyclopedia
+ * @Author: Mikkeyf
+ * @CreateTime: 2025-03-18  20:12
  */
-@TableName(value ="parenting_encyclopedia")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@TableName("parenting_encyclopedia")
+@Document(indexName = "parenting_encyclopedia", shards = 6, replicas = 3)
 public class ParentingEncyclopedia {
-    /**
-     * 
-     */
+
+    @Id
+    @Field(type = FieldType.Long)
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    /**
-     * 0:备孕期, 1:孕产期管理, 2:产褥期, 3:产后恢复, 4:0-1岁宝宝, 5:1-2岁宝宝, 6:2-3岁宝宝, 7:3-5岁宝宝, 8:5-10岁宝宝, 9:10-15岁宝宝
-     */
+    @Field(type = FieldType.Integer)
     private Integer stage;
 
-    /**
-     * 
-     */
+    @Field(type = FieldType.Long)
+    @TableField("user_id")
     private Long userId;
 
-    /**
-     * 
-     */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String title;
 
-    /**
-     * 
-     */
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String content;
 
+    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("create_time")
     private Date createTime;
 
+    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField("update_time")
     private Date updateTime;
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -59,10 +66,10 @@ public class ParentingEncyclopedia {
         }
         ParentingEncyclopedia other = (ParentingEncyclopedia) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getStage() == null ? other.getStage() == null : this.getStage().equals(other.getStage()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
-            && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
+                && (this.getStage() == null ? other.getStage() == null : this.getStage().equals(other.getStage()))
+                && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+                && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
+                && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()));
     }
 
     @Override

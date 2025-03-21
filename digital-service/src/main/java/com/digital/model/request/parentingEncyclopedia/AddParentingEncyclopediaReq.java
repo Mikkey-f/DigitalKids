@@ -2,9 +2,10 @@ package com.digital.model.request.parentingEncyclopedia;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class AddParentingEncyclopediaReq {
-    private Long id;
+public class AddParentingEncyclopediaReq implements Serializable {
 
     private Integer stage;
 
