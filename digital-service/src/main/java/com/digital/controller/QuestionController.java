@@ -1,23 +1,22 @@
 package com.digital.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.digital.annotation.AuthCheck;
+import com.digital.constant.TopicConstant;
 import com.digital.constant.UserConstant;
-import com.digital.enums.RoleEnum;
+import com.digital.enums.ResultErrorEnum;
+import com.digital.enums.ResultSuccessEnum;
+import com.digital.event.EventProducer;
+import com.digital.model.entity.CommonEvent;
 import com.digital.model.request.question.QuestionReq;
 import com.digital.result.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.elasticsearch.client.reactive.WebClientProvider;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 /**
  * @Author: Mikkeyf
@@ -27,27 +26,19 @@ import reactor.core.publisher.Mono;
 @RestController
 public class QuestionController {
 
-    private WebClient webClient;
+    @Autowired
+    private EventProducer eventProducer;
 
-    @Value("${RedirectUrl}")
-    private String redirectUrl;
-
-    public QuestionController(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8000").build();
-    }
+    private static final String ToGoUtl = "/status/{requestId}";
 
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     @PostMapping("/question")
-    public Result<String> question(@RequestBody QuestionReq questionReq) {
-//        System.out.println(redirectUrl);
-        Mono<ResponseEntity<String>> responseEntityMono = webClient.method(HttpMethod.POST)
-                .uri("/run_workflow")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(questionReq)
-                .retrieve()
-                .toEntity(String.class);
+    public Result question(@RequestBody QuestionReq questionReq) {
+        String requestId = UUID.randomUUID().toString();
+        String message = requestId + ":" + questionReq.getQuestion();
+        eventProducer.fireEventByQuestion(TopicConstant.TOPIC_QUESTION, message);
 
 
-        return Result.success(responseEntityMono.block().getBody());
+        return Result.success("请求已接收，正在处理，请轮询查询:" + ToGoUtl + "请求 ID：" + requestId);
     }
 }

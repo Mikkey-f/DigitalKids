@@ -2,7 +2,7 @@ package com.digital.service.impl;
 
 
 import com.digital.event.EventProducer;
-import com.digital.model.entity.Event;
+import com.digital.model.entity.CommonEvent;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,7 +15,6 @@ import com.digital.result.Result;
 import com.digital.service.ParentingEncyclopediaService;
 import com.digital.mapper.ParentingEncyclopediaMapper;
 
-import org.apache.poi.ss.formula.functions.Even;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -177,13 +176,13 @@ public class ParentingEncyclopediaServiceImpl extends ServiceImpl<ParentingEncyc
                 return Result.error(ResultErrorEnum.W_FAIL_TO_ADD.getMessage());
             }
 
-            Event event = Event.builder()
+            CommonEvent commonEvent = CommonEvent.builder()
                     .topic(TOPIC_PUBLISH_PARENTING_ENCY)
                     .fromUserId(req.getUserId())
                     .entityId(entity.getId())
                     .entityType(PARENTING_ENCYCLOPEDIA)
                     .build();
-            eventProducer.fireEvent(event);
+            eventProducer.fireEvent(commonEvent);
 
             // 5. 返回成功结果（可返回生成的ID
             return Result.success(ResultSuccessEnum.W_ENCYCLOPEDIA_ADD_SUCCESS.getMsg());

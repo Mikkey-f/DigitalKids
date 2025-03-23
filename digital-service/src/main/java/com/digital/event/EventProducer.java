@@ -1,7 +1,7 @@
 package com.digital.event;
 
 import com.alibaba.fastjson.JSONObject;
-import com.digital.model.entity.Event;
+import com.digital.model.entity.CommonEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,14 @@ public class EventProducer {
     private KafkaTemplate kafkaTemplate;
 
     // 处理事件
-    public void fireEvent(Event event) {
+    public void fireEvent(CommonEvent commonEvent) {
         // 将事件发送到指定主题
-        kafkaTemplate.send(event.getTopic(), JSONObject.toJSONString(event));
+        kafkaTemplate.send(commonEvent.getTopic(), JSONObject.toJSONString(commonEvent));
+    }
+
+    // 处理事件
+    public void fireEventByQuestion(String topic, String question) {
+        // 将事件发送到指定主题
+        kafkaTemplate.send(topic, question);
     }
 }

@@ -23,7 +23,9 @@ public enum ResultErrorEnum {
     OPERATION_ERROR(112, "操作错误"),
     NOT_ALLOW_ADD_SAME_THING(113, "不能添加同一个物品"),
     MQ_ERROR(114, "消息队列错误"),
-    MQ_GESHI_ERROR(114, "消息队列格式错误"),
+    MQ_GESHI_ERROR(115, "消息队列格式错误"),
+    QUESTION_RESULT_NOT_FIND(116, "问题结果没有得到，请继续轮询"),
+    SMART_AGENT_ERROR(117, "智能体错误"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),
