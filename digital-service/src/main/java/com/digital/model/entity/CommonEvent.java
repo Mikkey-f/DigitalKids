@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Event {
+public class CommonEvent {
 
     private String topic;
     /**
@@ -30,7 +30,7 @@ public class Event {
     private long entityId;
     private Map<String, Object> data = new ConcurrentHashMap<>();
 
-    public Event setData(String key, Object value) {
+    public CommonEvent setData(String key, Object value) {
         data.put(key, value);
         return this;
     }

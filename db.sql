@@ -958,3 +958,14 @@ VR暴露疗法：社交恐惧症患者模拟演讲场景（从5人观众逐步�
 危机响应网络：
 签订心理急救协议：约定情绪崩溃时的暗号（如“我需要红色警报”）
 建立校外导师制：链接行业专家（每月1次职业访谈）');
+
+-- 向 user 表添加 role 列，数据类型为 varchar
+ALTER TABLE user
+    ADD COLUMN role VARCHAR(255);
+
+-- 向 user 表添加 is_delete 列，数据类型为 varchar，默认值为 '0'
+ALTER TABLE user
+    ADD COLUMN is_delete VARCHAR(1) DEFAULT '0';
+
+INSERT INTO user (name, password, avatar, phone, role, gender)
+VALUES ('test', '123456', 'test', 'test', 'admin', '男');

@@ -19,4 +19,9 @@ public class TopicConstant {
      */
     public static final String TOPIC_COMMENT = "comment";
 
+    /**
+     * 提问
+     */
+    public static final String TOPIC_QUESTION = "question";
+
 }
