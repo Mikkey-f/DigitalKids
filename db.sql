@@ -969,3 +969,27 @@ ALTER TABLE user
 
 INSERT INTO user (name, password, avatar, phone, role, gender)
 VALUES ('test', '123456', 'test', 'test', 'admin', '男');
+
+CREATE TABLE product (
+                         id INT AUTO_INCREMENT PRIMARY KEY,
+                         category_id INT,
+                         name VARCHAR(255),
+                         subtitle VARCHAR(255),
+                         main_image VARCHAR(255),
+                         sub_images TEXT,
+                         detail TEXT,
+                         price DECIMAL(10, 2),
+                         stock INT,
+                         status INT,
+                         create_time DATETIME,
+                         update_time DATETIME
+);
+
+CREATE TABLE category (
+                          id INT AUTO_INCREMENT PRIMARY KEY,
+                          parent_id INT,
+                          name VARCHAR(255),
+                          status INT,
+                          create_time DATETIME,
+                          update_time DATETIME
+);

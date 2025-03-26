@@ -37,8 +37,6 @@ public class QuestionController {
         String requestId = UUID.randomUUID().toString();
         String message = requestId + ":" + questionReq.getQuestion();
         eventProducer.fireEventByQuestion(TopicConstant.TOPIC_QUESTION, message);
-
-
         return Result.success("请求已接收，正在处理，请轮询查询:" + ToGoUtl + "请求 ID：" + requestId);
     }
 }
