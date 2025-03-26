@@ -96,7 +96,7 @@ public class ProductController {
 
     @DeleteMapping("/product/{id}")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result deleteCategoryById(@PathVariable Integer id) {
+    public Result deleteProductById(@PathVariable Integer id) {
 
         if (id == null || id <= 0) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -110,9 +110,9 @@ public class ProductController {
         return Result.success();
     }
 
-    @PutMapping("/category/{id}")
+    @PutMapping("/product/{id}")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result updateCategoryById(@PathVariable Integer id,
+    public Result updateProductById(@PathVariable Integer id,
                                      @RequestBody ProductUpdateReq productUpdateReq) {
 
         if (id == null || id <= 0) {

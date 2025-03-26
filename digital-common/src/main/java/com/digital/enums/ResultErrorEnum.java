@@ -26,6 +26,8 @@ public enum ResultErrorEnum {
     MQ_GESHI_ERROR(115, "消息队列格式错误"),
     QUESTION_RESULT_NOT_FIND(116, "问题结果没有得到，请继续轮询"),
     SMART_AGENT_ERROR(117, "智能体错误"),
+    CART_WITH_NO_PRODUCT(118, "购物车没有该商品"),
+
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),
