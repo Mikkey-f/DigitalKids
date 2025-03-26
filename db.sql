@@ -993,3 +993,11 @@ CREATE TABLE category (
                           create_time DATETIME,
                           update_time DATETIME
 );
+
+INSERT INTO category (name, status, parent_id)
+VALUES
+    ('卫生护理', 0, 0),
+    ('药品', 0, 0),
+    ('可穿戴健康监测设备', 0, 0),
+    ('保健产品', 0, 0),
+    ('健康医疗器械', 0, 0);

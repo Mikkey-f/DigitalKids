@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -16,6 +17,7 @@ import java.util.Date;
 @Data
 @TableName("category")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Category {
 
     @TableId(value = "id", type = IdType.AUTO)
