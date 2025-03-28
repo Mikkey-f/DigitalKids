@@ -30,7 +30,7 @@ public class CartService {
 //    }
 
     public Result<List<CartItem>> addCart(String userCartKey, Integer productId, int quantity, boolean isSelected) {
-        if (hashOperations.hasKey(userCartKey, productId)) {
+        if (hashOperations.hasKey(userCartKey, String.valueOf(productId))) {
             CartItem cartItem = hashOperations.get(userCartKey, productId);
             if (cartItem == null) {
                 return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
@@ -45,7 +45,7 @@ public class CartService {
 
     public Result<List<CartItem>> updateCart(String userCartKey, Integer productId, int quantity, boolean isSelected) {
 
-        if (hashOperations.hasKey(userCartKey, productId)) {
+        if (hashOperations.hasKey(userCartKey, String.valueOf(productId))) {
             CartItem cartItem = new CartItem(quantity, isSelected);
             hashOperations.put(userCartKey, String.valueOf(productId), cartItem);
         } else {
@@ -57,11 +57,11 @@ public class CartService {
 
     public Result<List<CartItem>> deleteCart(String userCartKey, Integer productId) {
 
-        if (!hashOperations.hasKey(userCartKey, productId)) {
+        if (!hashOperations.hasKey(userCartKey, String.valueOf(productId))) {
             return Result.error(ResultErrorEnum.CART_WITH_NO_PRODUCT.getMessage());
         }
 
-        Long delete = hashOperations.delete(userCartKey, productId);
+        Long delete = hashOperations.delete(userCartKey, String.valueOf(productId));
         if (delete <= 0) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
