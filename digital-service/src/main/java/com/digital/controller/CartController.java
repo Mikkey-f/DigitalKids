@@ -18,6 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author: Mikkeyf
@@ -38,7 +39,7 @@ public class CartController {
 
     @PostMapping("/{productId}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result addProductForCart(@PathVariable Integer productId,
+    public Result<List<CartItem>> addProductForCart(@PathVariable Integer productId,
                                     @RequestBody CartItem cartItem,
                                     HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
@@ -52,7 +53,7 @@ public class CartController {
 
     @PutMapping("/{productId}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result updateProductForCart(@PathVariable Integer productId,
+    public Result<List<CartItem>> updateProductForCart(@PathVariable Integer productId,
                                        @RequestBody CartItem cartItem,
                                        HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
@@ -65,8 +66,8 @@ public class CartController {
 
     @DeleteMapping("/{productId}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result deleteProductForCart(@PathVariable Integer productId,
-                                       HttpServletRequest request) {
+    public Result<List<CartItem>> deleteProductForCart(@PathVariable Integer productId,
+                                                       HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
@@ -75,17 +76,9 @@ public class CartController {
         return cartService.deleteCart(userCartKey, productId);
     }
 
-//    @GetMapping("/{productId}")
-//    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-//    public Result listProductForCart(@PathVariable Integer productId,
-//                       HttpServletRequest request) {
-//        User loginUser = userService.getLoginUser(request);
-//        cartService
-//    }
-
     @PutMapping("/selectedAll")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result selectedAllForCart(HttpServletRequest request) {
+    public Result<List<CartItem>> selectedAllForCart(HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
@@ -96,7 +89,7 @@ public class CartController {
 
     @PutMapping("/unselectedAll")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result unselectedAllForCart(HttpServletRequest request) {
+    public Result<List<CartItem>> unselectedAllForCart(HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());

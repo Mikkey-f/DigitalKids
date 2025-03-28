@@ -6,7 +6,10 @@ import com.digital.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author: Mikkeyf
@@ -18,13 +21,15 @@ public class CartService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    private final HashOperations<String, String, CartItem> hashOperations;
+    @Autowired
+    private HashOperations<String, String, CartItem> hashOperations;
 
-    public CartService() {
-        this.hashOperations = redisTemplate.opsForHash();
-    }
 
-    public Result addCart(String userCartKey, Integer productId,  int quantity, boolean isSelected) {
+//    public CartService() {
+//        this.hashOperations = redisTemplate.opsForHash();
+//    }
+
+    public Result<List<CartItem>> addCart(String userCartKey, Integer productId, int quantity, boolean isSelected) {
         if (hashOperations.hasKey(userCartKey, productId)) {
             CartItem cartItem = hashOperations.get(userCartKey, productId);
             if (cartItem == null) {
@@ -35,11 +40,10 @@ public class CartService {
             CartItem cartItem = new CartItem(quantity, isSelected);
             hashOperations.put(userCartKey, String.valueOf(productId), cartItem);
         }
-
-        return Result.success();
+        return Result.success(getListOfCartItems(userCartKey));
     }
 
-    public Result updateCart(String userCartKey, Integer productId, int quantity, boolean isSelected) {
+    public Result<List<CartItem>> updateCart(String userCartKey, Integer productId, int quantity, boolean isSelected) {
 
         if (hashOperations.hasKey(userCartKey, productId)) {
             CartItem cartItem = new CartItem(quantity, isSelected);
@@ -48,10 +52,10 @@ public class CartService {
             return Result.error(ResultErrorEnum.CART_WITH_NO_PRODUCT.getMessage());
         }
 
-        return Result.success();
+        return Result.success(getListOfCartItems(userCartKey));
     }
 
-    public Result deleteCart(String userCartKey, Integer productId) {
+    public Result<List<CartItem>> deleteCart(String userCartKey, Integer productId) {
 
         if (!hashOperations.hasKey(userCartKey, productId)) {
             return Result.error(ResultErrorEnum.CART_WITH_NO_PRODUCT.getMessage());
@@ -62,20 +66,28 @@ public class CartService {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(getListOfCartItems(userCartKey));
     }
 
-    public Result selectedAllForCart(String userCartKey) {
-
+    public Result<List<CartItem>> selectedAllForCart(String userCartKey) {
+        List<CartItem> listOfCartItems = getListOfCartItems(userCartKey);
+        listOfCartItems.forEach(cartItem -> {
+            cartItem.setIsSelected(true);
+        });
+        return Result.success(listOfCartItems);
     }
 
-    public Result unselectedAllForCart(String userCartKey) {
-
+    public Result<List<CartItem>> unselectedAllForCart(String userCartKey) {
+        List<CartItem> listOfCartItems = getListOfCartItems(userCartKey);
+        listOfCartItems.forEach(cartItem -> {
+            cartItem.setIsSelected(false);
+        });
+        return Result.success(listOfCartItems);
     }
 
-    public Result getProductForCart(String userCartKey) {
 
+    private List<CartItem> getListOfCartItems(String userCartKey) {
+        return hashOperations.values(userCartKey);
     }
-
 
 }
