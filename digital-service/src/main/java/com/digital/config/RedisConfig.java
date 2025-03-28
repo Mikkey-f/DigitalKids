@@ -1,6 +1,6 @@
 package com.digital.config;
 
-import com.digital.model.entity.CartItem;
+import com.digital.model.entity.redis.CartItem;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

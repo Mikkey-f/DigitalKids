@@ -1,12 +1,11 @@
 package com.digital.service.impl;
 
 import com.digital.enums.ResultErrorEnum;
-import com.digital.model.entity.CartItem;
+import com.digital.model.entity.redis.CartItem;
 import com.digital.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1001,3 +1001,47 @@ VALUES
     ('可穿戴健康监测设备', 0, 0),
     ('保健产品', 0, 0),
     ('健康医疗器械', 0, 0);
+
+
+-- 创建 order 表
+CREATE TABLE `order` (
+    -- 自增主键
+                         `id` INT AUTO_INCREMENT PRIMARY KEY,
+    -- 订单号，唯一标识订单
+                         `order_no` VARCHAR(255) NOT NULL,
+    -- 用户 ID，关联用户表
+                         `user_id` INT NOT NULL,
+    -- 用户地址表 ID，关联用户地址表
+                         `user_address_id` INT NOT NULL,
+    -- 订单总价，使用 DECIMAL 类型存储精确的小数
+                         `payment` DECIMAL(10, 2) NOT NULL,
+    -- 支付类型，用整数表示不同的支付方式
+                         `payment_type` INT NOT NULL,
+    -- 订单状态，用整数表示不同的订单状态
+                         `status` INT NOT NULL,
+    -- 支付时间
+                         `payment_time` DATETIME,
+    -- 寄出时间
+                         `send_time` DATETIME,
+    -- 结束时间
+                         `end_time` DATETIME,
+    -- 关闭时间
+                         `close_time` DATETIME,
+    -- 创建时间
+                         `create_time` DATETIME NOT NULL,
+    -- 更新时间
+                         `update_time` DATETIME NOT NULL
+);
+
+CREATE TABLE `user_address` (
+                                `id` INT AUTO_INCREMENT PRIMARY KEY,
+                                `user_id` INT NOT NULL,
+                                `receiver_name` VARCHAR(255) NOT NULL,
+                                `receiver_phone` VARCHAR(20) NOT NULL,
+                                `receiver_province` VARCHAR(255) NOT NULL,
+                                `receiver_city` VARCHAR(255) NOT NULL,
+                                `receiver_district` VARCHAR(255) NOT NULL,
+                                `receiver_address` VARCHAR(255) NOT NULL,
+                                `create_time` DATETIME NOT NULL,
+                                `update_time` DATETIME NOT NULL
+);

@@ -1,4 +1,4 @@
-package com.digital.model.entity;
+package com.digital.model.entity.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
