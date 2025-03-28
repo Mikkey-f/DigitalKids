@@ -45,7 +45,7 @@ public class CategoryController {
 
     @PostMapping("/category")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result addCategory(CategoryAddReq categoryAddReq) {
+    public Result addCategory(@RequestBody CategoryAddReq categoryAddReq) {
         if (categoryAddReq.getParentId() == null || categoryAddReq.getStatus() == null
         || categoryAddReq.getName() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());

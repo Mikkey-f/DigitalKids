@@ -54,7 +54,7 @@ public class ProductController {
 
     @GetMapping("/product")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result<Page<GetProductVo>> getProductList(Integer pageNum, Integer pageSize, Integer categoryId) {
+    public Result<Page<GetProductVo>> getProductListByCategoryId(Integer pageNum, Integer pageSize, Integer categoryId) {
         if (pageNum == null || pageSize == null || categoryId == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
@@ -75,7 +75,7 @@ public class ProductController {
 
     @PostMapping("/product")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result addProduct(ProductAddReq productAddReq) {
+    public Result addProduct(@RequestBody ProductAddReq productAddReq) {
         if (productAddReq.getCategoryId() == null || productAddReq.getName() == null
         || productAddReq.getSubtitle() == null || productAddReq.getMainImage() == null
         || productAddReq.getSubImages() == null || productAddReq.getDetail() == null
