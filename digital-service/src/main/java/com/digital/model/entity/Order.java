@@ -25,19 +25,19 @@ public class Order {
     /**
      * 随机数，一个订单号
      */
-    @TableId(value = "order_no")
+    @TableField(value = "order_no")
     private String orderNo;
 
     /**
      * 用户
      */
-    @TableId(value = "user_id")
+    @TableField(value = "user_id")
     private Integer userId;
 
     /**
      * 用户地址表id
      */
-    @TableId(value = "user_address_id")
+    @TableField(value = "user_address_id")
     private Integer userAddressId;
 
     /**
@@ -48,7 +48,7 @@ public class Order {
     /**
      * 支付类型
      */
-    @TableId(value = "payment_type")
+    @TableField(value = "payment_type")
     private Integer paymentType;
 
     /**
@@ -59,25 +59,25 @@ public class Order {
     /**
      * 支付时间
      */
-    @TableId(value = "payment_time")
+    @TableField(value = "payment_time")
     private Date paymentTime;
 
     /**
      * 寄出时间
      */
-    @TableId(value = "send_time")
+    @TableField(value = "send_time")
     private Date sendTime;
 
     /**
      * 结束时间
      */
-    @TableId(value = "end_time")
+    @TableField(value = "end_time")
     private Date endTime;
 
     /**
      * 关闭时间
      */
-    @TableId(value = "close_time")
+    @TableField(value = "close_time")
     private Date closeTime;
 
     @TableField("create_time")

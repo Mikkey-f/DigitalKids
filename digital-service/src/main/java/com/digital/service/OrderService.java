@@ -2,6 +2,8 @@ package com.digital.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.digital.model.entity.Order;
+import com.digital.model.entity.redis.CartItem;
+import com.digital.result.Result;
 
 /**
 * @author Lenovo
@@ -10,4 +12,5 @@ import com.digital.model.entity.Order;
 */
 public interface OrderService extends IService<Order> {
 
+    Result addOrder(Long userId, Integer userAddressId);
 }

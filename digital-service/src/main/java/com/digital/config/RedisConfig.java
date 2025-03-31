@@ -1,6 +1,8 @@
 package com.digital.config;
 
 import com.digital.model.entity.redis.CartItem;
+import com.digital.model.entity.redis.OrderItem;
+import com.digital.model.entity.redis.UserAddressItem;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -33,7 +35,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public HashOperations<String, String, CartItem> hashOperations(RedisConnectionFactory factory) {
+    public HashOperations<String, String, CartItem> hashOperationsForCartItem(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
 
@@ -49,4 +51,40 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template.opsForHash();
     }
+    @Bean
+    public HashOperations<String, String, OrderItem> hashOperationsForOrderItem(RedisConnectionFactory factory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+
+        // 设置key的序列化方式
+        template.setKeySerializer(RedisSerializer.string());
+        // 设置value的序列化方式
+        template.setValueSerializer(RedisSerializer.json());
+        // 设置hash的key的序列化方式
+        template.setHashKeySerializer(RedisSerializer.string());
+        // 设置hash的value的序列化方式
+        template.setHashValueSerializer(RedisSerializer.json());
+
+        template.afterPropertiesSet();
+        return template.opsForHash();
+    }
+    @Bean
+    public HashOperations<String, String, UserAddressItem> hashOperationsForUserAddressItem(RedisConnectionFactory factory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+
+        // 设置key的序列化方式
+        template.setKeySerializer(RedisSerializer.string());
+        // 设置value的序列化方式
+        template.setValueSerializer(RedisSerializer.json());
+        // 设置hash的key的序列化方式
+        template.setHashKeySerializer(RedisSerializer.string());
+        // 设置hash的value的序列化方式
+        template.setHashValueSerializer(RedisSerializer.json());
+
+        template.afterPropertiesSet();
+        return template.opsForHash();
+    }
+
+
 }

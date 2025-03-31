@@ -27,7 +27,8 @@ public enum ResultErrorEnum {
     QUESTION_RESULT_NOT_FIND(116, "问题结果没有得到，请继续轮询"),
     SMART_AGENT_ERROR(117, "智能体错误"),
     CART_WITH_NO_PRODUCT(118, "购物车没有该商品"),
-
+    CART_IS_NULL(119, "购物车为空无法生成订单"),
+    USER_ADDRESS_IS_NULL(120, "用户没有添加地址"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),

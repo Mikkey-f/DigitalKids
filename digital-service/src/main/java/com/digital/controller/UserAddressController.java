@@ -125,7 +125,7 @@ public class UserAddressController {
         return Result.success(getUserAddressVo);
     }
 
-    @GetMapping("/product")
+    @GetMapping("/userAddress")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<Page<GetUserAddressVo>> getUserAddressListByCategoryId(Integer pageNum, Integer pageSize,
                                                                      HttpServletRequest request) {
