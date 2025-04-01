@@ -6,16 +6,18 @@ package com.digital.utils;
  */
 public class RedisKeyUtil {
 
-    private static final String SPILT = ":";
+    public static final String SPILT = ":";
     // cart:userId(赋值):(productId:cartItem(cnt,isSelected))
-    private static final String CART_PREFIX = "cart";
+    public static final String CART_PREFIX = "cart";
     // orderItem:orderNo:(productId:oderItem(productName,productImage,Price,quantity,totalPrice))
-    private static final String ORDER_ITEM_PREFIX = "orderItem";
+    public static final String ORDER_ITEM_PREFIX = "orderItem";
     // userAddress:orderNo:(userAddressId:userAddressItem(receiverName,receiverP
     // hone,receiverProvince,receiverCity,receiverDistrict,receiverAddress))
-    private static final String USER_ADDRESS_PREFIX = "userAddress";
+    public static final String USER_ADDRESS_PREFIX = "userAddress";
     // k - order:orderNo v- orderVo
-    private static final String ORDER_PREFIX = "orderVo";
+    public static final String ORDER_PREFIX = "orderVo";
+    // orderCreateTime:orderNo - Date()
+    public static final String ORDER_CREATE_TIME_PREFIX = "orderCreateTime";
 
     public static String getUserCartKey(String userId) {
         return CART_PREFIX + SPILT + userId;
@@ -31,5 +33,9 @@ public class RedisKeyUtil {
 
     public static String getOrderKey(String orderNo) {
         return ORDER_PREFIX + SPILT + orderNo;
+    }
+
+    public static String getOrderCreateTimeKey(String orderNo) {
+        return ORDER_CREATE_TIME_PREFIX + SPILT + orderNo;
     }
 }

@@ -33,10 +33,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.net.http.HttpRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -50,7 +47,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     implements OrderService{
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, Date> redisTemplateForOrderCreateTime;
 
     @Autowired
     private RedisTemplate<String, OrderVo> redisOrderVoTemplate;
@@ -72,11 +69,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     @Autowired
     private OrderMapper orderMapper;
-
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private OrderService orderService;
 
     @Override
     public Result<OrderVo> addOrder(Long userId, Integer userAddressId) {
@@ -122,7 +114,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
         orderMapper.insert(order);
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
-        redisOrderVoTemplate.opsForValue().set(orderKey, getOrderVo(order, userId), OrderStatusType.TIMEOUT, TimeUnit.SECONDS);
+        String orderCreateTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
+        redisOrderVoTemplate.opsForValue().set(orderKey, getOrderVo(order, userId));
+        redisTemplateForOrderCreateTime.opsForValue().set(orderCreateTimeKey, new Date());
         return Result.success(getOrderVo(order, userId));
     }
 
