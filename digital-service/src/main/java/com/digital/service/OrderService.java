@@ -16,4 +16,12 @@ public interface OrderService extends IService<Order> {
     Result<OrderVo> addOrder(Long userId, Integer userAddressId);
 
     Result<OrderVo> getOrderByOrderNo(String orderNo, Long userId, Integer userAddressId);
+
+    Result canceledOrderByOrderNo(String orderNo);
+
+    Result<OrderVo> deliverOrderByOrderNo(String orderNo);
+
+    Result<OrderVo> afterSaleOrderByOrderNO(String orderNo);
+
+    Result<OrderVo> signForDeliveryByOrderNo(String orderNo);
 }

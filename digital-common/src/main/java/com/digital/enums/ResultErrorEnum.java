@@ -30,6 +30,8 @@ public enum ResultErrorEnum {
     CART_IS_NULL(119, "购物车为空无法生成订单"),
     USER_ADDRESS_IS_NULL(120, "用户没有添加地址"),
     NOT_HAVE_THIS_ORDER(121, "数据库没有该订单"),
+    THIS_ORDER_ALREADY_CANCELED(122, "该表单已经被取消"),
+    ORDER_TYPE_ERROR(123,"订单类型错误，不能执行以下操作"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),

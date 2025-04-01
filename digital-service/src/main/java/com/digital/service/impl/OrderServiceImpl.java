@@ -75,6 +75,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderService orderService;
 
     @Override
     public Result<OrderVo> addOrder(Long userId, Integer userAddressId) {
@@ -120,7 +122,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
         orderMapper.insert(order);
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
-        redisOrderVoTemplate.opsForValue().set(orderKey, getOrderVo(order, userId));
+        redisOrderVoTemplate.opsForValue().set(orderKey, getOrderVo(order, userId), OrderStatusType.TIMEOUT, TimeUnit.SECONDS);
         return Result.success(getOrderVo(order, userId));
     }
 
@@ -151,6 +153,66 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             return Result.success(currentOrderVo);
         }
     }
+
+    @Override
+    public Result canceledOrderByOrderNo(String orderNo) {
+        String orderKey = RedisKeyUtil.getOrderKey(orderNo);
+        OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
+        if (orderVo == null) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        if (!orderVo.getOrderStatus().equals(OrderStatusType.NOT_PAY)) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        redisOrderVoTemplate.delete(orderKey);
+        return Result.success();
+    }
+
+    @Override
+    public Result<OrderVo> deliverOrderByOrderNo(String orderNo) {
+        String orderKey = RedisKeyUtil.getOrderKey(orderNo);
+        OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
+        if (orderVo == null) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        if (!orderVo.getOrderStatus().equals(OrderStatusType.PAYED_READY_TO_DELIVER)) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        orderVo.setOrderStatus(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT);
+        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+        return Result.success(orderVo);
+    }
+
+    @Override
+    public Result<OrderVo> afterSaleOrderByOrderNO(String orderNo) {
+        String orderKey = RedisKeyUtil.getOrderKey(orderNo);
+        OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
+        if (orderVo == null) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        if (!orderVo.getOrderStatus().equals(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU)) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        orderVo.setOrderStatus(OrderStatusType.SHOU_HOU);
+        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+        return Result.success(orderVo);
+    }
+
+    @Override
+    public Result<OrderVo> signForDeliveryByOrderNo(String orderNo) {
+        String orderKey = RedisKeyUtil.getOrderKey(orderNo);
+        OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
+        if (orderVo == null) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        if (!orderVo.getOrderStatus().equals(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT)) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        orderVo.setOrderStatus(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU);
+        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+        return Result.success(orderVo);
+    }
+
 
     private OrderVo getOrderVo(Order order, Long userId) {
         String orderItemKey = RedisKeyUtil.getOrderItemKey(order.getOrderNo());

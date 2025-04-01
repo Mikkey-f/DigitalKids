@@ -10,10 +10,7 @@ import com.digital.result.Result;
 import com.digital.service.OrderService;
 import com.digital.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,5 +46,55 @@ public class OrderController {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
         }
         return orderService.getOrderByOrderNo(orderNo, loginUser.getId(), userAddressId);
+    }
+
+    @DeleteMapping("/delete")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    public Result canceledOrderByOrderNo(HttpServletRequest request, String orderNo) {
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
+        }
+        return orderService.canceledOrderByOrderNo(orderNo);
+    }
+
+    @PutMapping("/pay")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    public Result<OrderVo> payOrderByOrderNo(HttpServletRequest request, String orderNo) {
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
+        }
+
+    }
+
+    @PutMapping("/deliver")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public Result<OrderVo> deliverOrderByOrderNo(HttpServletRequest request, String orderNo) {
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
+        }
+        return orderService.deliverOrderByOrderNo(orderNo);
+    }
+
+    @PutMapping("/signForDelivery")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    public Result<OrderVo> signForDeliveryByOrderNo(HttpServletRequest request, String orderNo) {
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
+        }
+        return orderService.signForDeliveryByOrderNo(orderNo);
+    }
+
+    @PutMapping("/afterSale")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    public Result<OrderVo> afterSaleOrderByOrderNO(HttpServletRequest request, String orderNo) {
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
+        }
+        return orderService.afterSaleOrderByOrderNO(orderNo);
     }
 }

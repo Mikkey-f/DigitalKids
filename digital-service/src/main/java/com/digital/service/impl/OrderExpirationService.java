@@ -1,6 +1,11 @@
 package com.digital.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.digital.enums.ResultErrorEnum;
+import com.digital.exception.BusinessException;
+import com.digital.model.entity.Order;
 import com.digital.model.vo.order.OrderVo;
+import com.digital.service.OrderService;
 import com.digital.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
@@ -21,6 +26,9 @@ public class OrderExpirationService {
     private RedisTemplate<String, OrderVo> redisOrderVoTemplate;
 
     @Autowired
+    private OrderService orderService;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Scheduled(fixedRate = 60000) // 每分钟检查一次
@@ -35,6 +43,23 @@ public class OrderExpirationService {
                     jdbcTemplate.update(updateSql, orderNo);
                 }
             }
+        }
+    }
+
+    @Scheduled(fixedRate = 600000) // 每十分钟做一次redis与数据库同步
+    public void redisAndMysqlSyn() {
+        Set<String> orderKeys = redisOrderVoTemplate.keys("orderVo:*");
+        for (String key : orderKeys) {
+            String orderNo = extractOrderIdFromKey(key);
+            OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(key);
+            if (orderVo == null) {
+                throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
+            }
+            QueryWrapper<Order> orderVoQueryWrapper = new QueryWrapper<>();
+            orderVoQueryWrapper.eq("order_no", orderNo);
+            Order order = new Order();
+            order.setOrderNo(String.valueOf(orderVo.getOrderStatus()));
+            orderService.update(order, orderVoQueryWrapper);
         }
     }
 

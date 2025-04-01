@@ -31,13 +31,18 @@ public class OrderStatusType {
     public static final int ALREADY_DELIVERED_CAN_SHOU_HOU = 4;
 
     /**
-     * 订单彻底结束
+     * 售后
      */
-    public static final int ORDER_OVER = 5;
+    public static final int SHOU_HOU = 5;
 
 
     /**
-     * 订单过期阈值
+     * 没有支付的订单过期阈值
      */
-    public static final long TIMEOUT = 7 * 24 * 60 * 60 * 1000;
+    public static final long TIMEOUT_NOT_PAY = 7 * 24 * 60 * 60 * 1000;
+
+    /**
+     * 已经支付的订单阈值
+     */
+    public static final long TIMEOUT_IS_PAID = 20 * 24 * 60 * 60 * 1000;
 }
