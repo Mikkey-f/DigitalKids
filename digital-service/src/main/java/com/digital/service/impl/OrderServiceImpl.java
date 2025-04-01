@@ -1,5 +1,6 @@
 package com.digital.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digital.constant.OrderPayMentType;
 import com.digital.constant.OrderStatusType;
@@ -7,6 +8,7 @@ import com.digital.enums.ResultErrorEnum;
 import com.digital.exception.BusinessException;
 import com.digital.model.entity.Order;
 import com.digital.model.entity.Product;
+import com.digital.model.entity.User;
 import com.digital.model.entity.UserAddress;
 import com.digital.model.entity.redis.CartItem;
 import com.digital.model.entity.redis.OrderItem;
@@ -18,6 +20,7 @@ import com.digital.service.OrderService;
 import com.digital.mapper.OrderMapper;
 import com.digital.service.ProductService;
 import com.digital.service.UserAddressService;
+import com.digital.service.UserService;
 import com.digital.utils.RedisKeyUtil;
 import lombok.val;
 import org.elasticsearch.search.DocValueFormat;
@@ -27,7 +30,9 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +50,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     implements OrderService{
 
     @Autowired
-    private RedisTemplate<String, OrderVo> redisTemplateOrderVo;
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private RedisTemplate<String, OrderVo> redisOrderVoTemplate;
 
     @Autowired
     private HashOperations<String, String, CartItem> hashOperationsForCartItem;
@@ -64,6 +72,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public Result<OrderVo> addOrder(Long userId, Integer userAddressId) {
@@ -109,17 +120,39 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
         orderMapper.insert(order);
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
-        redisTemplateOrderVo.opsForValue().set(orderKey, getOrderVo(order), OrderStatusType.TIMEOUT, TimeUnit.SECONDS);
-        return Result.success(getOrderVo(order));
+        redisOrderVoTemplate.opsForValue().set(orderKey, getOrderVo(order, userId));
+        return Result.success(getOrderVo(order, userId));
     }
 
-//    @Override
-//    public Result<OrderVo> getOrderByOrderNo(String orderNo) {
-//
-//
-//    }
+    @Override
+    public Result<OrderVo> getOrderByOrderNo(String orderNo, Long userId, Integer userAddressId) {
+        OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderNo);
+        if (orderVo != null) {
+            return Result.success(orderVo);
+        } else {
+            QueryWrapper<Order> orderQueryWrapper = new QueryWrapper<>();
+            orderQueryWrapper.eq("order_no", orderNo);
+            Order order = orderMapper.selectOne(orderQueryWrapper);
+            if (order == null) {
+                return Result.error(ResultErrorEnum.NOT_HAVE_THIS_ORDER.getMessage());
+            }
+            OrderVo currentOrderVo = new OrderVo();
+            currentOrderVo.setOrderNo(order.getOrderNo());
+            currentOrderVo.setPayment(order.getPayment());
+            currentOrderVo.setOrderItemList(getOrderItemList(orderNo));
+            currentOrderVo.setOrderStatus(order.getStatus());
+            currentOrderVo.setUserAddressItem(getUserAddressItem(orderNo, String.valueOf(userAddressId)));
+            currentOrderVo.setUserId(Math.toIntExact(userId));
+            currentOrderVo.setCreateTime(order.getCreateTime());
+            currentOrderVo.setPaymentTime(order.getPaymentTime());
+            currentOrderVo.setSendTime(order.getSendTime());
+            currentOrderVo.setEndTime(order.getEndTime());
+            currentOrderVo.setCloseTime(order.getCloseTime());
+            return Result.success(currentOrderVo);
+        }
+    }
 
-    private OrderVo getOrderVo(Order order) {
+    private OrderVo getOrderVo(Order order, Long userId) {
         String orderItemKey = RedisKeyUtil.getOrderItemKey(order.getOrderNo());
         String userAddressKey = RedisKeyUtil.getUserAddressKey(order.getOrderNo());
         OrderVo orderVo = new OrderVo();
@@ -130,11 +163,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         if (userAddressItem == null) {
             throw new BusinessException(ResultErrorEnum.USER_ADDRESS_IS_NULL);
         }
-        GetUserAddressVo getUserAddressVo = new GetUserAddressVo();
-        BeanUtils.copyProperties(userAddressItem, getUserAddressVo);
-        orderVo.setGetUserAddressVo(getUserAddressVo);
+        orderVo.setUserAddressItem(userAddressItem);
+        orderVo.setUserId(Math.toIntExact(userId));
         BeanUtils.copyProperties(order, orderVo);
         return orderVo;
+    }
+
+    private List<OrderItem> getOrderItemList(String orderNo) {
+        String orderItemKey = RedisKeyUtil.getOrderItemKey(orderNo);
+        return hashOperationsForOrderItem.entries(orderItemKey).values().stream().toList();
+    }
+
+    private UserAddressItem getUserAddressItem(String orderNo, String userAddressId) {
+        String userAddressKey = RedisKeyUtil.getUserAddressKey(orderNo);
+        return hashOperationsForUserAddress.get(userAddressKey, userAddressId);
     }
 }
 

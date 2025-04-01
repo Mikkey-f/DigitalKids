@@ -1,6 +1,8 @@
 package com.digital.model.vo.order;
 
 import com.digital.model.entity.redis.OrderItem;
+import com.digital.model.entity.redis.UserAddressItem;
+import com.digital.model.vo.user.GetUserVo;
 import com.digital.model.vo.userAddress.GetUserAddressVo;
 import lombok.Data;
 
@@ -16,7 +18,8 @@ import java.util.List;
 public class OrderVo {
     private List<OrderItem> orderItemList;
     private BigDecimal payment;
-    private GetUserAddressVo getUserAddressVo;
+    private UserAddressItem userAddressItem;
+    private Integer userId;
     private String orderNo;
     private Integer orderStatus;
     private Date createTime;

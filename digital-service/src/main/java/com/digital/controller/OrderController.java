@@ -43,11 +43,11 @@ public class OrderController {
 
     @GetMapping("/get")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result<OrderVo> getOrderByOrderNo(String orderNo, HttpServletRequest request) {
+    public Result<OrderVo> getOrderByOrderNo(String orderNo,Integer userAddressId, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
         }
-        return orderService.getOrderByOrderNo(orderNo);
+        return orderService.getOrderByOrderNo(orderNo, loginUser.getId(), userAddressId);
     }
 }

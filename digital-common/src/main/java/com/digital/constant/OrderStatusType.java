@@ -7,7 +7,7 @@ package com.digital.constant;
 public class OrderStatusType {
 
     /**
-     * 放弃订单
+     * 订单过期或用户取消
      */
     public static final int GAVE_UP_ORDER = 0;
     /**
@@ -35,10 +35,6 @@ public class OrderStatusType {
      */
     public static final int ORDER_OVER = 5;
 
-    /**
-     * 订单过期或用户取消
-     */
-    public static final int ORDER_CANCELED = 6;
 
     /**
      * 订单过期阈值
