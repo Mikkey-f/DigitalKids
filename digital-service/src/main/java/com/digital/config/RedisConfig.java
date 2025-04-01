@@ -3,6 +3,7 @@ package com.digital.config;
 import com.digital.model.entity.redis.CartItem;
 import com.digital.model.entity.redis.OrderItem;
 import com.digital.model.entity.redis.UserAddressItem;
+import com.digital.model.vo.order.OrderVo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -33,6 +34,24 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
+    @Bean
+    public RedisTemplate<String, OrderVo> redisTemplateForOrder(RedisConnectionFactory factory) {
+        RedisTemplate<String, OrderVo> template = new RedisTemplate<>();
+        template.setConnectionFactory(factory);
+
+        // 设置key的序列化方式
+        template.setKeySerializer(RedisSerializer.string());
+        // 设置value的序列化方式
+        template.setValueSerializer(RedisSerializer.json());
+        // 设置hash的key的序列化方式
+        template.setHashKeySerializer(RedisSerializer.string());
+        // 设置hash的value的序列化方式
+        template.setHashValueSerializer(RedisSerializer.json());
+
+        template.afterPropertiesSet();
+        return template;
+    }
+
 
     @Bean
     public HashOperations<String, String, CartItem> hashOperationsForCartItem(RedisConnectionFactory factory) {
@@ -85,6 +104,4 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template.opsForHash();
     }
-
-
 }

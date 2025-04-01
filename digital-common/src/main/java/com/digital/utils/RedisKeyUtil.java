@@ -14,6 +14,8 @@ public class RedisKeyUtil {
     // userAddress:orderNo:(userAddressId:userAddressItem(receiverName,receiverP
     // hone,receiverProvince,receiverCity,receiverDistrict,receiverAddress))
     private static final String USER_ADDRESS_PREFIX = "userAddress";
+    // order:orderNo:orderVo
+    private static final String ORDER_PREFIX = "orderVo";
 
     public static String getUserCartKey(String userId) {
         return CART_PREFIX + SPILT + userId;
@@ -25,5 +27,9 @@ public class RedisKeyUtil {
 
     public static String getUserAddressKey(String orderNo) {
         return USER_ADDRESS_PREFIX + SPILT + orderNo;
+    }
+
+    public static String getOrderKey(String orderNo) {
+        return ORDER_PREFIX + SPILT + orderNo;
     }
 }

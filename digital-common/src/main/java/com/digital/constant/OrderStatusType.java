@@ -34,4 +34,14 @@ public class OrderStatusType {
      * 订单彻底结束
      */
     public static final int ORDER_OVER = 5;
+
+    /**
+     * 订单过期或用户取消
+     */
+    public static final int ORDER_CANCELED = 6;
+
+    /**
+     * 订单过期阈值
+     */
+    public static final long TIMEOUT = 7 * 24 * 60 * 60 * 1000;
 }

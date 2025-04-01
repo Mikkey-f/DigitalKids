@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +45,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     implements OrderService{
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, OrderVo> redisTemplateOrderVo;
 
     @Autowired
     private HashOperations<String, String, CartItem> hashOperationsForCartItem;
@@ -107,8 +108,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         order.setPayment(bigDecimal);
 
         orderMapper.insert(order);
+        String orderKey = RedisKeyUtil.getOrderKey(orderNo);
+        redisTemplateOrderVo.opsForValue().set(orderKey, getOrderVo(order), OrderStatusType.TIMEOUT, TimeUnit.SECONDS);
         return Result.success(getOrderVo(order));
     }
+
+//    @Override
+//    public Result<OrderVo> getOrderByOrderNo(String orderNo) {
+//
+//
+//    }
 
     private OrderVo getOrderVo(Order order) {
         String orderItemKey = RedisKeyUtil.getOrderItemKey(order.getOrderNo());
