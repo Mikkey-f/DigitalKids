@@ -13,6 +13,8 @@ public class UserAddressAddReq {
 
     private String receiverPhone;
 
+    private String receiverProvince;
+
     private String receiverCity;
 
     private String receiverDistrict;

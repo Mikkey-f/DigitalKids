@@ -16,46 +16,46 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserAddress {
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     private Integer id;
-    @TableField(value = "user_id")
+    @TableField("user_id")
     private Integer userId;
     /**
      * 收件人名字
      */
-    @TableField(value = "receiver_name")
+    @TableField("receiver_name")
     private String receiverName;
     /**
      * 收件人电话
      */
-    @TableField(value = "receiver_phone")
+    @TableField("receiver_phone")
     private String receiverPhone;
 
     /**
      * 收件人省份
      */
-    @TableField(value = "receiver_province")
+    @TableField("receiver_province")
     private String receiverProvince;
 
     /**
      * 收件人市
      */
-    @TableField(value = "receiver_city")
+    @TableField("receiver_city")
     private String receiverCity;
     /**
      * 收件人县/区
      */
-    @TableField(value = "receiver_district")
+    @TableField("receiver_district")
     private String receiverDistrict;
     /**
      * 收件人具体地址
      */
-    @TableField(value = "receiver_address")
+    @TableField("receiver_address")
     private String receiverAddress;
 
-    @TableField(value = "create_time")
+    @TableField("create_time")
     private Date createTime;
 
-    @TableField(value = "update_time")
+    @TableField("update_time")
     private Date updateTime;
 }

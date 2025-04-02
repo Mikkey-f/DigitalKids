@@ -36,10 +36,11 @@ public class StatusController {
     @GetMapping("/status/{sessionId}")
     public Result<String> getStatus(@PathVariable String sessionId) {
         String s = sessions.get(sessionId);
-        s = MarkdownUtils.markdownToHtml(s);
         if (s == null) {
-            Result.error(ResultErrorEnum.QUESTION_RESULT_NOT_FIND.getMessage());
+            return Result.error(ResultErrorEnum.QUESTION_RESULT_NOT_FIND.getMessage());
         }
+        s = MarkdownUtils.markdownToHtml(s);
+
 
         return Result.success(s);
     }

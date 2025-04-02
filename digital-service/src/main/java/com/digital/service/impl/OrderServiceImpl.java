@@ -100,18 +100,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             orderItem.setTotalPrice(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
             bigDecimal =  bigDecimal.add(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
             hashOperationsForOrderItem.put(orderItemKey, productId, orderItem);
+            hashOperationsForCartItem.delete(userCartKey, productId);
         }
         UserAddress userAddress = userAddressService.getById(userAddressId);
         order.setUserAddressId(userAddressId);
         String userAddressKey = RedisKeyUtil.getUserAddressKey(orderNo);
         UserAddressItem userAddressItem = new UserAddressItem();
         BeanUtils.copyProperties(userAddress, userAddressItem);
+        userAddressItem.setId(String.valueOf(userAddress.getId()));
         hashOperationsForUserAddress.put(userAddressKey, String.valueOf(userAddressId), userAddressItem);
 
         order.setUserId(Math.toIntExact(userId));
         order.setPaymentType(OrderPayMentType.NOT_SELECTED_PAYMENT);
         order.setStatus(OrderStatusType.NOT_PAY);
         order.setPayment(bigDecimal);
+        order.setCreateTime(new Date());
 
         orderMapper.insert(order);
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
@@ -122,8 +125,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     }
 
     @Override
-    public Result<OrderVo> getOrderByOrderNo(String orderNo, Long userId, Integer userAddressId) {
-        OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderNo);
+    public Result<OrderVo> getOrderByOrderNo(String orderNo, Long userId) {
+        String orderKey = RedisKeyUtil.getOrderKey(orderNo);
+        OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
         if (orderVo != null) {
             return Result.success(orderVo);
         } else {
@@ -137,8 +141,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             currentOrderVo.setOrderNo(order.getOrderNo());
             currentOrderVo.setPayment(order.getPayment());
             currentOrderVo.setOrderItemList(getOrderItemList(orderNo));
-            currentOrderVo.setOrderStatus(order.getStatus());
-            currentOrderVo.setUserAddressItem(getUserAddressItem(orderNo, String.valueOf(userAddressId)));
+            currentOrderVo.setStatus(order.getStatus());
+            currentOrderVo.setUserAddressItem(getUserAddressItem(orderNo, String.valueOf(order.getUserAddressId())));
             currentOrderVo.setUserId(Math.toIntExact(userId));
             currentOrderVo.setCreateTime(order.getCreateTime());
             currentOrderVo.setPaymentTime(order.getPaymentTime());
@@ -153,15 +157,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     public Result canceledOrderByOrderNo(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
         String orderCreateTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
+
         OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
         if (orderVo == null) {
             return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
         }
-        if (!orderVo.getOrderStatus().equals(OrderStatusType.NOT_PAY)) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        if (!orderVo.getStatus().equals(OrderStatusType.NOT_PAY)) {
+            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
         }
-        redisOrderVoTemplate.delete(orderKey);
         redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
+        orderVo.setCloseTime(new Date());
+        orderVo.setStatus(OrderStatusType.GAVE_UP_ORDER);
+        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
         return Result.success();
     }
 
@@ -177,10 +184,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         if (orderVo == null) {
             return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
         }
-        if (!orderVo.getOrderStatus().equals(OrderStatusType.PAYED_READY_TO_DELIVER)) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        if (!orderVo.getStatus().equals(OrderStatusType.PAYED_READY_TO_DELIVER)) {
+            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
         }
-        orderVo.setOrderStatus(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT);
+        orderVo.setStatus(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT);
+        orderVo.setSendTime(new Date());
         redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
         return Result.success(orderVo);
     }
@@ -197,10 +205,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         if (orderVo == null) {
             return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
         }
-        if (!orderVo.getOrderStatus().equals(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU)) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        if (!orderVo.getStatus().equals(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU)) {
+            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
         }
-        orderVo.setOrderStatus(OrderStatusType.SHOU_HOU);
+        orderVo.setStatus(OrderStatusType.SHOU_HOU);
         redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
         return Result.success(orderVo);
     }
@@ -217,10 +225,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         if (orderVo == null) {
             return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
         }
-        if (!orderVo.getOrderStatus().equals(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT)) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        if (!orderVo.getStatus().equals(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT)) {
+            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
         }
-        orderVo.setOrderStatus(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU);
+        orderVo.setStatus(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU);
+        orderVo.setEndTime(new Date());
         redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
         return Result.success(orderVo);
     }
@@ -239,12 +248,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         if (orderVo == null) {
             return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
         }
-        if (!orderVo.getOrderStatus().equals(OrderStatusType.NOT_PAY)) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        if (!orderVo.getStatus().equals(OrderStatusType.NOT_PAY)) {
+            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
         }
         //需要调用支付系统
-        orderVo.setOrderStatus(OrderStatusType.PAYED_READY_TO_DELIVER);
+        orderVo.setStatus(OrderStatusType.PAYED_READY_TO_DELIVER);
+        orderVo.setPaymentTime(new Date());
         redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+        redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
         return Result.success(orderVo);
     }
 
@@ -256,7 +267,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         Map<String, OrderItem> entries = hashOperationsForOrderItem.entries(orderItemKey);
         List<OrderItem> list = entries.values().stream().toList();
         orderVo.setOrderItemList(list);
-        UserAddressItem userAddressItem = hashOperationsForUserAddress.get(userAddressKey, order.getUserAddressId());
+        UserAddressItem userAddressItem = hashOperationsForUserAddress.get(userAddressKey, String.valueOf(order.getUserAddressId()));
         if (userAddressItem == null) {
             throw new BusinessException(ResultErrorEnum.USER_ADDRESS_IS_NULL);
         }

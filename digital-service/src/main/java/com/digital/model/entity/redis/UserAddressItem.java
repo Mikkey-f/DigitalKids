@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserAddressItem {
 
+    private String id;
+
     private String receiverName;
 
     private String receiverPhone;

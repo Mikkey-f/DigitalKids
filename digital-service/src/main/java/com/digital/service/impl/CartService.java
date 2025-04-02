@@ -24,13 +24,9 @@ public class CartService {
     private HashOperations<String, String, CartItem> hashOperations;
 
 
-//    public CartService() {
-//        this.hashOperations = redisTemplate.opsForHash();
-//    }
-
     public Result<List<CartItem>> addCart(String userCartKey, Integer productId, int quantity, boolean isSelected) {
         if (hashOperations.hasKey(userCartKey, String.valueOf(productId))) {
-            CartItem cartItem = hashOperations.get(userCartKey, productId);
+            CartItem cartItem = hashOperations.get(userCartKey, String.valueOf(productId));
             if (cartItem == null) {
                 return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
             }

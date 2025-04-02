@@ -49,12 +49,10 @@ public class OrderExpirationService {
 
                     long expirationTime = createTime.getTime() + OrderStatusType.TIMEOUT_NOT_PAY;
                     if (currentTime > expirationTime) {
-                        String updateSql = "UPDATE `order` SET status = " + OrderStatusType.GAVE_UP_ORDER + " WHERE order_no =?";
+                        String updateSql = "UPDATE `orders` SET status = " + OrderStatusType.GAVE_UP_ORDER + " WHERE order_no =?";
                         jdbcTemplate.update(updateSql, orderNo);
                         // 删除记录创建时间的键
                         redisOrderVoTemplate.delete(createTimeKey);
-                        // 删除订单键
-                        redisOrderVoTemplate.delete(key);
                     }
                 }
             }
@@ -73,7 +71,7 @@ public class OrderExpirationService {
             QueryWrapper<Order> orderVoQueryWrapper = new QueryWrapper<>();
             orderVoQueryWrapper.eq("order_no", orderNo);
             Order order = new Order();
-            order.setOrderNo(String.valueOf(orderVo.getOrderStatus()));
+            order.setOrderNo(String.valueOf(orderVo.getStatus()));
             orderService.update(order, orderVoQueryWrapper);
         }
     }

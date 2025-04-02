@@ -21,7 +21,7 @@ public class OrderVo {
     private UserAddressItem userAddressItem;
     private Integer userId;
     private String orderNo;
-    private Integer orderStatus;
+    private Integer status;
     private Date createTime;
     private Date paymentTime;
     private Date sendTime;

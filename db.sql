@@ -1004,7 +1004,7 @@ VALUES
 
 
 -- 创建 order 表
-CREATE TABLE `order` (
+CREATE TABLE `orders` (
     -- 自增主键
                          `id` INT AUTO_INCREMENT PRIMARY KEY,
     -- 订单号，唯一标识订单
@@ -1027,10 +1027,8 @@ CREATE TABLE `order` (
                          `end_time` DATETIME,
     -- 关闭时间
                          `close_time` DATETIME,
-    -- 创建时间
-                         `create_time` DATETIME NOT NULL,
-    -- 更新时间
-                         `update_time` DATETIME NOT NULL
+                         `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                         `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 );
 
 CREATE TABLE `user_address` (
@@ -1042,6 +1040,6 @@ CREATE TABLE `user_address` (
                                 `receiver_city` VARCHAR(255) NOT NULL,
                                 `receiver_district` VARCHAR(255) NOT NULL,
                                 `receiver_address` VARCHAR(255) NOT NULL,
-                                `create_time` DATETIME NOT NULL,
-                                `update_time` DATETIME NOT NULL
+                                `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 );

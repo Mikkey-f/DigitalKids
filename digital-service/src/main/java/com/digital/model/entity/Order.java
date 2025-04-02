@@ -15,7 +15,7 @@ import java.util.Date;
  * @CreateTime: 2025/3/28 11:36
  */
 @Data
-@TableName("order")
+@TableName("orders")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
