@@ -65,7 +65,7 @@ public class OrderController {
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
         }
-
+        return orderService.payOrderByOrderNo(orderNo);
     }
 
     @PutMapping("/deliver")

@@ -26,6 +26,7 @@ import lombok.val;
 import org.elasticsearch.search.DocValueFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -151,6 +152,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     @Override
     public Result canceledOrderByOrderNo(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
+        String orderCreateTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
         OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
         if (orderVo == null) {
             return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
@@ -159,9 +161,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
         }
         redisOrderVoTemplate.delete(orderKey);
+        redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
         return Result.success();
     }
 
+    /**
+     * 发货
+     * @param orderNo
+     * @return
+     */
     @Override
     public Result<OrderVo> deliverOrderByOrderNo(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
@@ -177,6 +185,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return Result.success(orderVo);
     }
 
+    /**
+     * 用户售后
+     * @param orderNo
+     * @return
+     */
     @Override
     public Result<OrderVo> afterSaleOrderByOrderNO(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
@@ -192,6 +205,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return Result.success(orderVo);
     }
 
+    /**
+     * 用户接收
+     * @param orderNo
+     * @return
+     */
     @Override
     public Result<OrderVo> signForDeliveryByOrderNo(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
@@ -203,6 +221,29 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
         }
         orderVo.setOrderStatus(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU);
+        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+        return Result.success(orderVo);
+    }
+
+    /**
+     * 支付order
+     * @param orderNo
+     * @return
+     */
+    @Override
+    public Result<OrderVo> payOrderByOrderNo(String orderNo) {
+        String orderKey = RedisKeyUtil.getOrderKey(orderNo);
+        String orderCreateTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
+        redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
+        OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
+        if (orderVo == null) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        if (!orderVo.getOrderStatus().equals(OrderStatusType.NOT_PAY)) {
+            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        }
+        //需要调用支付系统
+        orderVo.setOrderStatus(OrderStatusType.PAYED_READY_TO_DELIVER);
         redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
         return Result.success(orderVo);
     }

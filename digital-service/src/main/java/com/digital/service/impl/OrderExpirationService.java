@@ -42,14 +42,14 @@ public class OrderExpirationService {
         for (String key : orderKeys) {
             String orderNo = extractOrderIdFromKey(key);
             if (orderNo != null) {
-                String createTimeKey = "orderCreateTime:" + orderNo;
+                String createTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
                 Date createTime = redisOrderCreateTimeTemplate.opsForValue().get(createTimeKey);
                 if (createTime != null) {
                     long currentTime = System.currentTimeMillis();
 
                     long expirationTime = createTime.getTime() + OrderStatusType.TIMEOUT_NOT_PAY;
                     if (currentTime > expirationTime) {
-                        String updateSql = "UPDATE `order` SET status = '0' WHERE order_no =?";
+                        String updateSql = "UPDATE `order` SET status = " + OrderStatusType.GAVE_UP_ORDER + " WHERE order_no =?";
                         jdbcTemplate.update(updateSql, orderNo);
                         // 删除记录创建时间的键
                         redisOrderVoTemplate.delete(createTimeKey);

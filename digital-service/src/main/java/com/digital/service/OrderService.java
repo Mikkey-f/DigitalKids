@@ -24,4 +24,6 @@ public interface OrderService extends IService<Order> {
     Result<OrderVo> afterSaleOrderByOrderNO(String orderNo);
 
     Result<OrderVo> signForDeliveryByOrderNo(String orderNo);
+
+    Result<OrderVo> payOrderByOrderNo(String orderNo);
 }

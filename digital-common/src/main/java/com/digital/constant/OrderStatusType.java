@@ -41,8 +41,4 @@ public class OrderStatusType {
      */
     public static final long TIMEOUT_NOT_PAY = 7 * 24 * 60 * 60 * 1000;
 
-    /**
-     * 已经支付的订单阈值
-     */
-    public static final long TIMEOUT_IS_PAID = 20 * 24 * 60 * 60 * 1000;
 }
