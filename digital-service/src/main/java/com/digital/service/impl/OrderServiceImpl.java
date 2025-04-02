@@ -27,8 +27,11 @@ import org.elasticsearch.search.DocValueFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +49,9 @@ import java.util.stream.Collectors;
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     implements OrderService{
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private RedisTemplate<String, Date> redisTemplateForOrderCreateTime;
@@ -86,42 +92,53 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
                 .filter(entry -> entry.getValue().getIsSelected())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         String orderItemKey = RedisKeyUtil.getOrderItemKey(orderNo);
-        BigDecimal bigDecimal = new BigDecimal("0");
+        final BigDecimal[] bigDecimal = {new BigDecimal("0")};
 
-        for (Map.Entry<String, CartItem> cartItemEntry : cartItemMap.entrySet()) {
-            String productId = cartItemEntry.getKey();
-            Product product = productService.getById(productId);
-            CartItem cartItem = cartItemEntry.getValue();
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProductImage(product.getMainImage());
-            orderItem.setProductName(product.getName());
-            orderItem.setPrice(product.getPrice());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setTotalPrice(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
-            bigDecimal =  bigDecimal.add(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
-            hashOperationsForOrderItem.put(orderItemKey, productId, orderItem);
-            hashOperationsForCartItem.delete(userCartKey, productId);
-        }
-        UserAddress userAddress = userAddressService.getById(userAddressId);
-        order.setUserAddressId(userAddressId);
-        String userAddressKey = RedisKeyUtil.getUserAddressKey(orderNo);
-        UserAddressItem userAddressItem = new UserAddressItem();
-        BeanUtils.copyProperties(userAddress, userAddressItem);
-        userAddressItem.setId(String.valueOf(userAddress.getId()));
-        hashOperationsForUserAddress.put(userAddressKey, String.valueOf(userAddressId), userAddressItem);
+        List<Object> redisResults = redisTemplate.execute(new SessionCallback<List<Object>>() {
+            @Override
+            public <K, V> List<Object> execute(RedisOperations<K, V> operations) throws DataAccessException {
+                operations.multi();
+                for (Map.Entry<String, CartItem> cartItemEntry : cartItemMap.entrySet()) {
+                    String productId = cartItemEntry.getKey();
+                    Product product = productService.getById(productId);
+                    CartItem cartItem = cartItemEntry.getValue();
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setProductImage(product.getMainImage());
+                    orderItem.setProductName(product.getName());
+                    orderItem.setPrice(product.getPrice());
+                    orderItem.setQuantity(cartItem.getQuantity());
+                    orderItem.setTotalPrice(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+                    bigDecimal[0] = bigDecimal[0].add(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+                    hashOperationsForOrderItem.put(orderItemKey, productId, orderItem);
+                    hashOperationsForCartItem.delete(userCartKey, productId);
+                }
+                UserAddress userAddress = userAddressService.getById(userAddressId);
+                order.setUserAddressId(userAddressId);
+                String userAddressKey = RedisKeyUtil.getUserAddressKey(orderNo);
+                UserAddressItem userAddressItem = new UserAddressItem();
+                BeanUtils.copyProperties(userAddress, userAddressItem);
+                userAddressItem.setId(String.valueOf(userAddress.getId()));
+                hashOperationsForUserAddress.put(userAddressKey, String.valueOf(userAddressId), userAddressItem);
 
-        order.setUserId(Math.toIntExact(userId));
-        order.setPaymentType(OrderPayMentType.NOT_SELECTED_PAYMENT);
-        order.setStatus(OrderStatusType.NOT_PAY);
-        order.setPayment(bigDecimal);
-        order.setCreateTime(new Date());
+                order.setUserId(Math.toIntExact(userId));
+                order.setPaymentType(OrderPayMentType.NOT_SELECTED_PAYMENT);
+                order.setStatus(OrderStatusType.NOT_PAY);
+                order.setPayment(bigDecimal[0]);
+                order.setCreateTime(new Date());
 
-        orderMapper.insert(order);
+                orderMapper.insert(order);
+                String orderCreateTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
+                redisTemplateForOrderCreateTime.opsForValue().set(orderCreateTimeKey, new Date());
+                return operations.exec();
+            }
+        });
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
-        String orderCreateTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
         redisOrderVoTemplate.opsForValue().set(orderKey, getOrderVo(order, userId));
-        redisTemplateForOrderCreateTime.opsForValue().set(orderCreateTimeKey, new Date());
-        return Result.success(getOrderVo(order, userId));
+        if (!redisResults.contains(null)) {
+            return Result.success(getOrderVo(order, userId));
+        } else {
+            return Result.error(ResultErrorEnum.REDIS_TRANSACTION_ERROR.getMessage());
+        }
     }
 
     @Override
@@ -157,19 +174,26 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     public Result canceledOrderByOrderNo(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
         String orderCreateTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
-
         OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
-        if (orderVo == null) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        List<Object> redisResults = redisTemplate.execute(new SessionCallback<List<Object>>() {
+            @Override
+            public <K, V> List<Object> execute(RedisOperations<K, V> operations) throws DataAccessException {
+                operations.multi();
+                if (!orderVo.getStatus().equals(OrderStatusType.NOT_PAY)) {
+                    throw new BusinessException(ResultErrorEnum.ORDER_TYPE_ERROR);
+                }
+                redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
+                orderVo.setCloseTime(new Date());
+                orderVo.setStatus(OrderStatusType.GAVE_UP_ORDER);
+                redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+                return operations.exec();
+            }
+        });
+        if (!redisResults.contains(null)) {
+            return Result.success(orderVo);
+        } else {
+            return Result.error(ResultErrorEnum.REDIS_TRANSACTION_ERROR.getMessage());
         }
-        if (!orderVo.getStatus().equals(OrderStatusType.NOT_PAY)) {
-            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
-        }
-        redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
-        orderVo.setCloseTime(new Date());
-        orderVo.setStatus(OrderStatusType.GAVE_UP_ORDER);
-        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
-        return Result.success();
     }
 
     /**
@@ -181,16 +205,25 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     public Result<OrderVo> deliverOrderByOrderNo(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
         OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
-        if (orderVo == null) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        List<Object> redisResults = redisTemplate.execute(new SessionCallback<List<Object>>() {
+            @Override
+            public <K, V> List<Object> execute(RedisOperations<K, V> operations) throws DataAccessException {
+                operations.multi();
+                if (!orderVo.getStatus().equals(OrderStatusType.PAYED_READY_TO_DELIVER)) {
+                    throw new BusinessException(ResultErrorEnum.ORDER_TYPE_ERROR);
+                }
+                orderVo.setStatus(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT);
+                orderVo.setSendTime(new Date());
+                redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+                return operations.exec();
+            }
+        });
+
+        if (!redisResults.contains(null)) {
+            return Result.success(orderVo);
+        } else {
+            return Result.error(ResultErrorEnum.REDIS_TRANSACTION_ERROR.getMessage());
         }
-        if (!orderVo.getStatus().equals(OrderStatusType.PAYED_READY_TO_DELIVER)) {
-            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
-        }
-        orderVo.setStatus(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT);
-        orderVo.setSendTime(new Date());
-        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
-        return Result.success(orderVo);
     }
 
     /**
@@ -202,15 +235,23 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     public Result<OrderVo> afterSaleOrderByOrderNO(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
         OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
-        if (orderVo == null) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        List<Object> redisResults = redisTemplate.execute(new SessionCallback<List<Object>>() {
+            @Override
+            public <K, V> List<Object> execute(RedisOperations<K, V> operations) throws DataAccessException {
+                operations.multi();
+                if (!orderVo.getStatus().equals(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU)) {
+                    throw new BusinessException(ResultErrorEnum.ORDER_TYPE_ERROR);
+                }
+                orderVo.setStatus(OrderStatusType.SHOU_HOU);
+                redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+                return operations.exec();
+            }
+        });
+        if (!redisResults.contains(null)) {
+            return Result.success(orderVo);
+        } else {
+            return Result.error(ResultErrorEnum.REDIS_TRANSACTION_ERROR.getMessage());
         }
-        if (!orderVo.getStatus().equals(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU)) {
-            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
-        }
-        orderVo.setStatus(OrderStatusType.SHOU_HOU);
-        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
-        return Result.success(orderVo);
     }
 
     /**
@@ -222,16 +263,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     public Result<OrderVo> signForDeliveryByOrderNo(String orderNo) {
         String orderKey = RedisKeyUtil.getOrderKey(orderNo);
         OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
-        if (orderVo == null) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        List<Object> redisResults = redisTemplate.execute(new SessionCallback<List<Object>>() {
+            @Override
+            public <K, V> List<Object> execute(RedisOperations<K, V> operations) throws DataAccessException {
+                operations.multi();
+                if (!orderVo.getStatus().equals(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT)) {
+                    throw new BusinessException(ResultErrorEnum.ORDER_TYPE_ERROR);
+                }
+                orderVo.setStatus(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU);
+                orderVo.setEndTime(new Date());
+                redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+                return operations.exec();
+            }
+        });
+        if (!redisResults.contains(null)) {
+            return Result.success(orderVo);
+        } else {
+            return Result.error(ResultErrorEnum.REDIS_TRANSACTION_ERROR.getMessage());
         }
-        if (!orderVo.getStatus().equals(OrderStatusType.DELIVERED_READY_TO_GET_PRODUCT)) {
-            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
-        }
-        orderVo.setStatus(OrderStatusType.ALREADY_DELIVERED_CAN_SHOU_HOU);
-        orderVo.setEndTime(new Date());
-        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
-        return Result.success(orderVo);
     }
 
     /**
@@ -245,18 +294,27 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         String orderCreateTimeKey = RedisKeyUtil.getOrderCreateTimeKey(orderNo);
         redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
         OrderVo orderVo = redisOrderVoTemplate.opsForValue().get(orderKey);
-        if (orderVo == null) {
-            return Result.error(ResultErrorEnum.THIS_ORDER_ALREADY_CANCELED.getMessage());
+        List<Object> redisResults = redisTemplate.execute(new SessionCallback<List<Object>>() {
+            @Override
+            public <K, V> List<Object> execute(RedisOperations<K, V> operations) throws DataAccessException {
+                operations.multi();
+                if (!orderVo.getStatus().equals(OrderStatusType.NOT_PAY)) {
+                    throw new BusinessException(ResultErrorEnum.ORDER_TYPE_ERROR);
+                }
+                //需要调用支付系统
+                orderVo.setStatus(OrderStatusType.PAYED_READY_TO_DELIVER);
+                orderVo.setPaymentTime(new Date());
+                redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
+                redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
+                return operations.exec();
+            }
+        });
+
+        if (!redisResults.contains(null)) {
+            return Result.success(orderVo);
+        } else {
+            return Result.error(ResultErrorEnum.REDIS_TRANSACTION_ERROR.getMessage());
         }
-        if (!orderVo.getStatus().equals(OrderStatusType.NOT_PAY)) {
-            return Result.error(ResultErrorEnum.ORDER_TYPE_ERROR.getMessage());
-        }
-        //需要调用支付系统
-        orderVo.setStatus(OrderStatusType.PAYED_READY_TO_DELIVER);
-        orderVo.setPaymentTime(new Date());
-        redisOrderVoTemplate.opsForValue().set(orderKey, orderVo);
-        redisTemplateForOrderCreateTime.delete(orderCreateTimeKey);
-        return Result.success(orderVo);
     }
 
 
