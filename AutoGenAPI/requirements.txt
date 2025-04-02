@@ -1,0 +1,9 @@
+autogenstudio==0.0.47
+fastapi==0.115.11
+langchain_community==0.3.20
+pydantic==2.10.6
+python-dotenv==1.0.1
+Requests==2.32.3
+tiktoken==0.8.0
+uvicorn==0.34.0
+zhipuai==2.1.5.20250106
