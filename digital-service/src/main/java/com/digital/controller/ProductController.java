@@ -37,6 +37,11 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    /**
+     * 查看商品通过id
+     * @param id
+     * @return
+     */
     @GetMapping("/product/{id}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetProductVo> getProductById(@PathVariable Integer id) {
@@ -52,6 +57,13 @@ public class ProductController {
         return Result.success(getProductVo);
     }
 
+    /**
+     * 得到商品列表在某个类别下
+     * @param pageNum
+     * @param pageSize
+     * @param categoryId
+     * @return
+     */
     @GetMapping("/product")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<Page<GetProductVo>> getProductListByCategoryId(Integer pageNum, Integer pageSize, Integer categoryId) {
@@ -73,6 +85,11 @@ public class ProductController {
         return Result.success(getProductVoPage);
     }
 
+    /**
+     * 添加商品，限管理员
+     * @param productAddReq
+     * @return
+     */
     @PostMapping("/product")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Result addProduct(@RequestBody ProductAddReq productAddReq) {
@@ -94,6 +111,11 @@ public class ProductController {
         return Result.success();
     }
 
+    /**
+     * 删除商品，限管理员
+     * @param id
+     * @return
+     */
     @DeleteMapping("/product/{id}")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Result deleteProductById(@PathVariable Integer id) {
@@ -110,6 +132,12 @@ public class ProductController {
         return Result.success();
     }
 
+    /**
+     * 更新商品信息，限管理员
+     * @param id
+     * @param productUpdateReq
+     * @return
+     */
     @PutMapping("/product/{id}")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Result updateProductById(@PathVariable Integer id,

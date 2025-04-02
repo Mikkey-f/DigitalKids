@@ -29,6 +29,10 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * 选择所有商品类别
+     * @return
+     */
     @GetMapping("/category")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<List<GetListCategoryVo>> selectAllCategory() {
@@ -43,6 +47,11 @@ public class CategoryController {
         return Result.success(getListCategoryVoArrayList);
     }
 
+    /**
+     * 添加商品类别
+     * @param categoryAddReq
+     * @return
+     */
     @PostMapping("/category")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Result addCategory(@RequestBody CategoryAddReq categoryAddReq) {
@@ -66,6 +75,11 @@ public class CategoryController {
         return Result.success();
     }
 
+    /**
+     * 删除商品类别
+     * @param id
+     * @return
+     */
     @DeleteMapping("/category/{id}")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Result deleteCategoryById(@PathVariable Integer id) {
@@ -82,6 +96,12 @@ public class CategoryController {
         return Result.success();
     }
 
+    /**
+     * 更新商品类别信息
+     * @param id
+     * @param categoryUpdateReq
+     * @return
+     */
     @PutMapping("/category/{id}")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Result updateCategoryById(@PathVariable Integer id,

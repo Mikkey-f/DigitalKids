@@ -33,6 +33,11 @@ public class SearchController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 搜索功能
+     * @param searchReq
+     * @return
+     */
     @PostMapping("/search")
     public Result<List<SearchVo>> search(@RequestBody SearchAllParEncyReq searchReq) {
         SearchResult searchResult = elasticsearchService.searchEncyclopedia(
@@ -43,6 +48,11 @@ public class SearchController {
         return Result.success(getSearchVoList(parentingEncyclopediaList));
     }
 
+    /**
+     * 根据阶段搜文章
+     * @param searchParEncyByStageReq
+     * @return
+     */
     @PostMapping("/search/stage")
     public Result<List<SearchVo>> searchByStage(@RequestBody SearchParEncyByStageReq searchParEncyByStageReq) {
         SearchResult searchResult = elasticsearchService.searchEncyclopedia(

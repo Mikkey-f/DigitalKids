@@ -23,6 +23,10 @@ public class GuestController {
     @Autowired
     JwtConfig jwtConfig;
 
+    /**
+     * 游客登录
+     * @return
+     */
     @PostMapping("/login")
     public Result<LoginGuestVo> guestLogin() {
         // guestName guestName_bd7130c67a674c6bb9decb847cd21bf1

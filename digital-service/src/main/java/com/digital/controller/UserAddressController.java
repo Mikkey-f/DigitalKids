@@ -33,6 +33,12 @@ public class UserAddressController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 添加人物地址信息
+     * @param userAddressAddReq
+     * @param request
+     * @return
+     */
     @PostMapping("/userAddress")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addUserAddressByLoginUser(@RequestBody UserAddressAddReq userAddressAddReq,
@@ -58,9 +64,14 @@ public class UserAddressController {
         return Result.success();
     }
 
+    /**
+     * 删除地址信息根据id
+     * @param id
+     * @return
+     */
     @DeleteMapping("/userAddress/{id}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result deleteProductById(@PathVariable Integer id) {
+    public Result deleteUserAddressById(@PathVariable Integer id) {
 
         if (id == null || id <= 0) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -74,9 +85,16 @@ public class UserAddressController {
         return Result.success();
     }
 
+    /**
+     * 修改地址信息
+     * @param id
+     * @param userAddressUpdateReq
+     * @param request
+     * @return
+     */
     @PutMapping("/userAddress/{id}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result updateProductById(@PathVariable Integer id,
+    public Result updateUserAddressById(@PathVariable Integer id,
                                     @RequestBody UserAddressUpdateReq userAddressUpdateReq,
                                     HttpServletRequest request) {
 
@@ -104,6 +122,12 @@ public class UserAddressController {
         return Result.success();
     }
 
+    /**
+     * 得到用户地址信息根据id
+     * @param id
+     * @param request
+     * @return
+     */
     @GetMapping("/userAddress/{id}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetUserAddressVo> getUserAddressById(@PathVariable Integer id,
@@ -125,9 +149,16 @@ public class UserAddressController {
         return Result.success(getUserAddressVo);
     }
 
+    /**
+     * 得到用户地址列表
+     * @param pageNum
+     * @param pageSize
+     * @param request
+     * @return
+     */
     @GetMapping("/userAddress")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result<Page<GetUserAddressVo>> getUserAddressListByCategoryId(Integer pageNum, Integer pageSize,
+    public Result<Page<GetUserAddressVo>> getUserAddressList(Integer pageNum, Integer pageSize,
                                                                      HttpServletRequest request) {
         if (pageNum == null || pageSize == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());

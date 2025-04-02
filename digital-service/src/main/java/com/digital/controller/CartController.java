@@ -32,7 +32,13 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-
+    /**
+     * 给购物车加入商品
+     * @param productId
+     * @param cartItem
+     * @param request
+     * @return
+     */
     @PostMapping("/{productId}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<List<CartItem>> addProductForCart(@PathVariable Integer productId,
@@ -47,6 +53,13 @@ public class CartController {
         return cartService.addCart(userCartKey, productId, cartItem.getQuantity(), cartItem.getIsSelected());
     }
 
+    /**
+     * 更新购物车商品
+     * @param productId
+     * @param cartItem
+     * @param request
+     * @return
+     */
     @PutMapping("/{productId}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<List<CartItem>> updateProductForCart(@PathVariable Integer productId,
@@ -60,6 +73,12 @@ public class CartController {
         return cartService.updateCart(userCartKey, productId, cartItem.getQuantity(), cartItem.getIsSelected());
     }
 
+    /**
+     * 删除购物车商品
+     * @param productId
+     * @param request
+     * @return
+     */
     @DeleteMapping("/{productId}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<List<CartItem>> deleteProductForCart(@PathVariable Integer productId,
@@ -72,6 +91,11 @@ public class CartController {
         return cartService.deleteCart(userCartKey, productId);
     }
 
+    /**
+     * 购物车商品全选
+     * @param request
+     * @return
+     */
     @PutMapping("/selectedAll")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<List<CartItem>> selectedAllForCart(HttpServletRequest request) {
@@ -83,6 +107,11 @@ public class CartController {
         return cartService.selectedAllForCart(userCartKey);
     }
 
+    /**
+     * 购物车商品全不选
+     * @param request
+     * @return
+     */
     @PutMapping("/unselectedAll")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<List<CartItem>> unselectedAllForCart(HttpServletRequest request) {

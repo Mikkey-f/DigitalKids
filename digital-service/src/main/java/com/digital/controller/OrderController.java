@@ -28,6 +28,12 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 生成订单
+     * @param request
+     * @param userAddressId
+     * @return
+     */
     @PostMapping("/add")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<OrderVo> createOrder(HttpServletRequest request, Integer userAddressId) {
@@ -38,6 +44,13 @@ public class OrderController {
         return orderService.addOrder(loginUser.getId(), userAddressId);
     }
 
+    /**
+     * 通过订单号查看订单
+     * @param orderNo
+     * @param userAddressId
+     * @param request
+     * @return
+     */
     @GetMapping("/get")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<OrderVo> getOrderByOrderNo(String orderNo,Integer userAddressId, HttpServletRequest request) {
@@ -48,6 +61,12 @@ public class OrderController {
         return orderService.getOrderByOrderNo(orderNo, loginUser.getId(), userAddressId);
     }
 
+    /**
+     * 根据订单号删除订单
+     * @param request
+     * @param orderNo
+     * @return
+     */
     @DeleteMapping("/delete")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result canceledOrderByOrderNo(HttpServletRequest request, String orderNo) {
@@ -58,6 +77,12 @@ public class OrderController {
         return orderService.canceledOrderByOrderNo(orderNo);
     }
 
+    /**
+     * 支付订单
+     * @param request
+     * @param orderNo
+     * @return
+     */
     @PutMapping("/pay")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<OrderVo> payOrderByOrderNo(HttpServletRequest request, String orderNo) {
@@ -68,6 +93,12 @@ public class OrderController {
         return orderService.payOrderByOrderNo(orderNo);
     }
 
+    /**
+     * 订单发货状态，限管理员
+     * @param request
+     * @param orderNo
+     * @return
+     */
     @PutMapping("/deliver")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Result<OrderVo> deliverOrderByOrderNo(HttpServletRequest request, String orderNo) {
@@ -78,6 +109,12 @@ public class OrderController {
         return orderService.deliverOrderByOrderNo(orderNo);
     }
 
+    /**
+     * 订单货物接收
+     * @param request
+     * @param orderNo
+     * @return
+     */
     @PutMapping("/signForDelivery")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<OrderVo> signForDeliveryByOrderNo(HttpServletRequest request, String orderNo) {
@@ -88,6 +125,12 @@ public class OrderController {
         return orderService.signForDeliveryByOrderNo(orderNo);
     }
 
+    /**
+     * 订单售后
+     * @param request
+     * @param orderNo
+     * @return
+     */
     @PutMapping("/afterSale")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<OrderVo> afterSaleOrderByOrderNO(HttpServletRequest request, String orderNo) {

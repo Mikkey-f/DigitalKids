@@ -23,7 +23,10 @@ public class KidController {
     @Autowired
     private KidService kidService;
 
-    //返回所有儿童的相关信息
+    /**
+     * 返回所有儿童的相关信息
+     * @return
+     */
     @GetMapping("/kids")
     @AuthCheck(mustRole = "user")
     public Result<List<Kid>> getAllKids() {
@@ -31,7 +34,11 @@ public class KidController {
         return Result.success(kids);
     }
 
-    //返回值为id的儿童的相关信息
+    /**
+     * 返回值为id的儿童的相关信息
+     * @param id
+     * @return
+     */
     @GetMapping("/kids/{id}")
     @AuthCheck(mustRole = "user")
     public Result<CreateKidVo> getKidById(@PathVariable Long id) {
@@ -44,7 +51,11 @@ public class KidController {
         return Result.success(createKidVo);
     }
 
-    //根据id删除儿童信息
+    /**
+     * 根据id删除儿童信息
+     * @param id
+     * @return
+     */
     @DeleteMapping("/kids/{id}")
     @AuthCheck(mustRole = "user")
     public Result<?> deleteKid(@PathVariable Long id) {
@@ -52,7 +63,11 @@ public class KidController {
         return isRemoved ? Result.success() : Result.error("删除失败");
     }
 
-    //添加儿童的信息
+    /**
+     * 添加儿童的信息
+     * @param kidAddReq
+     * @return
+     */
     @PostMapping("/kids")
     @AuthCheck(mustRole = "user")
     public Result<?> addKid(@RequestBody KidAddReq kidAddReq) {
@@ -60,7 +75,11 @@ public class KidController {
         return result;
     }
 
-    //修改儿童信息
+    /**
+     * 修改儿童信息
+     * @param kidUpdateReq
+     * @return
+     */
     @PutMapping("/kids")
     @AuthCheck(mustRole = "user")
     public Result<?> updateKid(@RequestBody KidUpdateReq kidUpdateReq) {

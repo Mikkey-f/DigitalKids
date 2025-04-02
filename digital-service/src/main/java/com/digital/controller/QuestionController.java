@@ -31,6 +31,11 @@ public class QuestionController {
 
     private static final String ToGoUtl = "/status/{requestId}";
 
+    /**
+     * 智能体提问，返回html
+     * @param questionReq
+     * @return
+     */
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     @PostMapping("/question")
     public Result question(@RequestBody QuestionReq questionReq) {

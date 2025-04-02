@@ -27,6 +27,11 @@ public class StatusController {
         sessions.put(sessionId, body);
     }
 
+    /**
+     * 智能体提问后，轮询这个接口得到答案
+     * @param sessionId
+     * @return
+     */
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     @GetMapping("/status/{sessionId}")
     public Result<String> getStatus(@PathVariable String sessionId) {
