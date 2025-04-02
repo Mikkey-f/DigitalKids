@@ -29,5 +29,15 @@ spring:
   elasticsearch:
     uris: http://localhost:9200
     connection-timeout: 1s
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 100
+        max-idle: 10
+        max-wait: 100000
+    timeout: 5000
+    database: 15
 
-RedirectUrl: http://localhost:8000
+

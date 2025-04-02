@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.Order">
+            <id property="id" column="id" />
+            <result property="orderNo" column="order_no" />
+            <result property="userId" column="user_id" />
+            <result property="userAddressId" column="user_address_id" />
+            <result property="payment" column="payment" />
+            <result property="paymentType" column="payment_type" />
+            <result property="status" column="status" />
+            <result property="paymentTime" column="payment_time" />
+            <result property="sendTime" column="send_time" />
+            <result property="endTime" column="end_time" />
+            <result property="closeTime" column="close_time" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_no,user_id,user_address_id,payment,payment_type,
+        status,payment_time,send_time,end_time,close_time,
+        create_time,update_time
+    </sql>
+</mapper>

@@ -26,6 +26,13 @@ public enum ResultErrorEnum {
     MQ_GESHI_ERROR(115, "消息队列格式错误"),
     QUESTION_RESULT_NOT_FIND(116, "问题结果没有得到，请继续轮询"),
     SMART_AGENT_ERROR(117, "智能体错误"),
+    CART_WITH_NO_PRODUCT(118, "购物车没有该商品"),
+    CART_IS_NULL(119, "购物车为空无法生成订单"),
+    USER_ADDRESS_IS_NULL(120, "用户没有添加地址"),
+    NOT_HAVE_THIS_ORDER(121, "数据库没有该订单"),
+    THIS_ORDER_ALREADY_CANCELED(122, "该表单已经被取消"),
+    ORDER_TYPE_ERROR(123,"订单类型错误，不能执行以下操作"),
+    REDIS_TRANSACTION_ERROR(124, "redis事务运行失败"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),

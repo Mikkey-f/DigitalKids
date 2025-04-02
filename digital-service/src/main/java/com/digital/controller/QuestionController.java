@@ -31,14 +31,17 @@ public class QuestionController {
 
     private static final String ToGoUtl = "/status/{requestId}";
 
+    /**
+     * 智能体提问，返回html
+     * @param questionReq
+     * @return
+     */
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     @PostMapping("/question")
     public Result question(@RequestBody QuestionReq questionReq) {
         String requestId = UUID.randomUUID().toString();
         String message = requestId + ":" + questionReq.getQuestion();
         eventProducer.fireEventByQuestion(TopicConstant.TOPIC_QUESTION, message);
-
-
         return Result.success("请求已接收，正在处理，请轮询查询:" + ToGoUtl + "请求 ID：" + requestId);
     }
 }
