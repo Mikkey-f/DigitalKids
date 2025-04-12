@@ -22,4 +22,6 @@ public class UserRegisterReq {
     private String role;
 
     private Object gender;
+
+    private String code;
 }

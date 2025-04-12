@@ -18,6 +18,8 @@ import com.digital.model.vo.user.LoginUserVo;
 import com.digital.result.Result;
 import com.digital.service.FavoriteService;
 import com.digital.service.UserService;
+import com.digital.utils.SMUtils;
+import com.digital.utils.ValidateCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
@@ -26,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -49,7 +52,13 @@ public class UserController {
      * @return 返回响应
      */
     @PostMapping("/register")
-    public Result registerUser(@RequestBody UserRegisterReq userRegisterReq) {
+    public Result registerUser(@RequestBody UserRegisterReq userRegisterReq,
+                               HttpSession session) {
+        String code = userRegisterReq.getCode();
+        Object codeInSession = session.getAttribute(userRegisterReq.getPhone());
+        if (codeInSession == null || !codeInSession.equals(code)) {
+            return Result.error(ResultErrorEnum.REGISTER_IS_FAILURE.getMessage());
+        }
         Result result = userService.registerUser(userRegisterReq.getName(), userRegisterReq.getPassword(), userRegisterReq.getAvatar(), userRegisterReq.getPhone(),
                 userRegisterReq.getRole(), userRegisterReq.getGender());
         result.setMsg(ResultSuccessEnum.REGISTER_SUCCESS.getMsg());
@@ -62,15 +71,22 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public Result<LoginUserVo> loginUser(@RequestBody UserLoginReq userLoginReq) {
+    public Result<LoginUserVo> loginUser(@RequestBody UserLoginReq userLoginReq,
+                                         HttpSession session) {
         if (userLoginReq == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_NULL.getMessage());
         }
         String phoneNum = userLoginReq.getPhone();
         String userPassword = userLoginReq.getPassword();
-        if (StringUtils.isAnyBlank(phoneNum, userPassword)) {
+        String code = userLoginReq.getCode();
+        if (StringUtils.isAnyBlank(phoneNum, userPassword, code)) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        Object codeInSession = session.getAttribute(phoneNum);
+        if (codeInSession == null || !codeInSession.equals(code)) {
+            return Result.error(ResultErrorEnum.LOGIN_IS_FAILURE.getMessage());
+        }
+
         return userService.loginUser(phoneNum, userPassword);
     }
 
@@ -290,6 +306,27 @@ public class UserController {
 //        favoriteVOPage.setRecords(favoriteVO);
 //        return Result.success(favoriteVOPage);
 //    }
+    /**
+     * 发送手机验证码
+     */
+    @PostMapping("/sendMsg")
+    public Result<String> sendMsg(String phoneNum, HttpSession session) {
+
+        if (StringUtils.isEmpty(phoneNum)) {
+            throw new BusinessException(ResultErrorEnum.NOT_GET_CODE);
+        }
+
+//      2.随机生成四位验证码
+        String code = ValidateCodeUtil.generateValidateCode(4).toString();
+
+//      3.调用阿里云提供的短信服务
+        SMUtils.sendMessage("张靖奇","", phoneNum, code);
+
+//      4.需要将生成的验证码保存到session中
+        session.setAttribute(phoneNum, code);
+
+        return Result.success(ResultErrorEnum.SUCCESS.getMessage());
+    }
 
 }
 

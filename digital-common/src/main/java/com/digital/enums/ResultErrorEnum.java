@@ -33,6 +33,10 @@ public enum ResultErrorEnum {
     THIS_ORDER_ALREADY_CANCELED(122, "该表单已经被取消"),
     ORDER_TYPE_ERROR(123,"订单类型错误，不能执行以下操作"),
     REDIS_TRANSACTION_ERROR(124, "redis事务运行失败"),
+    ONLY_GENERATE_4OR6_CODE(125, "只能生成4或者6的验证码"),
+    NOT_GET_CODE(126, "没有得到验证码"),
+    LOGIN_IS_FAILURE(127, "登录失败"),
+    REGISTER_IS_FAILURE(128, "注册失败"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),
