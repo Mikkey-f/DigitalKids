@@ -46,6 +46,8 @@ public class UserController {
     @Autowired
     FavoriteService favoriteService;
 
+    private static final String TEMPLATE_CODE = "SMS_317120109";
+
     /**
      * 用户注册
      * @param userRegisterReq 用户注册请求
@@ -306,8 +308,12 @@ public class UserController {
 //        favoriteVOPage.setRecords(favoriteVO);
 //        return Result.success(favoriteVOPage);
 //    }
+
     /**
      * 发送手机验证码
+     * @param phoneNum
+     * @param session
+     * @return
      */
     @PostMapping("/sendMsg")
     public Result<String> sendMsg(String phoneNum, HttpSession session) {
@@ -320,7 +326,7 @@ public class UserController {
         String code = ValidateCodeUtil.generateValidateCode(4).toString();
 
 //      3.调用阿里云提供的短信服务
-        SMUtils.sendMessage("张靖奇","", phoneNum, code);
+        SMUtils.sendMessage(phoneNum, code);
 
 //      4.需要将生成的验证码保存到session中
         session.setAttribute(phoneNum, code);

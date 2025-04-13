@@ -6,7 +6,19 @@ import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.profile.DefaultProfile;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.aliyun.oss.common.utils.HttpHeaders.HOST;
+import static org.springframework.web.servlet.support.WebContentGenerator.METHOD_POST;
 
 /**
  * @Author: Mikkeyf
@@ -14,45 +26,45 @@ import lombok.extern.slf4j.Slf4j;
  * 短信发送工具
  */
 @Slf4j
+@Component
+@Getter
 public class SMUtils {
 
-    public static final String ACCESS_KEY_ID = "LTAI5tJR33sru2pTxJW4PC2G";
-    public static final String ACCESS_KEY_SECRET = "BZZN79l193oiLfyljqMg1dLO470hMK";
-    /**
-     * 发送短信
-     * @param signName 阿里云设置的签名
-     * @param templateCode 阿里云设置的模板
-     * @param phoneNumbers 发送目标的手机号
-     * @param param 参数
-     */
-    public static void sendMessage(String signName, String templateCode,String phoneNumbers,String param){
+    public static void sendMessage(String phoneNumber, String code){
 
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", ACCESS_KEY_ID, ACCESS_KEY_SECRET);
+        String host = "https://dfsns.market.alicloudapi.com";
+        String path = "/data/send_sms";
+        String method = "POST";
+        String appcode = "404a2497a7e14509ae7b4123cae851a5";
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        //根据API的要求，定义相对应的Content-Type
+        headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        Map<String, String> querys = new HashMap<String, String>();
+        Map<String, String> bodys = new HashMap<String, String>();
+        bodys.put("content", "code:" + code);
+        bodys.put("template_id", "CST_ptdie100");  //注意，CST_ptdie100该模板ID仅为调试使用，调试结果为"status": "OK" ，即表示接口调用成功，然后联系客服报备自己的专属签名模板ID，以保证短信稳定下发
+        bodys.put("phone_number", phoneNumber);
 
-        IAcsClient client = new DefaultAcsClient(profile);
-
-        SendSmsRequest request = new SendSmsRequest();
-
-        request.setSysRegionId("cn-hangzhou");
-//	    要发送给那个人的电话号码
-        request.setPhoneNumbers(phoneNumbers);
-//      我们在阿里云设置的签名
-        request.setSignName(signName);
-//	    我们在阿里云设置的模板
-        request.setTemplateCode(templateCode);
-//	    在设置模板的时候有一个占位符
-        request.setTemplateParam("{\"code\":\""+param+"\"}");
-
-//		request.setPhoneNumbers("1368846****");//接收短信的手机号码
-//		request.setSignName("阿里云");//短信签名名称
-//		request.setTemplateCode("SMS_20933****");//短信模板CODE
-//		request.setTemplateParam("张三");//短信模板变量对应的实际值
 
         try {
-            SendSmsResponse response = client.getAcsResponse(request);
-            log.info(response.getCode() + " " + response.getMessage());
-            log.info("发送验证码成功");
-        }catch (ClientException | com.aliyuncs.exceptions.ClientException e) {
+            /**
+             * 重要提示如下:
+             * HttpUtils请从
+             * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+             * 下载
+             *
+             * 相应的依赖请参照
+             * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+             */
+            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+            HttpEntity entity = response.getEntity();
+            String result = EntityUtils.toString(entity,"UTF-8");
+            log.info("{}", result);
+            //获取response的body
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

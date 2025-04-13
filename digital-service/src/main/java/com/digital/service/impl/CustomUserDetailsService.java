@@ -40,9 +40,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username){
+    public UserDetails loadUserByUsername(String phoneNum){
         // 查询用户信息
-        User user = userRepository.selectOne(new QueryWrapper<User>().eq("name",username));
+        User user = userRepository.selectOne(new QueryWrapper<User>().eq("phone",phoneNum));
         if (user == null) {
             throw new BusinessException(ResultErrorEnum.NOT_LOGIN_USER);
         }
