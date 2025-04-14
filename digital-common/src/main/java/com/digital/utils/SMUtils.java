@@ -16,10 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.aliyun.oss.common.utils.HttpHeaders.HOST;
-import static org.springframework.web.servlet.support.WebContentGenerator.METHOD_POST;
-
 /**
  * @Author: Mikkeyf
  * @CreateTime: 2025/4/12 17:41

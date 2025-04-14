@@ -50,7 +50,14 @@ public class EventConsumer {
 
     @KafkaListener(topics = {TopicConstant.TOPIC_COMMENT}, groupId = "digitalKids-consumer-group")
     public void handleCommentMessage(ConsumerRecord<String, String> record) {
+        if (record == null) {
+            throw new BusinessException(ResultErrorEnum.MQ_ERROR);
+        }
 
+        CommonEvent commonEvent = JSONObject.parseObject(record.value().toString(), CommonEvent.class);
+        if (commonEvent == null) {
+            throw new BusinessException(ResultErrorEnum.MQ_ERROR);
+        }
     }
 
     @KafkaListener(topics = {TopicConstant.TOPIC_PUBLISH_PARENTING_ENCY}, groupId = "digitalKids-consumer-group")
@@ -100,7 +107,6 @@ public class EventConsumer {
             log.error("422 Unprocessable Entity. Status code: {}", unprocessableEntity.getStatusCode());
             log.error("Error details: {}", unprocessableEntity.getResponseBodyAsString());
             throw new BusinessException(ResultErrorEnum.SMART_AGENT_ERROR);
-
         }
     }
 }
