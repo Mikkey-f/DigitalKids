@@ -39,7 +39,7 @@ public class ParentingEncyclopediaServiceImpl extends ServiceImpl<ParentingEncyc
     ParentingEncyclopediaMapper parentingEncyclopediaMapper;
 
     @Autowired
-    EventProducer eventProducer;;
+    EventProducer eventProducer;
 
     @Override
     public Result get(Integer stage) {

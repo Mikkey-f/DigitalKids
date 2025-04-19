@@ -25,11 +25,11 @@ public class Comment {
      */
     private int userId;
     /**
-     * 目标类型,商品
+     * 目标类型,1 百科 2 商品
      */
     private int entityType;
     /**
-     * 目标实体（商品）id
+     * 目标实体（百科，商品）id
      */
     private int entityId;
     /**
