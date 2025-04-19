@@ -1043,3 +1043,46 @@ CREATE TABLE `user_address` (
                                 `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                 `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 );
+
+CREATE TABLE kid_body (
+                          body_id INT AUTO_INCREMENT PRIMARY KEY,
+                          kid_id BIGINT NOT NULL,
+                          height DECIMAL(5, 2),
+                          weight DECIMAL(5, 2),
+                          heartbeat_rate INT,
+                          bmi DECIMAL(5, 2),
+                          FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+CREATE TABLE kid_head (
+                          head_id INT AUTO_INCREMENT PRIMARY KEY,
+                          kid_id BIGINT NOT NULL,
+                          hair_color VARCHAR(50),
+                          eye_color VARCHAR(50),
+                          left_eye_degree DECIMAL(5, 2),
+                          right_eye_degree DECIMAL(5, 2),
+                          FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+CREATE TABLE left_arm (
+                          left_arm_id INT AUTO_INCREMENT PRIMARY KEY,
+                          kid_id BIGINT NOT NULL,
+                          arm_length DECIMAL(5, 2),
+                          FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+CREATE TABLE right_arm (
+                           right_arm_id INT AUTO_INCREMENT PRIMARY KEY,
+                           kid_id BIGINT NOT NULL,
+                           arm_length DECIMAL(5, 2),
+                           FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+CREATE TABLE left_leg (
+                          left_leg_id INT AUTO_INCREMENT PRIMARY KEY,
+                          kid_id BIGINT NOT NULL,
+                          leg_length DECIMAL(5, 2),
+                          FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+CREATE TABLE right_leg (
+                           right_leg_id INT AUTO_INCREMENT PRIMARY KEY,
+                           kid_id BIGINT NOT NULL,
+                           leg_length DECIMAL(5, 2),
+                           FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
