@@ -3,12 +3,10 @@ package com.digital.controller;
 import com.digital.annotation.AuthCheck;
 import com.digital.constant.UserConstant;
 import com.digital.enums.ResultErrorEnum;
-import com.digital.enums.RoleEnum;
 import com.digital.result.Result;
 import com.digital.utils.MarkdownUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;

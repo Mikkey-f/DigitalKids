@@ -24,9 +24,7 @@ public class CreateKidVo implements Serializable {
 
     private String birthdate;
 
-    private BigDecimal height;
-
-    private BigDecimal weight;
+    private Integer old;
 
     private Date createTime;
 

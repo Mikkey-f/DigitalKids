@@ -1,9 +1,7 @@
 package com.digital.service;
 
-.service;
-
-import .RightArm;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.digital.model.entity.RightArm;
 
 /**
 * @author Lenovo

@@ -8,9 +8,6 @@
         <result column="user_id" property="userId" />
         <result column="avatar" property="avatar" />
         <result column="nickname" property="nickname" />
-        <result column="birthdate" property="birthdate" />
-        <result column="height" property="height" />
-        <result column="weight" property="weight" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>

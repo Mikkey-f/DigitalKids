@@ -8,25 +8,19 @@ import com.digital.enums.ResultErrorEnum;
 import com.digital.exception.BusinessException;
 import com.digital.model.entity.Order;
 import com.digital.model.entity.Product;
-import com.digital.model.entity.User;
 import com.digital.model.entity.UserAddress;
 import com.digital.model.entity.redis.CartItem;
 import com.digital.model.entity.redis.OrderItem;
 import com.digital.model.entity.redis.UserAddressItem;
 import com.digital.model.vo.order.OrderVo;
-import com.digital.model.vo.userAddress.GetUserAddressVo;
 import com.digital.result.Result;
 import com.digital.service.OrderService;
 import com.digital.mapper.OrderMapper;
 import com.digital.service.ProductService;
 import com.digital.service.UserAddressService;
-import com.digital.service.UserService;
 import com.digital.utils.RedisKeyUtil;
-import lombok.val;
-import org.elasticsearch.search.DocValueFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisOperations;
@@ -34,11 +28,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.net.http.HttpRequest;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**

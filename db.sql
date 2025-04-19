@@ -76,9 +76,7 @@ CREATE TABLE `Kid` (
                        `user_id` BIGINT NOT NULL COMMENT '关联的用户ID',
                        `avatar` VARCHAR(500) COLLATE utf8mb4_bin DEFAULT '/default_avatar.png' COMMENT '头像URL',
                        `nickname` VARCHAR(50) COLLATE utf8mb4_bin NOT NULL COMMENT '昵称',
-                       `birthdate` VARCHAR(50) COMMENT '生日',
-                       `height` DECIMAL(4,2) COMMENT '身高(单位：米)',
-                       `weight` DECIMAL(5,2) COMMENT '体重(单位：千克)',
+                       `old` bigint COMMENT '年龄',
                        `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                        `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='孩子信息表';

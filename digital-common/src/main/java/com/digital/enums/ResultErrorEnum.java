@@ -37,6 +37,12 @@ public enum ResultErrorEnum {
     NOT_GET_CODE(126, "没有得到验证码"),
     LOGIN_IS_FAILURE(127, "登录失败"),
     REGISTER_IS_FAILURE(128, "注册失败"),
+    KID_BODY_IS_LOADED(129, "该孩子身体信息已经载入"),
+    KID_HEAD_IS_LOADED(130, "该孩子头部信息已经载入"),
+    LEFT_ARM_IS_LOADED(131, "该孩子左臂信息已经载入"),
+    RIGHT_ARM_IS_LOADED(132, "该孩子右臂信息已经载入"),
+    LEFT_LEG_IS_LOADED(133, "该孩子左腿信息已经载入"),
+    RIGHT_LEG_IS_LOADED(134, "该孩子右腿信息已经载入"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),

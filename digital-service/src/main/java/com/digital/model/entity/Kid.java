@@ -17,11 +17,7 @@ public class Kid {
 
     private String nickname;
 
-    private String birthdate;
-
-    private BigDecimal height;
-
-    private BigDecimal weight;
+    private Integer old;
 
     @TableField("create_time")
     private Date createTime;
