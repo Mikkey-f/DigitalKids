@@ -12,8 +12,8 @@ public enum FavouriteTypeEnum {
     VIDEO(2, "视频"),
     POST(3, "帖子");
 
-    private int code;
-    private String value;
+    private final int code;
+    private final String value;
     FavouriteTypeEnum(int code, String value) {
         this.code = code;
         this.value = value;

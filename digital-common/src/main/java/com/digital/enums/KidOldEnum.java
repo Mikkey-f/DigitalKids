@@ -12,9 +12,9 @@ public enum KidOldEnum {
     CHILD(4, 12, "儿童时期"),
     TEENAGER(13, 18, "少年时期");
 
-    private int from;
-    private int end;
-    private String value;
+    private final int from;
+    private final int end;
+    private final String value;
 
     KidOldEnum(int from, int end, String value) {
         this.from = from;

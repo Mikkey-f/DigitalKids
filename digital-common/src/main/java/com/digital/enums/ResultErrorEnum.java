@@ -62,8 +62,8 @@ public enum ResultErrorEnum {
     W_ENCYCLOPEDIA_ID_IS_EXIST(216,"有相同的ID存在"),
 
     SUCCESS(500, "成功!");
-    Integer code;
-    String message;
+    private final Integer code;
+    private final String message;
 
     ResultErrorEnum(Integer code, String message) {
         this.code = code;

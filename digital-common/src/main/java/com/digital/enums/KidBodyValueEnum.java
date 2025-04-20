@@ -13,11 +13,11 @@ public enum KidBodyValueEnum {
     CHILD(14.5, 21.4, 80, 100, "儿童时期"),
     TEENAGER(17.5, 23.5, 60, 90,  "少年时期");
 
-    private Double fromBmi;
-    private Double toBmi;
-    private Integer fromHeartBeat;
-    private Integer toHeartBeat;
-    private String value;
+    private final Double fromBmi;
+    private final Double toBmi;
+    private final Integer fromHeartBeat;
+    private final Integer toHeartBeat;
+    private final String value;
 
     KidBodyValueEnum (Double fromBmi, Double toBmi, Integer fromHeartBeat, Integer toHeartBeat, String value) {
         this.fromBmi = fromBmi;
