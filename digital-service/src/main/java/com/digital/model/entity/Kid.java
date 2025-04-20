@@ -8,9 +8,9 @@ import java.util.Date;
 @Data
 @TableName("Kid")
 public class Kid {
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
+    @TableField("user_id")
     private Long userId;
 
     private String avatar;

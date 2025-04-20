@@ -9,27 +9,26 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * @Author: Mikkeyf
- * @CreateTime: 2025-03-16  17:26
+ * @TableName message
  */
+@TableName(value ="message")
 @Data
-@TableName("favorite")
-public class Favorite {
+public class Message {
+
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
+    @TableField("from_id")
+    private Long fromId;
+    @TableField("to_id")
+    private Long toId;
+    @TableField("topic_id")
+    private Long topicId;
 
-    @TableField("target_id")
-    private Integer targetId;
-
-    @TableField("user_id")
-    private Long userId;
-
-    @TableField("target_type")
-    private String targetType;
-
+    private String content;
+    @TableField("is_read")
+    private Integer isRead;
     @TableField("create_time")
     private Date createTime;
-
     @TableField("update_time")
     private Date updateTime;
 }

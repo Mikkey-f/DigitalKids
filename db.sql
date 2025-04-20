@@ -1084,3 +1084,13 @@ CREATE TABLE right_leg (
                            leg_length DECIMAL(5, 2),
                            FOREIGN KEY (kid_id) REFERENCES kid(id)
 );
+CREATE TABLE message (
+                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                         from_id BIGINT NOT NULL COMMENT '发送消息用户',
+                         to_id BIGINT NOT NULL COMMENT '接收消息用户',
+                         topic_id BIGINT COMMENT '通知主题ID',
+                         content VARCHAR(1000) NOT NULL COMMENT '消息内容',
+                         is_read INT DEFAULT 0 COMMENT '是否已读，0表示未读，1表示已读',
+                         create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                         update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '站内通知消息表';

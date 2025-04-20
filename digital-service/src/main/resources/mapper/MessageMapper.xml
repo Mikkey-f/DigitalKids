@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.MessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.Message">
+            <id property="id" column="id" />
+            <result property="fromId" column="from_id" />
+            <result property="toId" column="to_Id" />
+            <result property="topicId" column="topic_Id" />
+            <result property="content" column="content" />
+            <result property="isRead" column="is_read" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,fromId,to_Id,topic_Id,content,is_read,
+        createTime,updateTime
+    </sql>
+</mapper>
