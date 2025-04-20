@@ -4,13 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.model.entity.*;
 import com.digital.model.request.threejs.*;
+import com.digital.model.vo.threejs.*;
 import com.digital.result.Result;
 import com.digital.service.*;
+import com.digital.utils.ThreeJsUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author: Mikkeyf
@@ -37,6 +41,8 @@ public class ThreeJsController {
 
     @Autowired
     private LeftLegService leftLegService;
+    @Autowired
+    private KidService kidService;
 
     @PostMapping("/kid_body/add")
     public Result addKidBody(@RequestBody KidBodyAddReq kidBodyAddReq) {
@@ -251,34 +257,123 @@ public class ThreeJsController {
 
         return Result.success();
     }
-    @GetMapping("/kid_body/{id}")
-    public Result getKidBody(@PathVariable Long id) {
-        KidBody byId = kidBodyService.getById(id);
-
+    @GetMapping("/kid_body/{kidId}")
+    public Result<GetKidBodyVo> getKidBody(@PathVariable Long kidId) {
+        Kid kid = kidService.getById(kidId);
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.NOT_HAVE_THIS_KID.getMessage());
+        }
+        KidBody kidBody = kidBodyService.getOne(new QueryWrapper<KidBody>().eq("kid_id", kidId));
+        if (kidBody == null) {
+            return Result.error(ResultErrorEnum.KID_BODY_UNLOADED.getMessage());
+        }
+        Map<String, String> map = new ConcurrentHashMap<>();
+        ThreeJsUtil.calculateKidBody(map, kidBody, kid.getOld());
+        GetKidBodyVo build = GetKidBodyVo.builder()
+                .bmi(kidBody.getBmi())
+                .height(kidBody.getHeight())
+                .heartbeatRate(kidBody.getHeartbeatRate())
+                .weight(kidBody.getWeight())
+                .status(map)
+                .build();
+        return Result.success(build);
     }
 
-    @GetMapping("/kid_head/{id}")
-    public Result getKidHead(@PathVariable Long id) {
-
+    @GetMapping("/kid_head/{kidId}")
+    public Result<GetKidHeadVo> getKidHead(@PathVariable Long kidId) {
+        Kid kid = kidService.getById(kidId);
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.NOT_HAVE_THIS_KID.getMessage());
+        }
+        KidHead kidHead = kidHeadService.getOne(new QueryWrapper<KidHead>().eq("kid_id", kidId));
+        if (kidHead == null) {
+            return Result.error(ResultErrorEnum.KID_HEAD_UNLOADED.getMessage());
+        }
+        Map<String, String> map = new ConcurrentHashMap<>();
+        ThreeJsUtil.calculateKidHead(map, kidHead, kid.getOld());
+        GetKidHeadVo build = GetKidHeadVo.builder()
+                .status(map)
+                .hairColor(kidHead.getHairColor())
+                .eyeColor(kidHead.getEyeColor())
+                .leftEyeDegree(kidHead.getLeftEyeDegree())
+                .rightEyeDegree(kidHead.getRightEyeDegree())
+                .build();
+        return Result.success(build);
     }
 
-    @GetMapping("/left_arm/{id}")
-    public Result getLeftArm(@PathVariable Long id) {
-
+    @GetMapping("/left_arm/{kidId}")
+    public Result<GetLeftArmVo> getLeftArm(@PathVariable Long kidId) {
+        Kid kid = kidService.getById(kidId);
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.NOT_HAVE_THIS_KID.getMessage());
+        }
+        LeftArm leftArm = leftArmService.getOne(new QueryWrapper<LeftArm>().eq("kid_id", kidId));
+        if (leftArm == null) {
+            return Result.error(ResultErrorEnum.LEFT_ARM_UNLOADED.getMessage());
+        }
+        Map<String, String> map = new ConcurrentHashMap<>();
+        ThreeJsUtil.calculateLeftArm(map, leftArm, kid.getOld());
+        GetLeftArmVo build = GetLeftArmVo.builder()
+                .status(map)
+                .armLength(leftArm.getArmLength())
+                .build();
+        return Result.success(build);
     }
 
-    @GetMapping("/right_arm/{id}")
-    public Result getRightArm(@PathVariable Long id) {
-
+    @GetMapping("/right_arm/{kidId}")
+    public Result<GetRightArmVo> getRightArm(@PathVariable Long kidId) {
+        Kid kid = kidService.getById(kidId);
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.NOT_HAVE_THIS_KID.getMessage());
+        }
+        RightArm rightArm = rightArmService.getOne(new QueryWrapper<RightArm>().eq("kid_id", kidId));
+        if (rightArm == null) {
+            return Result.error(ResultErrorEnum.KID_BODY_UNLOADED.getMessage());
+        }
+        Map<String, String> map = new ConcurrentHashMap<>();
+        ThreeJsUtil.calculateRightArm(map, rightArm, kid.getOld());
+        GetRightArmVo build = GetRightArmVo.builder()
+                .status(map)
+                .armLength(rightArm.getArmLength())
+                .build();
+        return Result.success(build);
     }
 
-    @GetMapping("/left_leg/{id}")
-    public Result getLeftLeg(@PathVariable Long id) {
-
+    @GetMapping("/left_leg/{kidId}")
+    public Result<GetLeftLegVo> getLeftLeg(@PathVariable Long kidId) {
+        Kid kid = kidService.getById(kidId);
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.NOT_HAVE_THIS_KID.getMessage());
+        }
+        LeftLeg leftLeg = leftLegService.getOne(new QueryWrapper<LeftLeg>().eq("kid_id", kidId));
+        if (leftLeg == null) {
+            return Result.error(ResultErrorEnum.KID_BODY_UNLOADED.getMessage());
+        }
+        Map<String, String> map = new ConcurrentHashMap<>();
+        ThreeJsUtil.calculateLeftLeg(map, leftLeg, kid.getOld());
+        GetLeftLegVo build = GetLeftLegVo.builder()
+                .legLength(leftLeg.getLegLength())
+                .status(map)
+                .build();
+        return Result.success(build);
     }
 
-    @GetMapping("/right_leg/{id}")
-    public Result getRightLeg(@PathVariable Long id) {
-
+    @GetMapping("/right_leg/{kidId}")
+    public Result<GetRightLegVo> getRightLeg(@PathVariable Long kidId) {
+        Kid kid = kidService.getById(kidId);
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.NOT_HAVE_THIS_KID.getMessage());
+        }
+        RightLeg rightLeg = rightLegService.getOne(new QueryWrapper<RightLeg>().eq("kid_id", kidId));
+        if (rightLeg == null) {
+            return Result.error(ResultErrorEnum.KID_BODY_UNLOADED.getMessage());
+        }
+        Map<String, String> map = new ConcurrentHashMap<>();
+        ThreeJsUtil.calculateRightLeg(map, rightLeg, kid.getOld());
+        GetRightLegVo build = GetRightLegVo.builder()
+                .legLength(rightLeg.getLegLength())
+                .status(map)
+                .build();
+        return Result.success(build);
     }
 }

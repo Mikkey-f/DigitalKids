@@ -43,6 +43,13 @@ public enum ResultErrorEnum {
     RIGHT_ARM_IS_LOADED(132, "该孩子右臂信息已经载入"),
     LEFT_LEG_IS_LOADED(133, "该孩子左腿信息已经载入"),
     RIGHT_LEG_IS_LOADED(134, "该孩子右腿信息已经载入"),
+    NOT_HAVE_THIS_KID(135, "没有这个孩子的信息"),
+    KID_BODY_UNLOADED(136, "该孩子身体信息没有载入或不完整"),
+    KID_HEAD_UNLOADED(137, "该孩子头部信息没有载入或不完整"),
+    LEFT_ARM_UNLOADED(138, "该孩子左臂信息没有载入或不完整"),
+    RIGHT_ARM_UNLOADED(139, "该孩子右臂信息没有载入或不完整"),
+    LEFT_LEG_UNLOADED(140, "该孩子左腿信息没有载入或不完整"),
+    RIGHT_LEG_UNLOADED(141, "该孩子右腿信息没有载入或不完整"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),

@@ -1,5 +1,6 @@
 package com.digital.model.vo.threejs;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,12 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * @CreateTime: 2025/4/19 21:34
  */
 @Data
-public class getLeftLegVo implements Serializable {
+@Builder
+public class GetRightLegVo implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private Map<String, String> status = new ConcurrentHashMap<String, String>();
-
-    private Integer leftLegId;
 
     private BigDecimal legLength;
 }
