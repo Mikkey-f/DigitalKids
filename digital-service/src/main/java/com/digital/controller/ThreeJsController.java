@@ -1,6 +1,8 @@
 package com.digital.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.digital.annotation.AuthCheck;
+import com.digital.constant.UserConstant;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.model.entity.*;
 import com.digital.model.request.threejs.*;
@@ -44,7 +46,13 @@ public class ThreeJsController {
     @Autowired
     private KidService kidService;
 
+    /**
+     * 给儿童身体添加信息
+     * @param kidBodyAddReq
+     * @return
+     */
     @PostMapping("/kid_body/add")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addKidBody(@RequestBody KidBodyAddReq kidBodyAddReq) {
         if (kidBodyAddReq.getWeight() == null || kidBodyAddReq.getBmi() == null
         || kidBodyAddReq.getHeight() == null || kidBodyAddReq.getHeartbeatRate() == null
@@ -66,7 +74,13 @@ public class ThreeJsController {
         return Result.success();
     }
 
+    /**
+     * 给儿童头部添加信息
+     * @param kidHeadAddReq
+     * @return
+     */
     @PostMapping("/kid_head/add")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addKidHead(@RequestBody KidHeadAddReq kidHeadAddReq) {
         if (kidHeadAddReq.getKidId() == null || kidHeadAddReq.getHairColor() == null
         || kidHeadAddReq.getEyeColor() == null || kidHeadAddReq.getLeftEyeDegree() == null
@@ -88,7 +102,13 @@ public class ThreeJsController {
         return Result.success();
     }
 
+    /**
+     * 给儿童左臂添加信息
+     * @param leftArmAddReq
+     * @return
+     */
     @PostMapping("/left_arm/add")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addLeftArm(@RequestBody LeftArmAddReq leftArmAddReq) {
         if (leftArmAddReq.getKidId() == null || leftArmAddReq.getLeftArmId() == null
         || leftArmAddReq.getArmLength() == null) {
@@ -108,7 +128,14 @@ public class ThreeJsController {
         }
         return Result.success();
     }
+
+    /**
+     * 给儿童左腿添加信息
+     * @param leftLegAddReq
+     * @return
+     */
     @PostMapping("/left_leg/add")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addLeftLeg(@RequestBody LeftLegAddReq leftLegAddReq) {
         if (leftLegAddReq.getKidId() == null || leftLegAddReq.getLeftLegId() == null
                 || leftLegAddReq.getLegLength() == null) {
@@ -128,7 +155,14 @@ public class ThreeJsController {
         }
         return Result.success();
     }
+
+    /**
+     * 给儿童右臂添加信息
+     * @param rightArmAddReq
+     * @return
+     */
     @PostMapping("/right_arm/add")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addRightArm(@RequestBody RightArmAddReq rightArmAddReq) {
         if (rightArmAddReq.getKidId() == null || rightArmAddReq.getRightArmId() == null
                 || rightArmAddReq.getArmLength() == null) {
@@ -148,7 +182,14 @@ public class ThreeJsController {
         }
         return Result.success();
     }
+
+    /**
+     * 给儿童右腿添加信息
+     * @param rightLegAddReq
+     * @return
+     */
     @PostMapping("/right_leg/add")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addRightLeg(@RequestBody RightLegAddReq rightLegAddReq) {
         if (rightLegAddReq.getKidId() == null || rightLegAddReq.getRightLegId() == null
                 || rightLegAddReq.getLegLength() == null) {
@@ -170,8 +211,13 @@ public class ThreeJsController {
     }
 
 
-
+    /**
+     * 修改儿童身体信息
+     * @param kidBodyUpdateReq
+     * @return
+     */
     @PutMapping("/kid_body/update")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result updateKidBody(@RequestBody KidBodyUpdateReq kidBodyUpdateReq) {
         if (kidBodyUpdateReq.getKidId() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -186,7 +232,13 @@ public class ThreeJsController {
         return Result.success();
     }
 
+    /**
+     * 修改儿童头部信息
+     * @param kidHeadUpdateReq
+     * @return
+     */
     @PutMapping("/kid_head/update")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result updateKidHead(@RequestBody KidHeadUpdateReq kidHeadUpdateReq) {
         if (kidHeadUpdateReq.getKidId() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -201,7 +253,13 @@ public class ThreeJsController {
         return Result.success();
     }
 
+    /**
+     * 修改儿童左臂信息
+     * @param leftArmUpdateReq
+     * @return
+     */
     @PutMapping("/left_arm/update")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result updateLeftArm(@RequestBody LeftArmUpdateReq leftArmUpdateReq) {
         if (leftArmUpdateReq.getKidId() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -215,7 +273,14 @@ public class ThreeJsController {
 
         return Result.success();
     }
+
+    /**
+     * 修改儿童左腿信息
+     * @param leftLegUpdateReq
+     * @return
+     */
     @PutMapping("/left_leg/update")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result updateLeftLeg(@RequestBody LeftLegUpdateReq leftLegUpdateReq) {
         if (leftLegUpdateReq.getKidId() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -229,7 +294,14 @@ public class ThreeJsController {
 
         return Result.success();
     }
+
+    /**
+     * 修改儿童右臂信息
+     * @param rightArmUpdateReq
+     * @return
+     */
     @PutMapping("/right_arm/update")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result updateRightArm(@RequestBody RightArmUpdateReq rightArmUpdateReq) {
         if (rightArmUpdateReq.getKidId() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -243,7 +315,14 @@ public class ThreeJsController {
 
         return Result.success();
     }
+
+    /**
+     * 修改儿童右腿信息
+     * @param rightLegUpdateReq
+     * @return
+     */
     @PutMapping("/right_leg/update")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result updateRightLeg(@RequestBody RightLegUpdateReq rightLegUpdateReq) {
         if (rightLegUpdateReq.getKidId() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -257,7 +336,14 @@ public class ThreeJsController {
 
         return Result.success();
     }
+
+    /**
+     * 获取儿童身体信息
+     * @param kidId
+     * @return
+     */
     @GetMapping("/kid_body/{kidId}")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetKidBodyVo> getKidBody(@PathVariable Long kidId) {
         Kid kid = kidService.getById(kidId);
         if (kid == null) {
@@ -279,7 +365,13 @@ public class ThreeJsController {
         return Result.success(build);
     }
 
+    /**
+     * 获取儿童头部信息
+     * @param kidId
+     * @return
+     */
     @GetMapping("/kid_head/{kidId}")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetKidHeadVo> getKidHead(@PathVariable Long kidId) {
         Kid kid = kidService.getById(kidId);
         if (kid == null) {
@@ -301,7 +393,13 @@ public class ThreeJsController {
         return Result.success(build);
     }
 
+    /**
+     * 获取儿童左臂信息
+     * @param kidId
+     * @return
+     */
     @GetMapping("/left_arm/{kidId}")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetLeftArmVo> getLeftArm(@PathVariable Long kidId) {
         Kid kid = kidService.getById(kidId);
         if (kid == null) {
@@ -320,7 +418,13 @@ public class ThreeJsController {
         return Result.success(build);
     }
 
+    /**
+     * 获取儿童右臂信息
+     * @param kidId
+     * @return
+     */
     @GetMapping("/right_arm/{kidId}")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetRightArmVo> getRightArm(@PathVariable Long kidId) {
         Kid kid = kidService.getById(kidId);
         if (kid == null) {
@@ -339,7 +443,13 @@ public class ThreeJsController {
         return Result.success(build);
     }
 
+    /**
+     * 获取儿童左腿信息
+     * @param kidId
+     * @return
+     */
     @GetMapping("/left_leg/{kidId}")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetLeftLegVo> getLeftLeg(@PathVariable Long kidId) {
         Kid kid = kidService.getById(kidId);
         if (kid == null) {
@@ -358,7 +468,13 @@ public class ThreeJsController {
         return Result.success(build);
     }
 
+    /**
+     * 获取儿童右腿信息
+     * @param kidId
+     * @return
+     */
     @GetMapping("/right_leg/{kidId}")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetRightLegVo> getRightLeg(@PathVariable Long kidId) {
         Kid kid = kidService.getById(kidId);
         if (kid == null) {
