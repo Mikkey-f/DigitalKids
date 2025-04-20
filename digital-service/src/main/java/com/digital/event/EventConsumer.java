@@ -48,7 +48,7 @@ public class EventConsumer {
     }
 
 
-    @KafkaListener(topics = {TopicConstant.TOPIC_COMMENT}, groupId = "digitalKids-consumer-group")
+    @KafkaListener(topics = {TopicConstant.TOPIC_COMMENT, TopicConstant.TOPIC_LIKE}, groupId = "digitalKids-consumer-group")
     public void handleCommentMessage(ConsumerRecord<String, String> record) {
         if (record == null) {
             throw new BusinessException(ResultErrorEnum.MQ_ERROR);
@@ -75,9 +75,17 @@ public class EventConsumer {
         elasticsearchService.saveEncyclopedia(parentingEncyclopedia);
     }
 
-    @KafkaListener(topics = {TopicConstant.TOPIC_DELETE}, groupId = "digitalKids-consumer-group")
+    @KafkaListener(topics = {TopicConstant.TOPIC_DELETE_PARENTING_ENCY}, groupId = "digitalKids-consumer-group")
     public void handleEncyclopediaDeleteMessage(ConsumerRecord<String, String> record) {
-
+        if (record == null) {
+            throw new BusinessException(ResultErrorEnum.MQ_ERROR);
+        }
+        CommonEvent commonEvent = JSONObject.parseObject(record.value().toString(), CommonEvent.class);
+        if (commonEvent == null) {
+            throw new BusinessException(ResultErrorEnum.MQ_ERROR);
+        }
+        parentingEncyclopediaService.removeById(commonEvent.getEntityId());
+        elasticsearchService.deleteEncyclopedia((int) commonEvent.getEntityId());
     }
 
     @KafkaListener(topics = {TopicConstant.TOPIC_QUESTION}, groupId = "digitalKids-consumer-group")

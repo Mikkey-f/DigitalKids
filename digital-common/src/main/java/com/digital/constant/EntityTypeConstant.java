@@ -15,4 +15,9 @@ public class EntityTypeConstant {
      */
     public static final int PRODUCT = 2;
 
+    /**
+     * 3为评论
+     */
+    public static final int COMMENT = 3;
+
 }

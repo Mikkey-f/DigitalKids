@@ -12,7 +12,7 @@ public class TopicConstant {
     /**
      * 删除百科
      */
-    public static final String TOPIC_DELETE = "delete";
+    public static final String TOPIC_DELETE_PARENTING_ENCY = "delete_parenting_enc";
 
     /**
      * 对百科和百科中的评论的评论
@@ -23,5 +23,15 @@ public class TopicConstant {
      * 提问
      */
     public static final String TOPIC_QUESTION = "question";
+
+    /**
+     * 点赞
+     */
+    public static final String TOPIC_LIKE = "like";
+
+    /**
+     * 警报
+     */
+    public static final String TOPIC_ALARM = "alarm";
 
 }

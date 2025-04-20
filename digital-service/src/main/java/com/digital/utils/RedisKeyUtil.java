@@ -1,5 +1,7 @@
 package com.digital.utils;
 
+import com.google.common.base.Splitter;
+
 /**
  * @Author: Mikkeyf
  * @CreateTime: 2025/3/26 17:33
@@ -18,6 +20,18 @@ public class RedisKeyUtil {
     public static final String ORDER_PREFIX = "orderVo";
     // orderCreateTime:orderNo - Date()
     public static final String ORDER_CREATE_TIME_PREFIX = "orderCreateTime";
+    // likeEntity:entityType:entityId -> userId
+    public static final String LIKE_ENTITY_PREFIX = "likeEntity";
+    // likeUser:userId -> int
+    public static final String LIKE_USER_PREFIX = "likeUser";
+
+    public static String getLikeUserKey(String userId) {
+        return LIKE_USER_PREFIX + SPILT + userId;
+    }
+
+    public static String getLikeEntityKey(String entityType, String entityId) {
+        return LIKE_ENTITY_PREFIX + SPILT + entityType + SPILT + entityId;
+    }
 
     public static String getUserCartKey(String userId) {
         return CART_PREFIX + SPILT + userId;
