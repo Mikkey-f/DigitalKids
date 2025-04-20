@@ -1,5 +1,6 @@
 package com.digital.event;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.digital.constant.StatusConstant;
@@ -8,8 +9,10 @@ import com.digital.controller.StatusController;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.exception.BusinessException;
 import com.digital.model.entity.CommonEvent;
+import com.digital.model.entity.Message;
 import com.digital.model.entity.ParentingEncyclopedia;
 import com.digital.model.request.question.QuestionReq;
+import com.digital.service.MessageService;
 import com.digital.service.ParentingEncyclopediaService;
 import com.digital.service.impl.ElasticsearchService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,11 @@ import org.springframework.web.reactive.socket.WebSocketHandler;
 import reactor.core.publisher.Mono;
 
 import java.net.http.WebSocket;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.digital.constant.UserConstant.SYSTEM_USER_ID;
 
 /**
  * @Author: Mikkeyf
@@ -35,28 +43,58 @@ import java.net.http.WebSocket;
 @Slf4j
 public class EventConsumer {
 
+
     @Autowired
     private ParentingEncyclopediaService parentingEncyclopediaService;
     @Autowired
     private ElasticsearchService elasticsearchService;
 
     private final WebClient webClient;
+    @Autowired
+    private MessageService messageService;
 
 
     public EventConsumer(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8000").build();
     }
 
-
+    /**
+     * 评论-1 点赞-2
+     * @param record
+     */
     @KafkaListener(topics = {TopicConstant.TOPIC_COMMENT, TopicConstant.TOPIC_LIKE}, groupId = "digitalKids-consumer-group")
     public void handleCommentMessage(ConsumerRecord<String, String> record) {
         if (record == null) {
             throw new BusinessException(ResultErrorEnum.MQ_ERROR);
         }
 
-        CommonEvent commonEvent = JSONObject.parseObject(record.value().toString(), CommonEvent.class);
+        CommonEvent commonEvent = JSONObject.parseObject(record.value(), CommonEvent.class);
         if (commonEvent == null) {
             throw new BusinessException(ResultErrorEnum.MQ_ERROR);
+        }
+        Message message = Message.builder()
+                .fromId(SYSTEM_USER_ID)
+                .isRead(0)
+                .build();
+        Object targetUserId = commonEvent.getData().get("targetUserId");
+        message.setToId((Long) targetUserId);
+        if (Objects.equals(commonEvent.getTopic(), TopicConstant.TOPIC_COMMENT)) {
+            message.setTopicId(TopicConstant.TOPIC_COMMENT_ID);
+        } else if (Objects.equals(commonEvent.getTopic(), TopicConstant.TOPIC_LIKE)) {
+            message.setTopicId(TopicConstant.TOPIC_LIKE_ID);
+        }
+
+        Map<String, String> map = new ConcurrentHashMap<>();
+        map.put("entityType", String.valueOf(commonEvent.getEntityType()));
+        map.put("entityId", String.valueOf(commonEvent.getEntityId()));
+        map.put("userId", String.valueOf(commonEvent.getFromUserId()));
+
+        String jsonString = JSONUtils.toJSONString(map);
+        message.setContent(jsonString);
+
+        boolean save = messageService.save(message);
+        if (!save) {
+            throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
         }
     }
 
@@ -66,7 +104,7 @@ public class EventConsumer {
             throw new BusinessException(ResultErrorEnum.MQ_ERROR);
         }
 
-        CommonEvent commonEvent = JSONObject.parseObject(record.value().toString(), CommonEvent.class);
+        CommonEvent commonEvent = JSONObject.parseObject(record.value(), CommonEvent.class);
         if (commonEvent == null) {
             throw new BusinessException(ResultErrorEnum.MQ_ERROR);
         }
@@ -80,7 +118,7 @@ public class EventConsumer {
         if (record == null) {
             throw new BusinessException(ResultErrorEnum.MQ_ERROR);
         }
-        CommonEvent commonEvent = JSONObject.parseObject(record.value().toString(), CommonEvent.class);
+        CommonEvent commonEvent = JSONObject.parseObject(record.value(), CommonEvent.class);
         if (commonEvent == null) {
             throw new BusinessException(ResultErrorEnum.MQ_ERROR);
         }
@@ -109,7 +147,9 @@ public class EventConsumer {
 
         try {
             ResponseEntity<String> response = responseEntityMono.block();
-            StatusController.saveSession(requestId, response.getBody());
+            if (response != null) {
+                StatusController.saveSession(requestId, response.getBody());
+            }
         } catch (RuntimeException e) {
             WebClientResponseException.UnprocessableEntity unprocessableEntity = (WebClientResponseException.UnprocessableEntity) e;
             log.error("422 Unprocessable Entity. Status code: {}", unprocessableEntity.getStatusCode());

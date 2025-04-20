@@ -6,7 +6,7 @@ package com.digital.constant;
  */
 public class TopicConstant {
     /**
-     * 发布百科
+     * 发布百科 1
      */
     public static final String TOPIC_PUBLISH_PARENTING_ENCY = "publish_parenting_enc";
     /**
@@ -33,5 +33,15 @@ public class TopicConstant {
      * 警报
      */
     public static final String TOPIC_ALARM = "alarm";
+
+    /**
+     * 评论topic id
+     */
+    public static final Long TOPIC_COMMENT_ID = 1L;
+
+    /**
+     * 点赞topic id
+     */
+    public static final Long TOPIC_LIKE_ID = 2L;
 
 }
