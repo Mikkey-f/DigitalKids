@@ -42,7 +42,7 @@ public class ParentingEncyclopediaServiceImpl extends ServiceImpl<ParentingEncyc
     EventProducer eventProducer;
 
     @Override
-    public Result get(Integer stage) {
+    public Result<List<ParentingEncyclopedia>> get(Integer stage) {
         try {
             QueryWrapper<ParentingEncyclopedia> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("stage", stage);
