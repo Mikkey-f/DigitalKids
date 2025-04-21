@@ -7,11 +7,13 @@ import com.digital.model.request.parentingEncyclopedia.UpdateParentingEncycloped
 import com.digital.model.vo.parentingEncyclopedia.GetParentingEncyclopediaVo;
 import com.digital.result.Result;
 
+import java.util.List;
+
 /**
 * @description 针对表【parenting_encyclopedia】的数据库操作Service
 */
 public interface ParentingEncyclopediaService extends IService<ParentingEncyclopedia> {
-    Result<GetParentingEncyclopediaVo> get(Integer stage);
+    Result<List<ParentingEncyclopedia>> get(Integer stage);
 
     Result delete(Integer id);
 

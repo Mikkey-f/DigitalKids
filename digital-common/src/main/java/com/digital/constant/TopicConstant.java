@@ -44,4 +44,9 @@ public class TopicConstant {
      */
     public static final Long TOPIC_LIKE_ID = 2L;
 
+    /**
+     * 预警topic id
+     */
+    public static final Long TOPIC_ALARM_ID = 3L;
+
 }

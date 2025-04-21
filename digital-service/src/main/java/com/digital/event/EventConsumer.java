@@ -15,6 +15,7 @@ import com.digital.model.request.question.QuestionReq;
 import com.digital.service.MessageService;
 import com.digital.service.ParentingEncyclopediaService;
 import com.digital.service.impl.ElasticsearchService;
+import com.digital.utils.SseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,9 @@ public class EventConsumer {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private SseUtil sseUtil;
+
 
     public EventConsumer(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8000").build();
@@ -87,10 +91,14 @@ public class EventConsumer {
         Map<String, String> map = new ConcurrentHashMap<>();
         map.put("entityType", String.valueOf(commonEvent.getEntityType()));
         map.put("entityId", String.valueOf(commonEvent.getEntityId()));
-        map.put("userId", String.valueOf(commonEvent.getFromUserId()));
+        map.put("SendUserId", String.valueOf(commonEvent.getFromUserId()));
+        map.put("topicId", commonEvent.getTopic());
 
         String jsonString = JSONUtils.toJSONString(map);
         message.setContent(jsonString);
+
+        // 系统发送提示消息
+        sseUtil.sendMessage((Long)targetUserId, String.valueOf(message.getId()), message.getContent());
 
         boolean save = messageService.save(message);
         if (!save) {

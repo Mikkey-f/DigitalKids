@@ -54,7 +54,7 @@ public class ParentingEncyclopediaController {
      */
     @GetMapping("/{stage}")
     @AuthCheck(mustRole = "guest")
-    public Result<GetParentingEncyclopediaVo> getParentingEncyclopedia(@PathVariable Integer stage) {
+    public Result<List<ParentingEncyclopedia>> getParentingEncyclopedia(@PathVariable Integer stage) {
         return parentingEncyclopediaService.get(stage);
     }
 
