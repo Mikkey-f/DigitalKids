@@ -1,4 +1,4 @@
-package com.digitalkid.mcp.model.request;
+package com.digitalkid.mcp.mcp.model.request;
 
 import lombok.Data;
 

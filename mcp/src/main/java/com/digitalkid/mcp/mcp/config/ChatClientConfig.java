@@ -1,4 +1,4 @@
-package com.digitalkid.mcp.config;
+package com.digitalkid.mcp.mcp.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.ToolCallbackProvider;

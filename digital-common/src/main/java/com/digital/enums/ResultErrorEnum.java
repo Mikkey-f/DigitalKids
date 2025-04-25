@@ -50,6 +50,10 @@ public enum ResultErrorEnum {
     RIGHT_ARM_UNLOADED(139, "该孩子右臂信息没有载入或不完整"),
     LEFT_LEG_UNLOADED(140, "该孩子左腿信息没有载入或不完整"),
     RIGHT_LEG_UNLOADED(141, "该孩子右腿信息没有载入或不完整"),
+    PLEASE_SELECT_IMAGE(142, "请选择想上传的图片"),
+    FILE_UPLOAD_ERROR(143, "文件上传失败"),
+    AUTH_IS_OVERTIME(144, "令牌已经过期"),
+    FILE_OPERATION_ERROR(145, "文件处理错误"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),

@@ -1,8 +1,8 @@
-package com.digitalkid.mcp.mcp.service;
+package com.digitalkid.mcp.mcp.mcp.service;
 
-import com.digitalkid.mcp.model.entity.ParentingEncyclopedia;
-import com.digitalkid.mcp.model.request.AddParentingEncyclopediaReq;
-import com.digitalkid.mcp.service.ParentingEncyclopediaService;
+import com.digitalkid.mcp.mcp.model.entity.ParentingEncyclopedia;
+import com.digitalkid.mcp.mcp.model.request.AddParentingEncyclopediaReq;
+import com.digitalkid.mcp.mcp.service.ParentingEncyclopediaService;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;

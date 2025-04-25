@@ -22,10 +22,20 @@ config:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       group-id: digitalKids-consumer-group
       enable-auto-commit: true
       auto-commit-interval: 3000
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+#        // 序列化、反序列化一致
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
   elasticsearch:
     uris: http://localhost:9200
     connection-timeout: 1s
@@ -39,5 +49,9 @@ spring:
         max-wait: 100000
     timeout: 5000
     database: 15
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 

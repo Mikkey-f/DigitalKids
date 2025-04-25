@@ -50,6 +50,7 @@ public class TopicConstant {
      */
     public static final String TOPIC_MCP = "mcp";
 
+
     /**
      * 评论topic id
      */

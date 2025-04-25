@@ -1,7 +1,7 @@
-package com.digitalkid.mcp.mapper;
+package com.digitalkid.mcp.mcp.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.digitalkid.mcp.model.entity.ParentingEncyclopedia;
+import com.digitalkid.mcp.mcp.model.entity.ParentingEncyclopedia;
 import org.springframework.stereotype.Repository;
 
 /**

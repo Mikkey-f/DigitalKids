@@ -1,4 +1,4 @@
-package com.digitalkid.mcp.config;
+package com.digitalkid.mcp.mcp.config;
 
 import org.springframework.ai.autoconfigure.chat.client.ChatClientBuilderConfigurer;
 import org.springframework.context.annotation.Bean;

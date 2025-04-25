@@ -1,4 +1,4 @@
-package com.digitalkid.mcp.model.response;
+package com.digitalkid.mcp.mcp.model.response;
 
 import lombok.Data;
 

@@ -5,6 +5,7 @@ import com.digital.model.entity.CommonEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Author: Mikkeyf
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class EventProducer {
 
     @Autowired
-    private KafkaTemplate kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     // 处理事件
     public void fireEvent(CommonEvent commonEvent) {
@@ -27,4 +28,10 @@ public class EventProducer {
         // 将事件发送到指定主题
         kafkaTemplate.send(topic, question);
     }
+    // 处理事件
+    public void fireEventByImage(String topic, String filePath) {
+        // 将事件发送到指定主题
+        kafkaTemplate.send(topic, filePath);
+    }
+
 }

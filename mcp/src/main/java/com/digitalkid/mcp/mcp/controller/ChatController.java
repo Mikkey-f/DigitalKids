@@ -1,7 +1,7 @@
-package com.digitalkid.mcp.controller;
+package com.digitalkid.mcp.mcp.controller;
 
-import com.digitalkid.mcp.model.request.ChatRequest;
-import com.digitalkid.mcp.model.response.ChatResponse;
+import com.digitalkid.mcp.mcp.model.request.ChatRequest;
+import com.digitalkid.mcp.mcp.model.response.ChatResponse;
 import jakarta.annotation.Resource;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.ResponseEntity;

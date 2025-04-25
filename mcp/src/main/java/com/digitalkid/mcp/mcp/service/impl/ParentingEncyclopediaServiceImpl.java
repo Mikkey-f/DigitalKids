@@ -1,13 +1,12 @@
-package com.digitalkid.mcp.service.impl;
+package com.digitalkid.mcp.mcp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.digitalkid.mcp.mapper.ParentingEncyclopediaMapper;
-import com.digitalkid.mcp.model.entity.ParentingEncyclopedia;
-import com.digitalkid.mcp.model.request.AddParentingEncyclopediaReq;
-import com.digitalkid.mcp.service.ParentingEncyclopediaService;
+import com.digitalkid.mcp.mcp.mapper.ParentingEncyclopediaMapper;
+import com.digitalkid.mcp.mcp.model.entity.ParentingEncyclopedia;
+import com.digitalkid.mcp.mcp.model.request.AddParentingEncyclopediaReq;
+import com.digitalkid.mcp.mcp.service.ParentingEncyclopediaService;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.BeanUtils;

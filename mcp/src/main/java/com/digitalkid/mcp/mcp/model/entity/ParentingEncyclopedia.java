@@ -1,4 +1,4 @@
-package com.digitalkid.mcp.model.entity;
+package com.digitalkid.mcp.mcp.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

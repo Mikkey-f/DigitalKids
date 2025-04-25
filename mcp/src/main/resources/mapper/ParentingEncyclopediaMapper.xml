@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.digitalkid.mcp.mapper.ParentingEncyclopediaMapper">
+<mapper namespace="com.digitalkid.mcp.mcp.mapper.ParentingEncyclopediaMapper">
 
-    <resultMap id="BaseResultMap" type="com.digitalkid.mcp.model.entity.ParentingEncyclopedia">
+    <resultMap id="BaseResultMap" type="com.digitalkid.mcp.mcp.model.entity.ParentingEncyclopedia">
         <id property="id" column="id" />
         <result property="stage" column="stage" />
         <result property="userId" column="user_id" />

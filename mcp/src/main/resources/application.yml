@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: mcp
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/digitalKids
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    mcp:
+      server:
+        enabled: true
+        name: book-management-server
+        version: 1.0.0
+        type: SYNC
+        sse-message-endpoint: /mcp/message
+  ai:
+    openai:
+      api-key: {YOUR_OPEN_AI_KEY}
+
+
+server:
+  port: 7777

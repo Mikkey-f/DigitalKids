@@ -1,5 +1,7 @@
 package com.digital.config;
 
+import com.digital.enums.ResultErrorEnum;
+import com.digital.exception.BusinessException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -51,7 +53,7 @@ public class JwtConfig {
         try {
             return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
         }catch (Exception e){
-            return null;
+            throw new BusinessException(ResultErrorEnum.AUTH_IS_OVERTIME);
         }
     }
 

@@ -3,7 +3,6 @@ package com.digital.event;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.digital.constant.StatusConstant;
 import com.digital.constant.TopicConstant;
 import com.digital.controller.StatusController;
 import com.digital.enums.ResultErrorEnum;
@@ -11,28 +10,32 @@ import com.digital.exception.BusinessException;
 import com.digital.model.entity.CommonEvent;
 import com.digital.model.entity.Message;
 import com.digital.model.entity.ParentingEncyclopedia;
+import com.digital.model.vo.tongue.TongueResult;
 import com.digital.model.request.mcp.ChatRequest;
 import com.digital.model.request.question.QuestionReq;
 import com.digital.service.MessageService;
 import com.digital.service.ParentingEncyclopediaService;
 import com.digital.service.impl.ElasticsearchService;
+import com.digital.utils.FileUtil;
 import com.digital.utils.SseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import org.springframework.web.reactive.socket.WebSocketHandler;
 import reactor.core.publisher.Mono;
 
-import java.net.http.WebSocket;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.digital.constant.UserConstant.SYSTEM_USER_ID;
@@ -61,6 +64,7 @@ public class EventConsumer {
 
     private static final String MCP_IP = "127.0.0.1";
     private static final String MCP_PORT = "7777";
+
 
 
     public EventConsumer(WebClient.Builder webClientBuilder) {

@@ -1,6 +1,6 @@
-package com.digitalkid.mcp.mcp.config;
+package com.digitalkid.mcp.mcp.mcp.config;
 
-import com.digitalkid.mcp.service.ParentingEncyclopediaService;
+import com.digitalkid.mcp.mcp.service.ParentingEncyclopediaService;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.context.annotation.Bean;

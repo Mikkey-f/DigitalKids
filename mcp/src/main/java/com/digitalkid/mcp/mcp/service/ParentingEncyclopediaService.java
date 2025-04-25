@@ -1,7 +1,9 @@
-package com.digitalkid.mcp.service;
+package com.digitalkid.mcp.mcp.service;
 
-import com.digitalkid.mcp.model.entity.ParentingEncyclopedia;
-import com.digitalkid.mcp.model.request.AddParentingEncyclopediaReq;
+
+
+import com.digitalkid.mcp.mcp.model.entity.ParentingEncyclopedia;
+import com.digitalkid.mcp.mcp.model.request.AddParentingEncyclopediaReq;
 
 import java.util.List;
 
