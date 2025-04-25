@@ -39,7 +39,6 @@ public class StatusController {
         }
         s = MarkdownUtils.markdownToHtml(s);
 
-
         return Result.success(s);
     }
 }

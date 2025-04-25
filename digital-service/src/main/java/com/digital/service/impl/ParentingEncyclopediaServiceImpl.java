@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.digital.constant.EntityTypeConstant.PARENTING_ENCYCLOPEDIA;
+import static com.digital.constant.TopicConstant.TOPIC_DELETE_PARENTING_ENCY;
 import static com.digital.constant.TopicConstant.TOPIC_PUBLISH_PARENTING_ENCY;
 
 /**
@@ -65,6 +66,13 @@ public class ParentingEncyclopediaServiceImpl extends ServiceImpl<ParentingEncyc
             // 2. 执行删除（MyBatis-Plus 的 removeById 方法）
             boolean isSuccess = removeById(id);
 
+
+            CommonEvent commonEvent = CommonEvent.builder()
+                    .topic(TOPIC_DELETE_PARENTING_ENCY)
+                    .entityId(id)
+                    .entityType(PARENTING_ENCYCLOPEDIA)
+                    .build();
+            eventProducer.fireEvent(commonEvent);
             // 3. 根据删除结果返回响应
             if (isSuccess) {
                 Result result = Result.success();
@@ -120,6 +128,14 @@ public class ParentingEncyclopediaServiceImpl extends ServiceImpl<ParentingEncyc
             if (rows <= 0) {
                 return Result.error(ResultErrorEnum.W_ENCYCLOPEDIA_FAIL_TO_UPDATE.getMessage());
             }
+
+            CommonEvent commonEvent = CommonEvent.builder()
+                    .topic(TOPIC_PUBLISH_PARENTING_ENCY)
+                    .fromUserId(req.getUserId())
+                    .entityId(entity.getId())
+                    .entityType(PARENTING_ENCYCLOPEDIA)
+                    .build();
+            eventProducer.fireEvent(commonEvent);
 
             // 6. 返回成功结果
             Result result = Result.success();

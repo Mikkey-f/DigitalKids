@@ -15,6 +15,16 @@ public class TopicConstant {
     public static final String TOPIC_DELETE_PARENTING_ENCY = "delete_parenting_enc";
 
     /**
+     * 更新百科
+     */
+    public static final String TOPIC_UPDATE_PARENTING_ENCY = "update_parenting_enc";
+
+    /**
+     * 发布商品
+     */
+    public static final String TOPIC_PUBLISH_PRODUCT = "publish_product";
+
+    /**
      * 对百科和百科中的评论的评论
      */
     public static final String TOPIC_COMMENT = "comment";
@@ -23,6 +33,7 @@ public class TopicConstant {
      * 提问
      */
     public static final String TOPIC_QUESTION = "question";
+
 
     /**
      * 点赞
@@ -33,6 +44,11 @@ public class TopicConstant {
      * 警报
      */
     public static final String TOPIC_ALARM = "alarm";
+
+    /**
+     * mcp
+     */
+    public static final String TOPIC_MCP = "mcp";
 
     /**
      * 评论topic id

@@ -48,7 +48,7 @@ public class CheckKidTask {
     private SseUtil sseUtil;
 
     // 每 10 分钟执行一次，Cron 表达式：0 0/10 * * * ?
-    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(cron = "0 0/5 * * * *")
     public void checkKidDatabase() {
         // 在这里编写扫描 kid 数据库表的逻辑，例如查询数据库、处理数据等
         List<Kid> kidList = kidService.list();

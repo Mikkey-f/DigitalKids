@@ -58,7 +58,7 @@ public class SseUtil {
                 sseEmitter.send(SseEmitter.event().id(messageId).data(message));
                 log.info("用户{},消息id:{},推送成功:{}", userId, messageId, message);
                 return true;
-            }catch (Exception e) {
+            } catch (Exception e) {
                 sseEmitterMap.remove(userId);
                 log.info("用户{},消息id:{},推送异常:{}", userId, messageId, e.getMessage());
                 sseEmitter.complete();

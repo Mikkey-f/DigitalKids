@@ -1,20 +1,17 @@
 package com.digital.controller;
 
-import com.digital.enums.ResultErrorEnum;
 import com.digital.model.entity.ParentingEncyclopedia;
-import com.digital.model.entity.SearchResult;
+import com.digital.model.entity.search.SearchResultForPar;
 import com.digital.model.entity.User;
 import com.digital.model.request.search.SearchAllParEncyReq;
 import com.digital.model.request.search.SearchParEncyByStageReq;
 import com.digital.model.vo.search.SearchVo;
-import com.digital.model.vo.user.GetUserVo;
 import com.digital.model.vo.user.SearchUserVo;
 import com.digital.result.Result;
 import com.digital.service.UserService;
 import com.digital.service.impl.ElasticsearchService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -40,11 +37,11 @@ public class SearchController {
      */
     @PostMapping("/search")
     public Result<List<SearchVo>> search(@RequestBody SearchAllParEncyReq searchReq) {
-        SearchResult searchResult = elasticsearchService.searchEncyclopedia(
+        SearchResultForPar searchResultForPar = elasticsearchService.searchEncyclopedia(
                 searchReq.getKeyword(), -1, (int) (searchReq.getPageReq().getCurrent() - 1), (int) searchReq.getPageReq().getPageSize()
         );
 
-        List<ParentingEncyclopedia> parentingEncyclopediaList = searchResult.getParentingEncyclopediaList();
+        List<ParentingEncyclopedia> parentingEncyclopediaList = searchResultForPar.getParentingEncyclopediaList();
         return Result.success(getSearchVoList(parentingEncyclopediaList));
     }
 
@@ -55,11 +52,11 @@ public class SearchController {
      */
     @PostMapping("/search/stage")
     public Result<List<SearchVo>> searchByStage(@RequestBody SearchParEncyByStageReq searchParEncyByStageReq) {
-        SearchResult searchResult = elasticsearchService.searchEncyclopedia(
+        SearchResultForPar searchResultForPar = elasticsearchService.searchEncyclopedia(
                 searchParEncyByStageReq.getKeyword(), searchParEncyByStageReq.getStage(), (int)(searchParEncyByStageReq.getPageReq().getCurrent() - 1), (int) searchParEncyByStageReq.getPageReq().getPageSize()
         );
 
-        List<ParentingEncyclopedia> parentingEncyclopediaList = searchResult.getParentingEncyclopediaList();
+        List<ParentingEncyclopedia> parentingEncyclopediaList = searchResultForPar.getParentingEncyclopediaList();
 
         return Result.success(getSearchVoList(parentingEncyclopediaList));
     }

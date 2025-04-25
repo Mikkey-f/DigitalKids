@@ -11,6 +11,7 @@ import com.digital.exception.BusinessException;
 import com.digital.model.entity.CommonEvent;
 import com.digital.model.entity.Message;
 import com.digital.model.entity.ParentingEncyclopedia;
+import com.digital.model.request.mcp.ChatRequest;
 import com.digital.model.request.question.QuestionReq;
 import com.digital.service.MessageService;
 import com.digital.service.ParentingEncyclopediaService;
@@ -50,16 +51,21 @@ public class EventConsumer {
     @Autowired
     private ElasticsearchService elasticsearchService;
 
-    private final WebClient webClient;
+    private final WebClient webClientQuestion;
+    private final WebClient webClientMcp;
     @Autowired
     private MessageService messageService;
 
     @Autowired
     private SseUtil sseUtil;
 
+    private static final String MCP_IP = "127.0.0.1";
+    private static final String MCP_PORT = "7777";
+
 
     public EventConsumer(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8000").build();
+        this.webClientQuestion = webClientBuilder.baseUrl("http://localhost:8000").build();
+        this.webClientMcp = webClientBuilder.baseUrl("http://" + MCP_IP + ":" + MCP_PORT).build();
     }
 
     /**
@@ -130,9 +136,10 @@ public class EventConsumer {
         if (commonEvent == null) {
             throw new BusinessException(ResultErrorEnum.MQ_ERROR);
         }
-        parentingEncyclopediaService.removeById(commonEvent.getEntityId());
+//        parentingEncyclopediaService.removeById(commonEvent.getEntityId());
         elasticsearchService.deleteEncyclopedia((int) commonEvent.getEntityId());
     }
+
 
     @KafkaListener(topics = {TopicConstant.TOPIC_QUESTION}, groupId = "digitalKids-consumer-group")
     public void handleQuestionMessage(ConsumerRecord<String, String> record) {
@@ -146,10 +153,42 @@ public class EventConsumer {
         String question = split[1];
         QuestionReq questionReq = new QuestionReq(question);
 
-        Mono<ResponseEntity<String>> responseEntityMono = webClient.method(HttpMethod.POST)
+        Mono<ResponseEntity<String>> responseEntityMono = webClientQuestion.method(HttpMethod.POST)
                 .uri("/run_workflow")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(JSON.toJSONString(questionReq))
+                .retrieve()
+                .toEntity(String.class);
+
+        try {
+            ResponseEntity<String> response = responseEntityMono.block();
+            if (response != null) {
+                StatusController.saveSession(requestId, response.getBody());
+            }
+        } catch (RuntimeException e) {
+            WebClientResponseException.UnprocessableEntity unprocessableEntity = (WebClientResponseException.UnprocessableEntity) e;
+            log.error("422 Unprocessable Entity. Status code: {}", unprocessableEntity.getStatusCode());
+            log.error("Error details: {}", unprocessableEntity.getResponseBodyAsString());
+            throw new BusinessException(ResultErrorEnum.SMART_AGENT_ERROR);
+        }
+    }
+
+    @KafkaListener(topics = {TopicConstant.TOPIC_MCP}, groupId = "digitalKids-consumer-group")
+    public void handleMcpMessage(ConsumerRecord<String, String> record) {
+        if (record == null) {
+            throw new BusinessException(ResultErrorEnum.MQ_ERROR);
+        }
+
+        String message = record.value();
+        String[] split = message.split(":");
+        String requestId = split[0];
+        String question = split[1];
+        ChatRequest chatRequest = new ChatRequest(question);
+
+        Mono<ResponseEntity<String>> responseEntityMono = webClientMcp.method(HttpMethod.POST)
+                .uri("/api/chat")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(JSON.toJSONString(chatRequest))
                 .retrieve()
                 .toEntity(String.class);
 
