@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
 
-    Result registerUser(String username, String password, String avatar, String phoneNumber, String role, Object gender);
+    Result registerUser(String username, String password, String phoneNumber, Object gender);
 
     Result<LoginUserVo> loginUser(String phoneNum, String password);
 

@@ -10,12 +10,12 @@ CREATE TABLE Permission (
 );
 
 CREATE TABLE role_permission (
-                                 role_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                 role_id BIGINT NOT NULL ,
                                  permission_id BIGINT
 );
 
 CREATE TABLE user_role (
-                           user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                           user_id BIGINT NOT NULL ,
                            role_id VARCHAR(255) NOT NULL
 );
 
@@ -1094,3 +1094,12 @@ CREATE TABLE message (
                          create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                          update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT '站内通知消息表';
+
+INSERT INTO permission (name)
+VALUES ('read - only'), ('write - only'), ('read - write');
+
+INSERT INTO role (name)
+VALUES ('admin'), ('user'), ('guest');
+
+INSERT INTO role_permission (role_id, permission_id)
+VALUES (1, 3), (2, 1), (3, 2);

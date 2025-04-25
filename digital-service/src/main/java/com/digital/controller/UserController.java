@@ -44,7 +44,6 @@ public class UserController {
     @Autowired
     FavoriteService favoriteService;
 
-    private static final String TEMPLATE_CODE = "SMS_317120109";
 
     /**
      * 用户注册
@@ -54,13 +53,13 @@ public class UserController {
     @PostMapping("/register")
     public Result registerUser(@RequestBody UserRegisterReq userRegisterReq,
                                HttpSession session) {
+        //测试阶段不加入验证码
         String code = userRegisterReq.getCode();
         Object codeInSession = session.getAttribute(userRegisterReq.getPhone());
         if (codeInSession == null || !codeInSession.equals(code)) {
             return Result.error(ResultErrorEnum.REGISTER_IS_FAILURE.getMessage());
         }
-        Result result = userService.registerUser(userRegisterReq.getName(), userRegisterReq.getPassword(), userRegisterReq.getAvatar(), userRegisterReq.getPhone(),
-                userRegisterReq.getRole(), userRegisterReq.getGender());
+        Result result = userService.registerUser(userRegisterReq.getName(), userRegisterReq.getPassword(), userRegisterReq.getPhone(), userRegisterReq.getGender());
         result.setMsg(ResultSuccessEnum.REGISTER_SUCCESS.getMsg());
         return result;
     }

@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
 
-                .antMatchers("/user/sendMsg","/user/login","/user/register", "/guest/login","/user/loginInvite","/swagger/**","/swagger-resources/**","/swagger-ui/**", "/v3/**", "/error","/**/*.js","/**/*.css","/**/*.png", "/webjars","/favicon.ico","/doc.html","/websocket/*","/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").anonymous()
+                .antMatchers("/admin/user","/user/sendMsg","/user/login","/user/register", "/guest/login","/user/loginInvite","/swagger/**","/swagger-resources/**","/swagger-ui/**", "/v3/**", "/error","/**/*.js","/**/*.css","/**/*.png", "/webjars","/favicon.ico","/doc.html","/websocket/*","/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs", "/webjars/**").anonymous()
 
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
