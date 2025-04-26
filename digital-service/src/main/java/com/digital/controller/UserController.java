@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -157,6 +158,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/list/page/vo")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<Page<GetUserVo>> listUserVOByPage(@RequestBody PageReq pageReq) {
         if (pageReq == null) {
             throw new BusinessException(ResultErrorEnum.PARAM_IS_ERROR);
@@ -187,7 +189,7 @@ public class UserController {
         }
 
         Favorite favorite = new Favorite();
-        QueryWrapper<Favorite> eq = new QueryWrapper<Favorite>().eq("user_id", favorAddReq.getUserId()).eq("target_id", favorAddReq.getTargetId()).eq("target_type", favorAddReq.getTargetType());
+        QueryWrapper<Favorite> eq = new QueryWrapper<Favorite>().eq("user_id", favorAddReq.getUserId()).eq("entity_id", favorAddReq.getEntityId()).eq("entity_type", favorAddReq.getEntityType());
         Favorite one = favoriteService.getOne(eq);
         if (one != null) {
             throw new BusinessException(ResultErrorEnum.NOT_ALLOW_ADD_SAME_THING);
@@ -210,6 +212,9 @@ public class UserController {
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result deleteFavoriteById(@PathVariable long id) {
         boolean b = favoriteService.removeById(id);
+        if (!b) {
+            return Result.error(ResultErrorEnum.FAVORITE_DELETE_IS_ERROR.getMessage());
+        }
         return Result.success(ResultErrorEnum.SUCCESS.getMessage());
     }
 
@@ -261,7 +266,7 @@ public class UserController {
         if (file.isEmpty()) {
             return Result.error(ResultErrorEnum.FILE_UPLOAD_IS_EMPTY.getMessage());
         }
-        String tempFilePath = this.getClass().getResource("/").getPath();
+        String tempFilePath = Objects.requireNonNull(this.getClass().getResource("/")).getPath();
         String fileName = file.getOriginalFilename();
         File tempFile = new File(tempFilePath + fileName);
         try {
