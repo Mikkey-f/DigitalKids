@@ -149,19 +149,7 @@ public class UserController {
         return Result.success(true);
     }
 
-    /**
-     * admin 获取用户分页列表
-     * @param pageReq
-     * @return
-     */
-    @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result<Page<User>> listUserByPage(@RequestBody PageReq pageReq) {
-        long current = pageReq.getCurrent();
-        long size = pageReq.getPageSize();
-        Page<User> userPage = userService.page(new Page<>(current, size));
-        return Result.success(userPage);
-    }
+
 
     /**
      * 用户获取userVO

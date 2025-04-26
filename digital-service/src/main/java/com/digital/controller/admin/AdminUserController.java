@@ -1,10 +1,13 @@
 package com.digital.controller.admin;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.digital.annotation.AuthCheck;
 import com.digital.constant.UserConstant;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.exception.BusinessException;
+import com.digital.mapper.UserMapper;
 import com.digital.model.entity.User;
+import com.digital.model.request.page.PageReq;
 import com.digital.model.request.user.DeleteUserReq;
 import com.digital.model.request.user.UserAddReq;
 import com.digital.model.request.user.UserUpdateReq;
@@ -27,6 +30,8 @@ public class AdminUserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserMapper userMapper;
     /**
      * admin直接添加用户
      * @param userAddRequest
@@ -105,5 +110,21 @@ public class AdminUserController {
             throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
         }
         return Result.success(user);
+    }
+
+    /**
+     * admin 获取用户分页列表
+     * @param pageReq
+     * @return
+     */
+    @PostMapping("/list/page")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public Result<Page<User>> listUserByPage(@RequestBody PageReq pageReq) {
+        long current = pageReq.getCurrent();
+        long size = pageReq.getPageSize();
+        Page<User> page = new Page<>(current, size);
+        Page<User> userPage = userMapper.selectPage(page, null);// null 表示无查询条件，可替换为 QueryWrapper 等条件构造器
+
+        return Result.success(userPage);
     }
 }
