@@ -33,7 +33,7 @@ public class JwtConfig {
      */
     public String createToken (String subject){
         Date nowDate = new Date();
-        Date expireDate = new Date(nowDate.getTime() + expire * 1000);//过期时间
+        Date expireDate = new Date(nowDate.getTime() + expire * 1000 * 24 * 30L);//过期时间
 
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")

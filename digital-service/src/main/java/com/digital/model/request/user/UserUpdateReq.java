@@ -26,11 +26,6 @@ public class UserUpdateReq implements Serializable {
     private String avatar;
 
 
-    /**
-     * 用户角色：user/admin/ban
-     */
-    private String role;
-
     private String location;
 
     private String password;

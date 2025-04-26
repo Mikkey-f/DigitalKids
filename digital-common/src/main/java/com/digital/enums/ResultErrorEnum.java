@@ -54,6 +54,9 @@ public enum ResultErrorEnum {
     FILE_UPLOAD_ERROR(143, "文件上传失败"),
     AUTH_IS_OVERTIME(144, "令牌已经过期"),
     FILE_OPERATION_ERROR(145, "文件处理错误"),
+    AVATAR_UPLOAD_ERROR(146, "头像上传失败"),
+    FILE_UPLOAD_IS_EMPTY(147, "头像为空，重新上传"),
+    DB_DONT_HAVE_THIS_USER(148, "数据库没有这个用户"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),
