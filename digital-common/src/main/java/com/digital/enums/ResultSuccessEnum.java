@@ -14,8 +14,8 @@ public enum ResultSuccessEnum {
     W_ENCYCLOPEDIA_UPDATE_SUCCESS(202,"育儿百科更新成功"),
     W_ENCYCLOPEDIA_ADD_SUCCESS(203,"育儿百科添加成功");
 
-    private int code;
-    private String msg;
+    private final int code;
+    private final String msg;
     ResultSuccessEnum(int code, String msg) {
         this.code = code;
         this.msg = msg;

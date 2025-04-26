@@ -3,12 +3,11 @@ package com.digital.controller;
 import com.digital.annotation.AuthCheck;
 import com.digital.constant.UserConstant;
 import com.digital.enums.ResultErrorEnum;
-import com.digital.enums.RoleEnum;
+import com.digital.model.vo.tongue.TongueResult;
 import com.digital.result.Result;
 import com.digital.utils.MarkdownUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -22,9 +21,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class StatusController {
 
     private static final Map<String, String> sessions = new ConcurrentHashMap<>();
-
+    private static final Map<String, TongueResult> sessionsForTongue = new ConcurrentHashMap<>();
     public static void saveSession(String sessionId, String body) {
         sessions.put(sessionId, body);
+    }
+
+    public static void saveSessionForTongue(String sessionId, TongueResult tongueResult) {
+        sessionsForTongue.put(sessionId, tongueResult);
     }
 
     /**
@@ -41,6 +44,16 @@ public class StatusController {
         }
         s = MarkdownUtils.markdownToHtml(s);
 
+        return Result.success(s);
+    }
+
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    @GetMapping("/status/tongue/{sessionId}")
+    public Result<TongueResult> getStatusForTongue(@PathVariable String sessionId) {
+        TongueResult s = sessionsForTongue.get(sessionId);
+        if (s == null) {
+            return Result.error(ResultErrorEnum.QUESTION_RESULT_NOT_FIND.getMessage());
+        }
 
         return Result.success(s);
     }

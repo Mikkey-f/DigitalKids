@@ -15,8 +15,8 @@ public class FavorAddReq implements Serializable {
 
     private Long userId;
 
-    private String targetType;
+    private Integer entityType;
 
-    private Integer targetId;
+    private Integer entityId;
 
 }

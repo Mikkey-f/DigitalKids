@@ -6,8 +6,8 @@
 
     <resultMap id="BaseResultMap" type="com.digital.model.entity.Favorite">
             <id property="id" column="id" />
-            <result property="targetId" column="target_id" />
-            <result property="targetType" column="target_type"/>
+            <result property="entityId" column="entity_id" />
+            <result property="entityType" column="entity_type"/>
             <result property="userId" column="user_id" />
             <result property="createTime" column="create_time" />
             <result property="updateTime" column="update_time" />

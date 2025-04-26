@@ -1,8 +1,8 @@
-package com.digital.model.entity;
+package com.digital.model.entity.search;
 
+import com.digital.model.entity.ParentingEncyclopedia;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchResult {
+public class SearchResultForPar {
     private List<ParentingEncyclopedia> parentingEncyclopediaList;
     private long total;
 

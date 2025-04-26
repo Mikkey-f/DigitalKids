@@ -71,7 +71,7 @@ public class KidController {
     @PostMapping("/kids")
     @AuthCheck(mustRole = "user")
     public Result<?> addKid(@RequestBody KidAddReq kidAddReq) {
-        Result result = kidService.add(kidAddReq.getUser_id(), kidAddReq.getAvatar(),kidAddReq.getNickname(),kidAddReq.getBirthdate(),kidAddReq.getHeight(),kidAddReq.getWeight());
+        Result result = kidService.add(kidAddReq.getUser_id(), kidAddReq.getAvatar(),kidAddReq.getNickname(), kidAddReq.getOld());
         return result;
     }
 
@@ -83,7 +83,7 @@ public class KidController {
     @PutMapping("/kids")
     @AuthCheck(mustRole = "user")
     public Result<?> updateKid(@RequestBody KidUpdateReq kidUpdateReq) {
-        Result result = kidService.update(kidUpdateReq.getId(), kidUpdateReq.getAvatar(), kidUpdateReq.getNickname(), kidUpdateReq.getBirthdate(), kidUpdateReq.getHeight(), kidUpdateReq.getWeight());
+        Result result = kidService.update(kidUpdateReq.getId(), kidUpdateReq.getAvatar(), kidUpdateReq.getNickname(), kidUpdateReq.getOld());
         return result;
     }
 }

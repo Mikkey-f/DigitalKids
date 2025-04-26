@@ -15,4 +15,6 @@ public class UserLoginReq implements Serializable {
     private String phone;
 
     private String password;
+
+    private String code;
 }

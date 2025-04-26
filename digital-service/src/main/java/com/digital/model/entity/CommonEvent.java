@@ -21,7 +21,7 @@ public class CommonEvent {
      */
     private long fromUserId;
     /**
-     * 实体类型：百科
+     * 实体类型：百科，商品
      */
     private int entityType;
     /**

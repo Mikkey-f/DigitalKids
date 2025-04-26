@@ -1,12 +1,13 @@
 package com.digital.service.impl;
 
 import com.digital.mapper.elasticsearch.ParentingEncyclopediaRepository;
+import com.digital.mapper.elasticsearch.ProductRepository;
 import com.digital.model.entity.ParentingEncyclopedia;
-import com.digital.model.entity.SearchResult;
+import com.digital.model.entity.Product;
+import com.digital.model.entity.search.SearchResultForPar;
+import com.digital.model.entity.search.SearchResultForProduct;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -34,17 +35,24 @@ public class ElasticsearchService {
     private ParentingEncyclopediaRepository parentingEncyclopediaRepository;
 
     @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
     private ElasticsearchRestTemplate elasticsearchTemplate;
 
     public void saveEncyclopedia(ParentingEncyclopedia parentingEncyclopedia) {
         parentingEncyclopediaRepository.save(parentingEncyclopedia);
     }
 
+    public void saveProduct(Product product) {
+        productRepository.save(product);
+    }
+
     public void deleteEncyclopedia(Integer id) {
         parentingEncyclopediaRepository.deleteById(id);
     }
 
-    public SearchResult searchEncyclopedia(String keyword, int stage, int current, int size) {
+    public SearchResultForPar searchEncyclopedia(String keyword, int stage, int current, int size) {
         // 构建一个NativeSearchQuery并添加分页条件、排序条件以及高光区域
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.multiMatchQuery(keyword, "title", "content"))
@@ -96,6 +104,56 @@ public class ElasticsearchService {
                 list.add(post);
             }
         }
-        return new SearchResult(list, totalHits);
+        return new SearchResultForPar(list, totalHits);
+    }
+
+    public SearchResultForProduct searchProduct(String keyword, int stage, int current, int size) {
+        // 构建一个NativeSearchQuery并添加分页条件、排序条件以及高光区域
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.multiMatchQuery(keyword, "title", "content"))
+                .withPageable(PageRequest.of(current, size))
+                .withHighlightFields(//高亮显示
+                        new HighlightBuilder.Field("name").preTags("<em>").postTags("</em>"),
+                        new HighlightBuilder.Field("detail").preTags("<em>").postTags("</em>")
+                ).build();
+        SearchHits<Product> searchHits = elasticsearchTemplate.search(nativeSearchQuery, Product.class);
+        long totalHits = searchHits.getTotalHits();
+
+        // 遍历搜索结果设置帖子的各个参数
+        List<Product> list = new ArrayList<>();
+        if (searchHits.getTotalHits() != 0) {
+            for (SearchHit<Product> searchHit : searchHits) {
+                Product product = new Product();
+                product.setId(searchHit.getContent().getId());
+                product.setName(searchHit.getContent().getName());
+                product.setDetail(searchHit.getContent().getDetail());
+                product.setPrice(searchHit.getContent().getPrice());
+                String createTime = searchHit.getContent().getCreateTime().toString();
+                String updateTime = searchHit.getContent().getUpdateTime().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+                Date date = null;
+                Date date1 = null;
+                try {
+                    date = (Date) sdf.parse(createTime);
+                    date1 = (Date) sdf.parse(updateTime);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                product.setCreateTime(date);
+                product.setUpdateTime(date1);
+
+                // 获得刚刚构建的高光区域，填到帖子的内容和标题上
+                List<String> contentField = searchHit.getHighlightFields().get("name");
+                if (contentField != null) {
+                    product.setName(contentField.get(0));
+                }
+                List<String> titleField = searchHit.getHighlightFields().get("detail");
+                if (titleField != null) {
+                    product.setDetail(titleField.get(0));
+                }
+                list.add(product);
+            }
+        }
+        return new SearchResultForProduct(list, totalHits);
     }
 }

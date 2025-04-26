@@ -15,15 +15,17 @@ import java.util.Date;
 @Data
 @TableName("favorite")
 public class Favorite {
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private Integer targetId;
+    @TableField("entity_id")
+    private Integer entityId;
 
+    @TableField("user_id")
     private Long userId;
 
-    @TableField("target_type")
-    private String targetType;
+    @TableField("entity_type")
+    private Integer entityType;
 
     @TableField("create_time")
     private Date createTime;

@@ -1,11 +1,15 @@
 package com.digital.model.vo.parentingEncyclopedia;
 
 
+import com.digital.model.vo.comment.CommentVo;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 @Data
-public class GetParentingEncyclopediaVo {
+public class GetParentingEncyclopediaVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -29,6 +33,10 @@ public class GetParentingEncyclopediaVo {
      *
      */
     private String content;
+
+    private Long likeCount;
+
+    private Integer likeStatus;
 
     private Date createTime;
 

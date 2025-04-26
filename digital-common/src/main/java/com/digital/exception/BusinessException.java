@@ -1,11 +1,14 @@
 package com.digital.exception;
 
 import com.digital.enums.ResultErrorEnum;
+import com.digital.result.Result;
+import lombok.Getter;
 
 /**
  * @Author: Mikkeyf
  * @CreateTime: 2025-03-16  14:12
  */
+@Getter
 public class BusinessException extends RuntimeException {
     /**
      * 错误码
@@ -27,7 +30,4 @@ public class BusinessException extends RuntimeException {
         this.code = errorCode.getCode();
     }
 
-    public int getCode() {
-        return code;
-    }
 }

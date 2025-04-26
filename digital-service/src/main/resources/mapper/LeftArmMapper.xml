@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.LeftArmMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.LeftArm">
+            <id property="leftArmId" column="left_arm_id" />
+            <result property="kidId" column="kid_id" />
+            <result property="armLength" column="arm_length" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        left_arm_id,kid_id,arm_length
+    </sql>
+</mapper>

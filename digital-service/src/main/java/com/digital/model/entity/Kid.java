@@ -8,20 +8,16 @@ import java.util.Date;
 @Data
 @TableName("Kid")
 public class Kid {
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
+    @TableField("user_id")
     private Long userId;
 
     private String avatar;
 
     private String nickname;
 
-    private String birthdate;
-
-    private BigDecimal height;
-
-    private BigDecimal weight;
+    private Integer old;
 
     @TableField("create_time")
     private Date createTime;

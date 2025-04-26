@@ -28,4 +28,9 @@ public class UserConstant {
      * 被封号
      */
     public static final String BAN_ROLE = "ban";
+
+    /**
+     * 系统用户
+     */
+    public static final Long SYSTEM_USER_ID = 0L;
 }

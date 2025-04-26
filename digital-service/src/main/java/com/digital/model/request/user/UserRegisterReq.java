@@ -15,11 +15,9 @@ public class UserRegisterReq {
 
     private String password;
 
-    private String avatar;
-
     private String phone;
 
-    private String role;
-
     private Object gender;
+
+    private String code;
 }

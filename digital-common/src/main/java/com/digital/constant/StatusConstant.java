@@ -9,4 +9,11 @@ public class StatusConstant {
 
     //禁用
     public static final Integer DISABLE = 0;
+
+    /**
+     * 评论状态
+     */
+    public static final Integer NOT_READ = 0;
+    public static final Integer ALREADY_READ = 1;
+    public static final Integer DELETED = 2;
 }

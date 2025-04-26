@@ -15,8 +15,8 @@ public enum RoleEnum {
     GUEST(3, "guest"),
     BAN(4, "ban");
 
-    private int code;
-    private String value;
+    private final int code;
+    private final String value;
     RoleEnum(int code, String value) {
         this.code = code;
         this.value = value;

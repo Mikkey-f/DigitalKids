@@ -33,6 +33,31 @@ public enum ResultErrorEnum {
     THIS_ORDER_ALREADY_CANCELED(122, "该表单已经被取消"),
     ORDER_TYPE_ERROR(123,"订单类型错误，不能执行以下操作"),
     REDIS_TRANSACTION_ERROR(124, "redis事务运行失败"),
+    ONLY_GENERATE_4OR6_CODE(125, "只能生成4或者6的验证码"),
+    NOT_GET_CODE(126, "没有得到验证码"),
+    LOGIN_IS_FAILURE(127, "登录失败"),
+    REGISTER_IS_FAILURE(128, "注册失败"),
+    KID_BODY_IS_LOADED(129, "该孩子身体信息已经载入"),
+    KID_HEAD_IS_LOADED(130, "该孩子头部信息已经载入"),
+    LEFT_ARM_IS_LOADED(131, "该孩子左臂信息已经载入"),
+    RIGHT_ARM_IS_LOADED(132, "该孩子右臂信息已经载入"),
+    LEFT_LEG_IS_LOADED(133, "该孩子左腿信息已经载入"),
+    RIGHT_LEG_IS_LOADED(134, "该孩子右腿信息已经载入"),
+    NOT_HAVE_THIS_KID(135, "没有这个孩子的信息"),
+    KID_BODY_UNLOADED(136, "该孩子身体信息没有载入或不完整"),
+    KID_HEAD_UNLOADED(137, "该孩子头部信息没有载入或不完整"),
+    LEFT_ARM_UNLOADED(138, "该孩子左臂信息没有载入或不完整"),
+    RIGHT_ARM_UNLOADED(139, "该孩子右臂信息没有载入或不完整"),
+    LEFT_LEG_UNLOADED(140, "该孩子左腿信息没有载入或不完整"),
+    RIGHT_LEG_UNLOADED(141, "该孩子右腿信息没有载入或不完整"),
+    PLEASE_SELECT_IMAGE(142, "请选择想上传的图片"),
+    FILE_UPLOAD_ERROR(143, "文件上传失败"),
+    AUTH_IS_OVERTIME(144, "令牌已经过期"),
+    FILE_OPERATION_ERROR(145, "文件处理错误"),
+    AVATAR_UPLOAD_ERROR(146, "头像上传失败"),
+    FILE_UPLOAD_IS_EMPTY(147, "头像为空，重新上传"),
+    DB_DONT_HAVE_THIS_USER(148, "数据库没有这个用户"),
+    FAVORITE_DELETE_IS_ERROR(149, "收藏删除错误"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),
@@ -52,8 +77,8 @@ public enum ResultErrorEnum {
     W_ENCYCLOPEDIA_ID_IS_EXIST(216,"有相同的ID存在"),
 
     SUCCESS(500, "成功!");
-    Integer code;
-    String message;
+    private final Integer code;
+    private final String message;
 
     ResultErrorEnum(Integer code, String message) {
         this.code = code;

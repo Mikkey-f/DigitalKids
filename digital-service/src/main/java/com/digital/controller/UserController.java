@@ -12,21 +12,29 @@ import com.digital.model.entity.User;
 import com.digital.model.request.favorite.FavorAddReq;
 import com.digital.model.request.page.PageReq;
 import com.digital.model.request.user.*;
-import com.digital.model.vo.favorite.FavoriteVo;
 import com.digital.model.vo.user.GetUserVo;
 import com.digital.model.vo.user.LoginUserVo;
 import com.digital.result.Result;
 import com.digital.service.FavoriteService;
 import com.digital.service.UserService;
+import com.digital.utils.OssPutUtil;
+import com.digital.utils.SMUtils;
+import com.digital.utils.ValidateCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @Author: Mikkeyf
@@ -43,15 +51,22 @@ public class UserController {
     @Autowired
     FavoriteService favoriteService;
 
+
     /**
      * 用户注册
      * @param userRegisterReq 用户注册请求
      * @return 返回响应
      */
     @PostMapping("/register")
-    public Result registerUser(@RequestBody UserRegisterReq userRegisterReq) {
-        Result result = userService.registerUser(userRegisterReq.getName(), userRegisterReq.getPassword(), userRegisterReq.getAvatar(), userRegisterReq.getPhone(),
-                userRegisterReq.getRole(), userRegisterReq.getGender());
+    public Result registerUser(@RequestBody UserRegisterReq userRegisterReq,
+                               HttpSession session) {
+        //测试阶段不加入验证码
+        String code = userRegisterReq.getCode();
+        Object codeInSession = session.getAttribute(userRegisterReq.getPhone());
+        if (codeInSession == null || !codeInSession.equals(code)) {
+            return Result.error(ResultErrorEnum.REGISTER_IS_FAILURE.getMessage());
+        }
+        Result result = userService.registerUser(userRegisterReq.getName(), userRegisterReq.getPassword(), userRegisterReq.getPhone(), userRegisterReq.getGender());
         result.setMsg(ResultSuccessEnum.REGISTER_SUCCESS.getMsg());
         return result;
     }
@@ -62,15 +77,22 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public Result<LoginUserVo> loginUser(@RequestBody UserLoginReq userLoginReq) {
+    public Result<LoginUserVo> loginUser(@RequestBody UserLoginReq userLoginReq,
+                                         HttpSession session) {
         if (userLoginReq == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_NULL.getMessage());
         }
         String phoneNum = userLoginReq.getPhone();
         String userPassword = userLoginReq.getPassword();
-        if (StringUtils.isAnyBlank(phoneNum, userPassword)) {
+        String code = userLoginReq.getCode();
+        if (StringUtils.isAnyBlank(phoneNum, userPassword, code)) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        Object codeInSession = session.getAttribute(phoneNum);
+        if (codeInSession == null || !codeInSession.equals(code)) {
+            return Result.error(ResultErrorEnum.LOGIN_IS_FAILURE.getMessage());
+        }
+
         return userService.loginUser(phoneNum, userPassword);
     }
 
@@ -86,82 +108,8 @@ public class UserController {
         return Result.success(userService.getLoginUserVO(user));
     }
 
-    /**
-     * admin直接添加用户
-     * @param userAddRequest
-     * @return
-     */
-    @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result<Long> addUser(@RequestBody UserAddReq userAddRequest) {
-        if (userAddRequest == null) {
-            throw new BusinessException(ResultErrorEnum.PARAM_IS_ERROR);
-        }
-        User user = new User();
-        BeanUtils.copyProperties(userAddRequest, user);
-        boolean result = userService.save(user);
-        if (!result) {
-            throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
-        }
-        return Result.success(user.getId());
-    }
 
-    /**
-     * 删除用户by admin
-     * @param deleteRequest
-     * @param request
-     * @return
-     */
-    @DeleteMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result<Boolean> deleteUser(@RequestBody DeleteUserReq deleteRequest, HttpServletRequest request) {
-        if (deleteRequest == null || deleteRequest.getId() <= 0) {
-            throw new BusinessException(ResultErrorEnum.PARAM_IS_ERROR);
-        }
-        boolean b = userService.removeById(deleteRequest.getId());
-        return Result.success(b);
-    }
 
-    /**
-     * 更改用户by admin
-     * @param userUpdateRequest
-     * @param request
-     * @return
-     */
-    @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result<Boolean> updateUser(@RequestBody UserUpdateReq userUpdateRequest,
-                                            HttpServletRequest request) {
-        if (userUpdateRequest == null || userUpdateRequest.getId() == null) {
-            throw new BusinessException(ResultErrorEnum.PARAM_IS_ERROR);
-        }
-        User user = new User();
-        BeanUtils.copyProperties(userUpdateRequest, user);
-        boolean result = userService.updateById(user);
-        if (!result) {
-            throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
-        }
-        return Result.success(true);
-    }
-
-    /**
-     * 仅限admin获取user
-     * @param id
-     * @param request
-     * @return
-     */
-    @GetMapping("/get")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result<User> getUserById(long id, HttpServletRequest request) {
-        if (id <= 0) {
-            throw new BusinessException(ResultErrorEnum.PARAM_IS_ERROR);
-        }
-        User user = userService.getById(id);
-        if (user == null) {
-            throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
-        }
-        return Result.success(user);
-    }
 
     /**
      * 根据 id 获取包装类
@@ -173,8 +121,7 @@ public class UserController {
     @GetMapping("/get/vo")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<GetUserVo> getUserVOById(long id, HttpServletRequest request) {
-        Result<User> response = getUserById(id, request);
-        User user = response.getData();
+        User user = userService.getById(id);
         return Result.success(userService.getUserVo(user));
     }
 
@@ -203,19 +150,7 @@ public class UserController {
         return Result.success(true);
     }
 
-    /**
-     * admin 获取用户分页列表
-     * @param pageReq
-     * @return
-     */
-    @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result<Page<User>> listUserByPage(@RequestBody PageReq pageReq) {
-        long current = pageReq.getCurrent();
-        long size = pageReq.getPageSize();
-        Page<User> userPage = userService.page(new Page<>(current, size));
-        return Result.success(userPage);
-    }
+
 
     /**
      * 用户获取userVO
@@ -223,6 +158,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/list/page/vo")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<Page<GetUserVo>> listUserVOByPage(@RequestBody PageReq pageReq) {
         if (pageReq == null) {
             throw new BusinessException(ResultErrorEnum.PARAM_IS_ERROR);
@@ -253,7 +189,7 @@ public class UserController {
         }
 
         Favorite favorite = new Favorite();
-        QueryWrapper<Favorite> eq = new QueryWrapper<Favorite>().eq("user_id", favorAddReq.getUserId()).eq("target_id", favorAddReq.getTargetId()).eq("target_type", favorAddReq.getTargetType());
+        QueryWrapper<Favorite> eq = new QueryWrapper<Favorite>().eq("user_id", favorAddReq.getUserId()).eq("entity_id", favorAddReq.getEntityId()).eq("entity_type", favorAddReq.getEntityType());
         Favorite one = favoriteService.getOne(eq);
         if (one != null) {
             throw new BusinessException(ResultErrorEnum.NOT_ALLOW_ADD_SAME_THING);
@@ -276,6 +212,9 @@ public class UserController {
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result deleteFavoriteById(@PathVariable long id) {
         boolean b = favoriteService.removeById(id);
+        if (!b) {
+            return Result.error(ResultErrorEnum.FAVORITE_DELETE_IS_ERROR.getMessage());
+        }
         return Result.success(ResultErrorEnum.SUCCESS.getMessage());
     }
 
@@ -291,5 +230,53 @@ public class UserController {
 //        return Result.success(favoriteVOPage);
 //    }
 
+    /**
+     * 发送手机验证码
+     * @param phoneNum
+     * @param session
+     * @return
+     */
+    @PostMapping("/sendMsg")
+    public Result<String> sendMsg(String phoneNum, HttpSession session) {
+
+        if (StringUtils.isEmpty(phoneNum)) {
+            throw new BusinessException(ResultErrorEnum.NOT_GET_CODE);
+        }
+
+//      2.随机生成四位验证码
+        String code = ValidateCodeUtil.generateValidateCode(4).toString();
+
+//      3.调用阿里云提供的短信服务
+        SMUtils.sendMessage(phoneNum, code);
+
+//      4.需要将生成的验证码保存到session中
+        session.setAttribute(phoneNum, code);
+
+        return Result.success(ResultErrorEnum.SUCCESS.getMessage());
+    }
+
+    /**
+     * 上传头像
+     * @param file
+     * @return
+     */
+    @PostMapping("/avatar")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    public Result<String> fileUpload(@RequestParam("file") MultipartFile file) throws FileNotFoundException {
+        if (file.isEmpty()) {
+            return Result.error(ResultErrorEnum.FILE_UPLOAD_IS_EMPTY.getMessage());
+        }
+        String tempFilePath = Objects.requireNonNull(this.getClass().getResource("/")).getPath();
+        String fileName = file.getOriginalFilename();
+        File tempFile = new File(tempFilePath + fileName);
+        try {
+            file.transferTo(tempFile);
+            //return "上传成功" + tempFilePath + fileName;
+        } catch (IOException e) {
+            log.info(e.getMessage());
+            throw new BusinessException(ResultErrorEnum.FILE_UPLOAD_ERROR);
+        }
+        return Result.success(OssPutUtil.fileUpload(fileName, tempFilePath + fileName));
+    }
 }
 

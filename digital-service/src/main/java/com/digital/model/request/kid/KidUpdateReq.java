@@ -12,10 +12,7 @@ public class KidUpdateReq {
 
     private String nickname;
 
-    private String birthdate;
+    private Integer old;
 
-    private BigDecimal height;
-
-    private BigDecimal weight;
     private static final long serialVersionUID = 1L;
 }

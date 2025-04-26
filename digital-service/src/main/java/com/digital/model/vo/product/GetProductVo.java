@@ -3,11 +3,14 @@ package com.digital.model.vo.product;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.digital.model.vo.comment.CommentVo;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: Mikkeyf
@@ -33,4 +36,9 @@ public class GetProductVo implements Serializable {
 
     private BigDecimal price;
 
+    private List<CommentVo> commentVos;
+
+    private BigInteger LikeCount;
+
+    private BigInteger LikeStatus;
 }
