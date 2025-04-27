@@ -41,7 +41,7 @@ public class UserAddressController {
      */
     @PostMapping("/userAddress")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result addUserAddressByLoginUser(@RequestBody UserAddressAddReq userAddressAddReq,
+    public Result<Boolean> addUserAddressByLoginUser(@RequestBody UserAddressAddReq userAddressAddReq,
                                             HttpServletRequest request) {
         if (userAddressAddReq.getReceiverAddress() == null || userAddressAddReq.getReceiverCity() == null || userAddressAddReq.getReceiverDistrict() == null
                 || userAddressAddReq.getReceiverName() == null || userAddressAddReq.getReceiverPhone() == null) {
@@ -61,7 +61,7 @@ public class UserAddressController {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -71,7 +71,7 @@ public class UserAddressController {
      */
     @DeleteMapping("/userAddress/{id}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result deleteUserAddressById(@PathVariable Integer id) {
+    public Result<Boolean> deleteUserAddressById(@PathVariable Integer id) {
 
         if (id == null || id <= 0) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -82,7 +82,7 @@ public class UserAddressController {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -94,7 +94,7 @@ public class UserAddressController {
      */
     @PutMapping("/userAddress/{id}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result updateUserAddressById(@PathVariable Integer id,
+    public Result<Boolean> updateUserAddressById(@PathVariable Integer id,
                                     @RequestBody UserAddressUpdateReq userAddressUpdateReq,
                                     HttpServletRequest request) {
 
@@ -119,7 +119,7 @@ public class UserAddressController {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**

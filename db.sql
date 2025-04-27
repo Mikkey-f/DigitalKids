@@ -970,8 +970,8 @@ CREATE TABLE product (
                          price DECIMAL(10, 2),
                          stock INT,
                          status INT,
-                         create_time DATETIME,
-                         update_time DATETIME
+                         create_time DATETIME default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+                         update_time DATETIME default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP
 );
 
 CREATE TABLE category (
@@ -979,8 +979,8 @@ CREATE TABLE category (
                           parent_id INT,
                           name VARCHAR(255),
                           status INT,
-                          create_time DATETIME,
-                          update_time DATETIME
+                          create_time DATETIME default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
+                          update_time DATETIME default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP
 );
 
 INSERT INTO category (name, status, parent_id)

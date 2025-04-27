@@ -25,16 +25,17 @@ public class CartService {
 
 
     public Result<List<CartItem>> addCart(String userCartKey, Integer productId, int quantity, boolean isSelected) {
+        CartItem cartItem = null;
         if (hashOperations.hasKey(userCartKey, String.valueOf(productId))) {
-            CartItem cartItem = hashOperations.get(userCartKey, String.valueOf(productId));
+            cartItem = hashOperations.get(userCartKey, String.valueOf(productId));
             if (cartItem == null) {
                 return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
             }
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         } else {
-            CartItem cartItem = new CartItem(quantity, isSelected);
-            hashOperations.put(userCartKey, String.valueOf(productId), cartItem);
+            cartItem = new CartItem(quantity, isSelected);
         }
+        hashOperations.put(userCartKey, String.valueOf(productId), cartItem);
         return Result.success(getListOfCartItems(userCartKey));
     }
 

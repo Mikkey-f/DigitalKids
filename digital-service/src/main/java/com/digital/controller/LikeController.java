@@ -49,7 +49,7 @@ public class LikeController {
      * 给唯一实体(商品，百科，评论)点赞
      * @param entityType 商品类别
      * @param entityId 商品id
-     * @param entityUserId 0 为系统发布（商品和百科） 非0为唯一实体为评论
+     * @param entityUserId 给目标评论的用户id
      * @param request
      * @return
      */
