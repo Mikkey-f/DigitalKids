@@ -1,6 +1,7 @@
 package com.digital.service.impl;
 
 import com.digital.utils.RedisKeyUtil;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
@@ -23,16 +24,16 @@ public class LikeService {
 
         redisTemplate.execute(new SessionCallback() {
             @Override
-            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+            public Object execute(@NotNull RedisOperations redisOperations) throws DataAccessException {
                 String entityLikeKey = RedisKeyUtil.getLikeEntityKey(String.valueOf(entityType), String.valueOf(entityId));
                 String userLikeKey = RedisKeyUtil.getLikeUserKey(String.valueOf(entityUserId));
                 Boolean isMember = redisOperations.opsForSet().isMember(entityLikeKey, userId);
 
                 redisOperations.multi();
 
-                if(isMember) {
+                if(Boolean.TRUE.equals(isMember)) {
                     redisOperations.opsForSet().remove(entityLikeKey, userId);
-                    redisOperations.opsForValue().increment(userLikeKey);
+                    redisOperations.opsForValue().decrement(userLikeKey);
                 } else {
                     redisOperations.opsForSet().add(entityLikeKey, userId);
                     redisOperations.opsForValue().increment(userLikeKey);

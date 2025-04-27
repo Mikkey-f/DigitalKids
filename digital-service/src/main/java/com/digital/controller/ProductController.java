@@ -100,15 +100,15 @@ public class ProductController {
                     .getUserVo(userService.getUserVo(userService.getById(comment.getUserId())))
                     .content(comment.getContent())
                     .likeCount(likeService.findEntityLikeCount(EntityTypeConstant.COMMENT, comment.getId()))
-                    .likeStatus(likeService.findUserLikeCount(Math.toIntExact(loginUser.getId())))
+                    .likeStatus(likeService.findEntityLikeStatus(Math.toIntExact(loginUser.getId()), EntityTypeConstant.COMMENT, comment.getId()))
                     .build();
             List<CommentSonVo> listCommentSonVo = list.stream()
                     .filter(comment1 -> comment1.getTargetId() == comment.getId())
                     .map(comment1 -> CommentSonVo.builder()
                             .content(comment1.getContent())
                             .getUserVo(userService.getUserVo(userService.getById(comment1.getUserId())))
-                            .likeCount(likeService.findEntityLikeCount(EntityTypeConstant.COMMENT, comment.getId()))
-                            .likeStatus(likeService.findUserLikeCount(Math.toIntExact(loginUser.getId())))
+                            .likeCount(likeService.findEntityLikeCount(EntityTypeConstant.COMMENT, comment1.getId()))
+                            .likeStatus(likeService.findEntityLikeStatus(Math.toIntExact(loginUser.getId()), EntityTypeConstant.COMMENT, comment1.getId()))
                             .build())
                     .toList();
             commentVo.setCommentSonVoList(listCommentSonVo);

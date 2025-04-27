@@ -95,7 +95,7 @@ public class ParentingEncyclopediaController {
         GetParentingEncyclopediaDetailVo getParentingEncyclopediaDetailVo = new GetParentingEncyclopediaDetailVo();
 
         //添加总点赞数量和状态
-        long entityLikeCount = likeService.findEntityLikeCount(EntityTypeConstant.PRODUCT, id);
+        long entityLikeCount = likeService.findEntityLikeCount(EntityTypeConstant.PARENTING_ENCYCLOPEDIA, id);
         getParentingEncyclopediaDetailVo.setLikeCount(entityLikeCount);
         int likeStatus = likeService.findEntityLikeStatus(Math.toIntExact(loginUser.getId()), EntityTypeConstant.PARENTING_ENCYCLOPEDIA, id);
         getParentingEncyclopediaDetailVo.setLikeStatus(likeStatus);
@@ -109,7 +109,7 @@ public class ParentingEncyclopediaController {
                     .getUserVo(userService.getUserVo(userService.getById(comment.getUserId())))
                     .content(comment.getContent())
                     .likeCount(likeService.findEntityLikeCount(EntityTypeConstant.COMMENT, comment.getId()))
-                    .likeStatus(likeService.findUserLikeCount(Math.toIntExact(loginUser.getId())))
+                    .likeStatus(likeService.findEntityLikeStatus(Math.toIntExact(loginUser.getId()), EntityTypeConstant.COMMENT, comment.getId()))
                     .build();
             List<CommentSonVo> listCommentSonVo = list.stream()
                     .filter(comment1 -> comment1.getTargetId() == comment.getId())
@@ -118,7 +118,7 @@ public class ParentingEncyclopediaController {
                             .content(comment1.getContent())
                             .getUserVo(userService.getUserVo(userService.getById(comment1.getUserId())))
                             .likeCount(likeService.findEntityLikeCount(EntityTypeConstant.COMMENT, comment.getId()))
-                            .likeStatus(likeService.findUserLikeCount(Math.toIntExact(loginUser.getId())))
+                            .likeStatus(likeService.findEntityLikeStatus(Math.toIntExact(loginUser.getId()), EntityTypeConstant.COMMENT, comment.getId()))
                             .build())
                     .toList();
             //二阶评论
@@ -130,7 +130,7 @@ public class ParentingEncyclopediaController {
                                 .content(comment1.getContent())
                                 .getUserVo(userService.getUserVo(userService.getById(comment1.getUserId())))
                                 .likeCount(likeService.findEntityLikeCount(EntityTypeConstant.COMMENT, comment.getId()))
-                                .likeStatus(likeService.findUserLikeCount(Math.toIntExact(loginUser.getId())))
+                                .likeStatus(likeService.findEntityLikeStatus(Math.toIntExact(loginUser.getId()), EntityTypeConstant.COMMENT, comment.getId()))
                                 .build())
                         .toList();
                 commentSonVo.setListCommentSonSonVo(list1);

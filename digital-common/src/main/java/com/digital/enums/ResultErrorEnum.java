@@ -60,6 +60,7 @@ public enum ResultErrorEnum {
     FAVORITE_DELETE_IS_ERROR(149, "收藏删除错误"),
     NOT_SEARCH_CONTENT(150, "无搜索内容"),
     SEND_PRIVATE_MESSAGE_ERROR(151, "发送私信失败"),
+    KID_NOT_LOADED(152, "孩子未被载入"),
 
     W_PARAM_IS_NULL(201, "儿童不能为空"),
     W_FAIL_TO_SELECT(202,"查询育儿百科失败"),

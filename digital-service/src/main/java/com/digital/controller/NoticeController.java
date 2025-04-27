@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author: Mikkeyf
- * @CreateTime: 2025/4/21 00:25
+ * @CreateTime: 2025/4/27 15:34
  */
-@Slf4j
 @RestController
-@RequestMapping("/message")
-public class MessageController {
+@Slf4j
+@RequestMapping("/notice")
+public class NoticeController {
 }

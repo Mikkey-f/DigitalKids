@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @Data
 @Slf4j
 public class LeftArmUpdateReq {
-    private Integer leftArmId;
 
     private Long kidId;
 

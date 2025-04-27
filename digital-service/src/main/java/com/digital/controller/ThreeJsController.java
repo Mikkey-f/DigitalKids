@@ -60,9 +60,14 @@ public class ThreeJsController {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
 
+        Kid kid = kidService.getById(kidBodyAddReq.getKidId());
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.KID_NOT_LOADED.getMessage());
+        }
+
         KidBody kidBody = new KidBody();
         KidBody kidId = kidBodyService.getOne(new QueryWrapper<KidBody>().eq("kid_id", kidBodyAddReq.getKidId()));
-        if (kidId == null) {
+        if (kidId != null) {
             return Result.error(ResultErrorEnum.KID_BODY_IS_LOADED.getMessage());
         }
 
@@ -71,7 +76,9 @@ public class ThreeJsController {
         if (!save) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
-        return Result.success();
+
+
+        return Result.success(true);
     }
 
     /**
@@ -88,9 +95,14 @@ public class ThreeJsController {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
 
+        Kid kid = kidService.getById(kidHeadAddReq.getKidId());
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.KID_NOT_LOADED.getMessage());
+        }
+
         KidHead kidHead = new KidHead();
         KidHead kidId = kidHeadService.getOne(new QueryWrapper<KidHead>().eq("kid_id", kidHeadAddReq.getKidId()));
-        if (kidId == null) {
+        if (kidId != null) {
             return Result.error(ResultErrorEnum.KID_HEAD_IS_LOADED.getMessage());
         }
 
@@ -99,7 +111,7 @@ public class ThreeJsController {
         if (!save) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -110,14 +122,18 @@ public class ThreeJsController {
     @PostMapping("/left_arm/add")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addLeftArm(@RequestBody LeftArmAddReq leftArmAddReq) {
-        if (leftArmAddReq.getKidId() == null || leftArmAddReq.getLeftArmId() == null
-        || leftArmAddReq.getArmLength() == null) {
+        if (leftArmAddReq.getKidId() == null ||  leftArmAddReq.getArmLength() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+
+        Kid kid = kidService.getById(leftArmAddReq.getKidId());
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.KID_NOT_LOADED.getMessage());
         }
 
         LeftArm leftArm = new LeftArm();
         LeftArm kidId = leftArmService.getOne(new QueryWrapper<LeftArm>().eq("kid_id", leftArmAddReq.getKidId()));
-        if (kidId == null) {
+        if (kidId != null) {
             return Result.error(ResultErrorEnum.LEFT_ARM_IS_LOADED.getMessage());
         }
 
@@ -126,7 +142,7 @@ public class ThreeJsController {
         if (!save) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -137,14 +153,18 @@ public class ThreeJsController {
     @PostMapping("/left_leg/add")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addLeftLeg(@RequestBody LeftLegAddReq leftLegAddReq) {
-        if (leftLegAddReq.getKidId() == null || leftLegAddReq.getLeftLegId() == null
-                || leftLegAddReq.getLegLength() == null) {
+        if (leftLegAddReq.getKidId() == null || leftLegAddReq.getLegLength() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+
+        Kid kid = kidService.getById(leftLegAddReq.getKidId());
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.KID_NOT_LOADED.getMessage());
         }
 
         LeftLeg leftLeg = new LeftLeg();
         LeftLeg kidId = leftLegService.getOne(new QueryWrapper<LeftLeg>().eq("kid_id", leftLegAddReq.getKidId()));
-        if (kidId == null) {
+        if (kidId != null) {
             return Result.error(ResultErrorEnum.LEFT_LEG_IS_LOADED.getMessage());
         }
 
@@ -153,7 +173,7 @@ public class ThreeJsController {
         if (!save) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -164,14 +184,18 @@ public class ThreeJsController {
     @PostMapping("/right_arm/add")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addRightArm(@RequestBody RightArmAddReq rightArmAddReq) {
-        if (rightArmAddReq.getKidId() == null || rightArmAddReq.getRightArmId() == null
-                || rightArmAddReq.getArmLength() == null) {
+        if (rightArmAddReq.getKidId() == null || rightArmAddReq.getArmLength() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+
+        Kid kid = kidService.getById(rightArmAddReq.getKidId());
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.KID_NOT_LOADED.getMessage());
         }
 
         RightArm rightArm = new RightArm();
         RightArm kidId = rightArmService.getOne(new QueryWrapper<RightArm>().eq("kid_id", rightArmAddReq.getKidId()));
-        if (kidId == null) {
+        if (kidId != null) {
             return Result.error(ResultErrorEnum.RIGHT_ARM_IS_LOADED.getMessage());
         }
 
@@ -180,7 +204,7 @@ public class ThreeJsController {
         if (!save) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -191,14 +215,18 @@ public class ThreeJsController {
     @PostMapping("/right_leg/add")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result addRightLeg(@RequestBody RightLegAddReq rightLegAddReq) {
-        if (rightLegAddReq.getKidId() == null || rightLegAddReq.getRightLegId() == null
-                || rightLegAddReq.getLegLength() == null) {
+        if (rightLegAddReq.getKidId() == null || rightLegAddReq.getLegLength() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+
+        Kid kid = kidService.getById(rightLegAddReq.getKidId());
+        if (kid == null) {
+            return Result.error(ResultErrorEnum.KID_NOT_LOADED.getMessage());
         }
 
         RightLeg rightLeg = new RightLeg();
         RightLeg kidId = rightLegService.getOne(new QueryWrapper<RightLeg>().eq("kid_id", rightLegAddReq.getKidId()));
-        if (kidId == null) {
+        if (kidId != null) {
             return Result.error(ResultErrorEnum.LEFT_ARM_IS_LOADED.getMessage());
         }
 
@@ -207,7 +235,7 @@ public class ThreeJsController {
         if (!save) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
-        return Result.success();
+        return Result.success(true);
     }
 
 
@@ -224,12 +252,12 @@ public class ThreeJsController {
         }
         KidBody kidBody = new KidBody();
         BeanUtils.copyProperties(kidBodyUpdateReq, kidBody);
-        boolean b = kidBodyService.updateById(kidBody);
+        boolean b = kidBodyService.update(kidBody, new QueryWrapper<KidBody>().eq("kid_id", kidBody.getKidId()));
         if (!b) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -245,12 +273,12 @@ public class ThreeJsController {
         }
         KidHead kidHead = new KidHead();
         BeanUtils.copyProperties(kidHeadUpdateReq, kidHead);
-        boolean b = kidHeadService.updateById(kidHead);
+        boolean b = kidHeadService.update(kidHead, new QueryWrapper<KidHead>().eq("kid_id", kidHead.getKidId()));
         if (!b) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -266,12 +294,12 @@ public class ThreeJsController {
         }
         LeftArm leftArm = new LeftArm();
         BeanUtils.copyProperties(leftArmUpdateReq, leftArm);
-        boolean b = leftArmService.updateById(leftArm);
+        boolean b = leftArmService.update(leftArm, new QueryWrapper<LeftArm>().eq("kid_id", leftArm.getKidId()));
         if (!b) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -287,12 +315,12 @@ public class ThreeJsController {
         }
         LeftLeg leftLeg = new LeftLeg();
         BeanUtils.copyProperties(leftLegUpdateReq, leftLeg);
-        boolean b = leftLegService.updateById(leftLeg);
+        boolean b = leftLegService.update(leftLeg, new QueryWrapper<LeftLeg>().eq("kid_id", leftLeg.getKidId()));
         if (!b) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -308,12 +336,12 @@ public class ThreeJsController {
         }
         RightArm rightArm = new RightArm();
         BeanUtils.copyProperties(rightArmUpdateReq, rightArm);
-        boolean b = rightArmService.updateById(rightArm);
+        boolean b = rightArmService.update(rightArm, new QueryWrapper<RightArm>().eq("kid_id", rightArm.getKidId()));
         if (!b) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
@@ -329,12 +357,12 @@ public class ThreeJsController {
         }
         RightLeg rightLeg = new RightLeg();
         BeanUtils.copyProperties(rightLegUpdateReq, rightLeg);
-        boolean b = rightLegService.updateById(rightLeg);
+        boolean b = rightLegService.update(rightLeg, new QueryWrapper<RightLeg>().eq("kid_id", rightLeg.getKidId()));
         if (!b) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success();
+        return Result.success(true);
     }
 
     /**
