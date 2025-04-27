@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * @Author: Mikkeyf
@@ -17,6 +18,8 @@ public class CommentSonVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
+
     private GetUserVo getUserVo;
 
     private Long likeCount;
@@ -24,4 +27,6 @@ public class CommentSonVo implements Serializable {
     private Integer likeStatus;
 
     private String content;
+
+    private List<CommentSonSonVo> listCommentSonSonVo;
 }

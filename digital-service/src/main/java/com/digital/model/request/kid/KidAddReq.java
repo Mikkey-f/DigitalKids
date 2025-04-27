@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 
 @Data
 public class KidAddReq implements Serializable {
-    private Long user_id;
 
     private String avatar;
 

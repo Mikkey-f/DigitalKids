@@ -47,6 +47,11 @@ public class StatusController {
         return Result.success(s);
     }
 
+    /**
+     * 轮询获得舌苔的分析结果
+     * @param sessionId
+     * @return
+     */
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     @GetMapping("/status/tongue/{sessionId}")
     public Result<TongueResult> getStatusForTongue(@PathVariable String sessionId) {
@@ -54,7 +59,6 @@ public class StatusController {
         if (s == null) {
             return Result.error(ResultErrorEnum.QUESTION_RESULT_NOT_FIND.getMessage());
         }
-
         return Result.success(s);
     }
 }

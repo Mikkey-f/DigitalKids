@@ -19,5 +19,6 @@ public class SearchVo implements Serializable {
     private SearchUserVo user;
     private String title;
     private String content;
+    private String mainImage;
     private Date createTime;
 }

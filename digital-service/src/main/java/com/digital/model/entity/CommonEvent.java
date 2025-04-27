@@ -28,10 +28,6 @@ public class CommonEvent {
      * 实体id
      */
     private long entityId;
-    private Map<String, Object> data = new ConcurrentHashMap<>();
+    private Map<String, Object> data;
 
-    public CommonEvent setData(String key, Object value) {
-        data.put(key, value);
-        return this;
-    }
 }
