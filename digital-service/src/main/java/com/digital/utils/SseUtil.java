@@ -1,6 +1,12 @@
 package com.digital.utils;
 
+import com.digital.constant.TopicConstant;
+import com.digital.enums.ResultErrorEnum;
+import com.digital.exception.BusinessException;
+import com.digital.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
+import com.digital.model.entity.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -18,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SseUtil {
     private static final Map<Long, SseEmitter> sseEmitterMap = new ConcurrentHashMap<>();
 
+    @Autowired
+    private MessageService messageService;
     /**
      * 创建连接
      */
@@ -51,21 +59,22 @@ public class SseUtil {
         return null;
     }
 
-    public boolean sendMessage(Long userId, String messageId, String message) {
-        if (sseEmitterMap.containsKey(userId)) {
-            SseEmitter sseEmitter = sseEmitterMap.get(userId);
+    public boolean sendMessage(Long toUserId, Long messageId, String message) {
+
+        if (sseEmitterMap.containsKey(toUserId)) {
+            SseEmitter sseEmitter = sseEmitterMap.get(toUserId);
             try {
-                sseEmitter.send(SseEmitter.event().id(messageId).data(message));
-                log.info("用户{},消息id:{},推送成功:{}", userId, messageId, message);
+                sseEmitter.send(SseEmitter.event().id(String.valueOf(messageId)).data(message));
+                log.info("用户{},消息id:{},推送成功:{}", toUserId, messageId, message);
                 return true;
             } catch (Exception e) {
-                sseEmitterMap.remove(userId);
-                log.info("用户{},消息id:{},推送异常:{}", userId, messageId, e.getMessage());
+                sseEmitterMap.remove(toUserId);
+                log.info("用户{},消息id:{},推送异常:{}", toUserId, messageId, e.getMessage());
                 sseEmitter.complete();
                 return false;
             }
         } else {
-            log.info("用户{}未上线", userId);
+            log.info("用户{}未上线", toUserId);
         }
         return false;
     }

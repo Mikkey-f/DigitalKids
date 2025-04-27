@@ -107,13 +107,13 @@ public class EventConsumer {
         String jsonString = JSONUtils.toJSONString(map);
         message.setContent(jsonString);
 
-        // 系统发送提示消息
-        sseUtil.sendMessage(Long.valueOf((Integer) targetUserId), String.valueOf(message.getId()), message.getContent());
-
         boolean save = messageService.save(message);
         if (!save) {
             throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
         }
+
+        // 系统发送提示消息
+        sseUtil.sendMessage(Long.valueOf((Integer) targetUserId), message.getId(), message.getContent());
     }
 
     @KafkaListener(topics = {TopicConstant.TOPIC_PUBLISH_PARENTING_ENCY}, groupId = "digitalKids-consumer-group")

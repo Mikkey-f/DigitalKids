@@ -66,4 +66,9 @@ public class TopicConstant {
      */
     public static final Long TOPIC_ALARM_ID = 3L;
 
+    /**
+     * 用户发私信 topic id
+     */
+    public static final Long TOPIC_TALK_ID = 4L;
+
 }
