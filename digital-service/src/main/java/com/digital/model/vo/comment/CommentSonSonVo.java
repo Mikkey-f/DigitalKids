@@ -1,33 +1,29 @@
 package com.digital.model.vo.comment;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.digital.model.vo.user.GetUserVo;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
-import java.math.BigInteger;
-import java.util.List;
 
 /**
  * @Author: Mikkeyf
- * @CreateTime: 2025/4/21 00:35
+ * @CreateTime: 2025/4/27 10:35
  */
 @Data
+@Slf4j
 @Builder
-public class CommentVo implements Serializable {
-
+public class CommentSonSonVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
 
     private GetUserVo getUserVo;
 
-    private String content;
-
     private Long likeCount;
 
     private Integer likeStatus;
 
-    private List<CommentSonVo> commentSonVoList;
+    private String content;
 }

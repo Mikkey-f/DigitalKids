@@ -48,8 +48,13 @@ public class ElasticsearchService {
         productRepository.save(product);
     }
 
+
     public void deleteEncyclopedia(Integer id) {
         parentingEncyclopediaRepository.deleteById(id);
+    }
+
+    public void deleteProduct(Integer id) {
+        productRepository.deleteById(id);
     }
 
     public SearchResultForPar searchEncyclopedia(String keyword, int stage, int current, int size) {
@@ -107,14 +112,15 @@ public class ElasticsearchService {
         return new SearchResultForPar(list, totalHits);
     }
 
-    public SearchResultForProduct searchProduct(String keyword, int stage, int current, int size) {
+    public SearchResultForProduct searchProduct(String keyword, int current, int size) {
         // 构建一个NativeSearchQuery并添加分页条件、排序条件以及高光区域
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.multiMatchQuery(keyword, "title", "content"))
+                .withQuery(QueryBuilders.multiMatchQuery(keyword, "name", "detail", "subtitle"))
                 .withPageable(PageRequest.of(current, size))
                 .withHighlightFields(//高亮显示
                         new HighlightBuilder.Field("name").preTags("<em>").postTags("</em>"),
-                        new HighlightBuilder.Field("detail").preTags("<em>").postTags("</em>")
+                        new HighlightBuilder.Field("detail").preTags("<em>").postTags("</em>"),
+                        new HighlightBuilder.Field("subtitle").preTags("<em>").postTags("</em>")
                 ).build();
         SearchHits<Product> searchHits = elasticsearchTemplate.search(nativeSearchQuery, Product.class);
         long totalHits = searchHits.getTotalHits();
@@ -128,6 +134,7 @@ public class ElasticsearchService {
                 product.setName(searchHit.getContent().getName());
                 product.setDetail(searchHit.getContent().getDetail());
                 product.setPrice(searchHit.getContent().getPrice());
+                product.setMainImage(searchHit.getContent().getMainImage());
                 String createTime = searchHit.getContent().getCreateTime().toString();
                 String updateTime = searchHit.getContent().getUpdateTime().toString();
                 SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
@@ -150,6 +157,10 @@ public class ElasticsearchService {
                 List<String> titleField = searchHit.getHighlightFields().get("detail");
                 if (titleField != null) {
                     product.setDetail(titleField.get(0));
+                }
+                List<String> subtitleField = searchHit.getHighlightFields().get("subtitle");
+                if (titleField != null) {
+                    product.setDetail(subtitleField.get(0));
                 }
                 list.add(product);
             }

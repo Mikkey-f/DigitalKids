@@ -92,21 +92,7 @@ public class OrderController {
         return orderService.payOrderByOrderNo(orderNo);
     }
 
-    /**
-     * 订单发货状态，限管理员
-     * @param request
-     * @param orderNo
-     * @return
-     */
-    @PutMapping("/deliver")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public Result<OrderVo> deliverOrderByOrderNo(HttpServletRequest request, String orderNo) {
-        User loginUser = userService.getLoginUser(request);
-        if (loginUser == null) {
-            return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
-        }
-        return orderService.deliverOrderByOrderNo(orderNo);
-    }
+
 
     /**
      * 订单货物接收

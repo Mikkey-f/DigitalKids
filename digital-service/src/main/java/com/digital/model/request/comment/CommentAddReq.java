@@ -17,5 +17,7 @@ public class CommentAddReq implements Serializable {
 
     private Integer entityId;
 
+    private Integer targetId;
+
     private String content;
 }

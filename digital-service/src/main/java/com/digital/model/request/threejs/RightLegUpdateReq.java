@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @Data
 @Slf4j
 public class RightLegUpdateReq {
-    private Integer rightLegId;
 
     private Long kidId;
 

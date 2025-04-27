@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @Data
 @Slf4j
 public class LeftLegAddReq {
-    private Integer leftLegId;
 
     private Long kidId;
 

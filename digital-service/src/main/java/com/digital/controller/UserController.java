@@ -276,6 +276,7 @@ public class UserController {
             log.info(e.getMessage());
             throw new BusinessException(ResultErrorEnum.FILE_UPLOAD_ERROR);
         }
+
         return Result.success(OssPutUtil.fileUpload(fileName, tempFilePath + fileName));
     }
 }

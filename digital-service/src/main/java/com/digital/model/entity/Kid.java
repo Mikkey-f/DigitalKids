@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-@TableName("Kid")
+@TableName("kid")
 public class Kid {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;

@@ -91,7 +91,7 @@ public class EventConsumer {
                 .isRead(0)
                 .build();
         Object targetUserId = commonEvent.getData().get("targetUserId");
-        message.setToId((Long) targetUserId);
+        message.setToId(Long.valueOf((Integer) targetUserId));
         if (Objects.equals(commonEvent.getTopic(), TopicConstant.TOPIC_COMMENT)) {
             message.setTopicId(TopicConstant.TOPIC_COMMENT_ID);
         } else if (Objects.equals(commonEvent.getTopic(), TopicConstant.TOPIC_LIKE)) {
@@ -107,13 +107,13 @@ public class EventConsumer {
         String jsonString = JSONUtils.toJSONString(map);
         message.setContent(jsonString);
 
-        // 系统发送提示消息
-        sseUtil.sendMessage((Long)targetUserId, String.valueOf(message.getId()), message.getContent());
-
         boolean save = messageService.save(message);
         if (!save) {
             throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
         }
+
+        // 系统发送提示消息
+        sseUtil.sendMessage(Long.valueOf((Integer) targetUserId), message.getId(), message.getContent());
     }
 
     @KafkaListener(topics = {TopicConstant.TOPIC_PUBLISH_PARENTING_ENCY}, groupId = "digitalKids-consumer-group")

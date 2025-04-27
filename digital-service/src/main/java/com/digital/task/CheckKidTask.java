@@ -2,6 +2,9 @@ package com.digital.task;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import com.digital.constant.TopicConstant;
+import com.digital.constant.UserConstant;
+import com.digital.enums.ResultErrorEnum;
+import com.digital.exception.BusinessException;
 import com.digital.model.entity.*;
 import com.digital.service.*;
 import com.digital.utils.SseUtil;
@@ -45,6 +48,9 @@ public class CheckKidTask {
     private RightLegService rightLegService;
 
     @Autowired
+    private MessageService messageService;
+
+    @Autowired
     private SseUtil sseUtil;
 
     // 每 10 分钟执行一次，Cron 表达式：0 0/10 * * * ?
@@ -82,7 +88,19 @@ public class CheckKidTask {
             ThreeJsUtil.calculateLeftArm(map, leftArms.get(0), kid.getOld());
             map.put("topicId", String.valueOf(TopicConstant.TOPIC_ALARM_ID));
             String jsonString = JSONUtils.toJSONString(map);
-            sseUtil.sendMessage(kid.getUserId(), String.valueOf(UUID.randomUUID()), jsonString);
+
+            Message build = Message.builder()
+                    .toId(kid.getUserId())
+                    .fromId(UserConstant.SYSTEM_USER_ID)
+                    .topicId(TopicConstant.TOPIC_ALARM_ID)
+                    .content(jsonString)
+                    .isRead(0)
+                    .build();
+            boolean save = messageService.save(build);
+            if (!save) {
+                throw new BusinessException(ResultErrorEnum.OPERATION_ERROR);
+            }
+            sseUtil.sendMessage(kid.getUserId(), build.getId(), build.getContent());
         }
     }
 }
