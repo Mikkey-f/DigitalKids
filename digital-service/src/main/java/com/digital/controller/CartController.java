@@ -34,43 +34,39 @@ public class CartController {
 
     /**
      * 给购物车加入商品
-     * @param productId
      * @param cartItem
      * @param request
      * @return
      */
-    @PostMapping("/{productId}")
+    @PostMapping
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result<List<CartItem>> addProductForCart(@PathVariable Integer productId,
-                                    @RequestBody CartItem cartItem,
-                                    HttpServletRequest request) {
+    public Result<List<CartItem>> addProductForCart(@RequestBody CartItem cartItem,
+                                                    HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
         }
 
         String userCartKey = RedisKeyUtil.getUserCartKey(String.valueOf(loginUser.getId()));
-        return cartService.addCart(userCartKey, productId, cartItem.getQuantity(), cartItem.getIsSelected());
+        return cartService.addCart(userCartKey, cartItem.getProductId(), cartItem.getQuantity(), cartItem.getIsSelected());
     }
 
     /**
      * 更新购物车商品
-     * @param productId
      * @param cartItem
      * @param request
      * @return
      */
-    @PutMapping("/{productId}")
+    @PutMapping
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result<List<CartItem>> updateProductForCart(@PathVariable Integer productId,
-                                       @RequestBody CartItem cartItem,
+    public Result<List<CartItem>> updateProductForCart(@RequestBody CartItem cartItem,
                                        HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
         }
         String userCartKey = RedisKeyUtil.getUserCartKey(String.valueOf(loginUser.getId()));
-        return cartService.updateCart(userCartKey, productId, cartItem.getQuantity(), cartItem.getIsSelected());
+        return cartService.updateCart(userCartKey, cartItem.getProductId(), cartItem.getQuantity(), cartItem.getIsSelected());
     }
 
     /**
@@ -121,5 +117,21 @@ public class CartController {
         }
         String userCartKey = RedisKeyUtil.getUserCartKey(String.valueOf(loginUser.getId()));
         return cartService.unselectedAllForCart(userCartKey);
+    }
+
+    /**
+     * 获取购物车列表
+     * @param request
+     * @return
+     */
+    @GetMapping("/list")
+    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
+    public Result<List<CartItem>> getListOfCartItems(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
+        }
+        String userCartKey = RedisKeyUtil.getUserCartKey(String.valueOf(loginUser.getId()));
+        return Result.success(cartService.getListOfCartItems(userCartKey));
     }
 }
