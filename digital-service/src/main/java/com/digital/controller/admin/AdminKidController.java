@@ -10,7 +10,6 @@ import com.digital.model.entity.User;
 import com.digital.model.request.kid.KidAddReq;
 import com.digital.model.request.kid.KidUpdateReq;
 import com.digital.model.request.page.PageReq;
-import com.digital.model.request.threejs.KidBodyUpdateReq;
 import com.digital.result.Result;
 import com.digital.service.KidService;
 import com.digital.service.UserService;

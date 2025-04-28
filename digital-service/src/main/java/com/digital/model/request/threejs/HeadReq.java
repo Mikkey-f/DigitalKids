@@ -14,5 +14,6 @@ public class HeadReq implements Serializable {
     private Long kidId;
     private String headacheFrequency;
     private String dizziness;
+    private String traumaHistory;
     private String cognitiveTestResult;
 }

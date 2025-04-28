@@ -11,8 +11,9 @@ import java.io.Serializable;
 @Data
 public class ShoulderReq implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String lengthDifference;
+    private String rangeOfMotion;
+    private String painIndex;
+    private String stability;
     private String muscleStrength;
-    private String kneeReflex;
-    private String swellingDegree;
+    private Long kidId;
 }

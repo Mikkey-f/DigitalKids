@@ -14,6 +14,7 @@ public class OralReq implements Serializable {
     private Long kidId;
     private String deciduousTeeth;
     private String permanentTeeth;
+    private String decayedTeeth;
     private String gumCondition;
     private String occlusion;
 }
