@@ -33,7 +33,7 @@ public class CartService {
             }
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         } else {
-            cartItem = new CartItem(quantity, isSelected);
+            cartItem = new CartItem(productId, quantity, isSelected);
         }
         hashOperations.put(userCartKey, String.valueOf(productId), cartItem);
         return Result.success(getListOfCartItems(userCartKey));
@@ -42,7 +42,7 @@ public class CartService {
     public Result<List<CartItem>> updateCart(String userCartKey, Integer productId, int quantity, boolean isSelected) {
 
         if (hashOperations.hasKey(userCartKey, String.valueOf(productId))) {
-            CartItem cartItem = new CartItem(quantity, isSelected);
+            CartItem cartItem = new CartItem(productId, quantity, isSelected);
             hashOperations.put(userCartKey, String.valueOf(productId), cartItem);
         } else {
             return Result.error(ResultErrorEnum.CART_WITH_NO_PRODUCT.getMessage());
@@ -82,7 +82,7 @@ public class CartService {
     }
 
 
-    private List<CartItem> getListOfCartItems(String userCartKey) {
+    public List<CartItem> getListOfCartItems(String userCartKey) {
         return hashOperations.values(userCartKey);
     }
 
