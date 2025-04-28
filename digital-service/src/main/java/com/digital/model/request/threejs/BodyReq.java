@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class BodyReq implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long kidId;
-    private String scoliosisStatus;
+    private String scoliosisDegree;
     private String coreStrength;
     private String bodyFatPercentage;
     private String flexibility;

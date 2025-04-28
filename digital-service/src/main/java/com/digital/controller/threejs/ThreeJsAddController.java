@@ -1,4 +1,4 @@
-package com.digital.controller;
+package com.digital.controller.threejs;
 
 import com.digital.enums.ResultErrorEnum;
 import com.digital.enums.ThreeJsEnum;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @Author: Mikkeyf
  * @CreateTime: 2025/4/28 20:42
  */
-@RequestMapping("/threeJs")
+@RequestMapping("/threeJs/add")
 @RestController
-public class ThreeJsController {
+public class ThreeJsAddController {
 
     @Autowired
     BodyService bodyService;
@@ -87,12 +87,12 @@ public class ThreeJsController {
     public Result<Boolean> addBody(@RequestBody BodyReq bodyReq) {
         if (bodyReq.getBodyFatPercentage() == null || bodyReq.getFlexibility() == null
         || bodyReq.getCoreStrength() == null || bodyReq.getKidId() == null
-        || bodyReq.getScoliosisStatus() == null) {
+        || bodyReq.getScoliosisDegree() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
         Body body = new Body();
         BeanUtils.copyProperties(bodyReq, body);
-        String json = "脊柱侧弯" + bodyReq.getScoliosisStatus() + SPILT + "核心肌力" + bodyReq.getCoreStrength()
+        String json = "脊柱侧弯" + bodyReq.getScoliosisDegree() + SPILT + "核心肌力" + bodyReq.getCoreStrength()
                 + "体脂率" + bodyReq.getBodyFatPercentage() + SPILT + "柔韧性" + bodyReq.getFlexibility() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.BODY.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
