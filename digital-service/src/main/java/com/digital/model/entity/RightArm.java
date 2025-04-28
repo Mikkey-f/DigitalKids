@@ -4,21 +4,33 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /**
  * @TableName right_arm
  */
 @TableName(value ="right_arm")
 @Data
-public class RightArm {
-    @TableId(value = "right_arm_id", type = IdType.AUTO)
-    private Integer rightArmId;
+public class RightArm implements Serializable {
+    private Integer id;
 
     private Long kidId;
-    @TableField("arm_length")
-    private BigDecimal armLength;
 
+    private String gripStrength;
+
+    private String elbowRangeOfMotion;
+
+    private String tinelSign;
+
+    private String circumferenceDifference;
+
+    private String recommendation;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    private static final long serialVersionUID = 1L;
 }

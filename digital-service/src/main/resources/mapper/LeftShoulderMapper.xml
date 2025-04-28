@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.LeftShoulderMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.LeftShoulder">
+            <id property="id" column="id" />
+            <result property="kidId" column="kid_id" />
+            <result property="rangeOfMotion" column="range_of_motion" />
+            <result property="painIndex" column="pain_index" />
+            <result property="stability" column="stability" />
+            <result property="muscleStrength" column="muscle_strength" />
+            <result property="recommendation" column="recommendation" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,kid_id,range_of_motion,pain_index,stability,muscle_strength,
+        recommendation,create_time,update_time
+    </sql>
+</mapper>

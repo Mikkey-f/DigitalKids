@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.OralMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.Oral">
+            <id property="id" column="id" />
+            <result property="kidId" column="kid_id" />
+            <result property="deciduousTeeth" column="deciduous_teeth" />
+            <result property="permanentTeeth" column="permanent_teeth" />
+            <result property="decayedTeeth" column="decayed_teeth" />
+            <result property="gumCondition" column="gum_condition" />
+            <result property="occlusion" column="occlusion" />
+            <result property="recommendation" column="recommendation" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,kid_id,deciduous_teeth,permanent_teeth,decayed_teeth,gum_condition,
+        occlusion,recommendation,create_time,update_time
+    </sql>
+</mapper>

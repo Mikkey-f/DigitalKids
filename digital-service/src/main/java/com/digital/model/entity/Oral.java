@@ -9,22 +9,24 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * @TableName left_leg
+ * @TableName oral
  */
-@TableName(value ="left_leg")
+@TableName(value ="oral")
 @Data
-public class LeftLeg implements Serializable {
+public class Oral implements Serializable {
     private Integer id;
 
     private Long kidId;
 
-    private String lengthDifference;
+    private String deciduousTeeth;
 
-    private String muscleStrength;
+    private String permanentTeeth;
 
-    private String kneeReflex;
+    private String decayedTeeth;
 
-    private String swellingDegree;
+    private String gumCondition;
+
+    private String occlusion;
 
     private String recommendation;
 
