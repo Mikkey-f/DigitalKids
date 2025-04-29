@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="head")
 @Data
 public class Head implements Serializable {
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private Long kidId;

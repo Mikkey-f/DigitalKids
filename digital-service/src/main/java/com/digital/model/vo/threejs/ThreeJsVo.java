@@ -12,10 +12,10 @@ import java.util.Map;
 @Data
 public class ThreeJsVo implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private String id;
     private String name;
     private String description;
     private String icon;
-    private Map<String, String> map;
+    private Map<String, String> data;
     private String recommendation;
 }

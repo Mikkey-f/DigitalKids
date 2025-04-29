@@ -19,6 +19,8 @@ public class Kid {
 
     private Integer old;
 
+    private Integer gender;
+
     @TableField("create_time")
     private Date createTime;
 

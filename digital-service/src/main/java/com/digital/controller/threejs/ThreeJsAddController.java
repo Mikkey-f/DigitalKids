@@ -1,5 +1,7 @@
 package com.digital.controller.threejs;
 
+import com.alibaba.druid.support.json.JSONUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.digital.enums.ResultErrorEnum;
 import com.digital.enums.ThreeJsEnum;
 import com.digital.model.entity.*;
@@ -7,6 +9,7 @@ import com.digital.model.request.threejs.*;
 import com.digital.result.Result;
 import com.digital.service.*;
 import com.digital.utils.ThreeJsUtil;
+import com.google.gson.Gson;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,6 +93,10 @@ public class ThreeJsAddController {
         || bodyReq.getScoliosisDegree() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        Body kidId = bodyService.getOne(new QueryWrapper<Body>().eq("kid_id", bodyReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         Body body = new Body();
         BeanUtils.copyProperties(bodyReq, body);
         String json = "脊柱侧弯" + bodyReq.getScoliosisDegree() + SPILT + "核心肌力" + bodyReq.getCoreStrength()
@@ -115,6 +122,10 @@ public class ThreeJsAddController {
         || endocrineReq.getMetabolicRate() == null || endocrineReq.getThyroidFunction() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        Endocrine kidId = endocrineService.getOne(new QueryWrapper<Endocrine>().eq("kid_id", endocrineReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         Endocrine endocrine = new Endocrine();
         BeanUtils.copyProperties(endocrineReq, endocrine);
         String json = "甲状腺功能" + endocrineReq.getThyroidFunction() + SPILT + "生长激素" + endocrineReq.getGrowthHormone()
@@ -129,12 +140,20 @@ public class ThreeJsAddController {
         return Result.success(true);
     }
 
-
+    /**
+     * 插入耳鼻喉
+     * @param entReq
+     * @return
+     */
     @PostMapping("/ent")
     public Result<Boolean> addEnt (@RequestBody EntReq entReq) {
         if (entReq.getLeftHearing() == null || entReq.getRightHearing() == null
         || entReq.getSinusCondition() == null || entReq.getThroatCondition() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+        Ent kidId = entService.getOne(new QueryWrapper<Ent>().eq("kid_id", entReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
         }
         Ent ent = new Ent();
         BeanUtils.copyProperties(entReq, ent);
@@ -163,6 +182,10 @@ public class ThreeJsAddController {
                 || headReq.getTraumaHistory() == null
                 || headReq.getCognitiveTestResult() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+        Head kidId = headService.getOne(new QueryWrapper<Head>().eq("kid_id", headReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
         }
         Head head = new Head();
         BeanUtils.copyProperties(headReq, head);
@@ -194,6 +217,10 @@ public class ThreeJsAddController {
                 || leftArmReq.getCircumferenceDifference() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        LeftArm kidId = leftArmService.getOne(new QueryWrapper<LeftArm>().eq("kid_id", leftArmReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         LeftArm leftArm = new LeftArm();
         BeanUtils.copyProperties(leftArmReq, leftArm);
         String json = "握力" + leftArmReq.getGripStrength() + SPILT
@@ -224,6 +251,10 @@ public class ThreeJsAddController {
                 || rightArmReq.getCircumferenceDifference() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        RightArm kidId = rightArmService.getOne(new QueryWrapper<RightArm>().eq("kid_id", rightArmReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         RightArm rightArm = new RightArm();
         BeanUtils.copyProperties(rightArmReq, rightArm);
         String json = "握力" + rightArmReq.getGripStrength() + SPILT
@@ -232,6 +263,7 @@ public class ThreeJsAddController {
                 + "周长差异" + rightArmReq.getCircumferenceDifference();
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.ARM.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
+
         rightArm.setRecommendation(recommendation);
         boolean save = rightArmService.save(rightArm);
         if (!save) {
@@ -253,6 +285,10 @@ public class ThreeJsAddController {
                 || leftFootReq.getCallusStatus() == null
                 || leftFootReq.getGaitCycleStatus() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+        LeftFoot kidId = leftFootService.getOne(new QueryWrapper<LeftFoot>().eq("kid_id", leftFootReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
         }
         LeftFoot leftFoot = new LeftFoot();
         BeanUtils.copyProperties(leftFootReq, leftFoot);
@@ -284,6 +320,10 @@ public class ThreeJsAddController {
                 || leftHandReq.getNailBedCirculation() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        LeftHand kidId = leftHandService.getOne(new QueryWrapper<LeftHand>().eq("kid_id", leftHandReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         LeftHand leftHand = new LeftHand();
         BeanUtils.copyProperties(leftHandReq, leftHand);
         String json = "柔韧性" + leftHandReq.getFlexibility() + SPILT
@@ -314,6 +354,10 @@ public class ThreeJsAddController {
                 || leftLegReq.getSwellingDegree() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        LeftLeg kidId = leftLegService.getOne(new QueryWrapper<LeftLeg>().eq("kid_id", leftLegReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         LeftLeg leftLeg = new LeftLeg();
         BeanUtils.copyProperties(leftLegReq, leftLeg);
         String json = "长度差异" + leftLegReq.getLengthDifference() + SPILT
@@ -343,6 +387,10 @@ public class ThreeJsAddController {
                 || leftShoulderReq.getStability() == null
                 || leftShoulderReq.getMuscleStrength() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+        LeftShoulder kidId = leftShoulderService.getOne(new QueryWrapper<LeftShoulder>().eq("kid_id", leftShoulderReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
         }
         LeftShoulder leftShoulder = new LeftShoulder();
         BeanUtils.copyProperties(leftShoulderReq, leftShoulder);
@@ -375,13 +423,17 @@ public class ThreeJsAddController {
                 || oralReq.getOcclusion() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        Oral kidId = oralService.getOne(new QueryWrapper<Oral>().eq("kid_id", oralReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         Oral oral = new Oral();
         BeanUtils.copyProperties(oralReq, oral);
         String json = "乳牙情况" + oralReq.getDeciduousTeeth() + SPILT
                 + "恒牙情况" + oralReq.getPermanentTeeth() + SPILT
                 + "龋齿情况" + oralReq.getDecayedTeeth() + SPILT
                 + "牙龈状况" + oralReq.getGumCondition() + SPILT
-                + "咬合情况" + oralReq.getOcclusion();
+                + "咬合情况" + oralReq.getOcclusion() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.ORAL.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         oral.setRecommendation(recommendation);
@@ -405,6 +457,10 @@ public class ThreeJsAddController {
                 || rightFootReq.getCallusStatus() == null
                 || rightFootReq.getGaitCycleStatus() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+        RightFoot kidId = rightFootService.getOne(new QueryWrapper<RightFoot>().eq("kid_id", rightFootReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
         }
         RightFoot rightFoot = new RightFoot();
         BeanUtils.copyProperties(rightFootReq, rightFoot);
@@ -436,6 +492,10 @@ public class ThreeJsAddController {
                 || rightHandReq.getNailBedCirculation() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        RightHand kidId = rightHandService.getOne(new QueryWrapper<RightHand>().eq("kid_id", rightHandReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         RightHand rightHand = new RightHand();
         BeanUtils.copyProperties(rightHandReq, rightHand);
         String json = "柔韧性" + rightHandReq.getFlexibility() + SPILT
@@ -458,13 +518,17 @@ public class ThreeJsAddController {
      * @return
      */
     @PostMapping("/rightLeg")
-    public Result<Boolean> addRightLeg(@RequestBody LeftLeg rightLegReq) {
+    public Result<Boolean> addRightLeg(@RequestBody LegReq rightLegReq) {
         if (rightLegReq.getKidId() == null
                 || rightLegReq.getLengthDifference() == null
                 || rightLegReq.getMuscleStrength() == null
                 || rightLegReq.getKneeReflex() == null
                 || rightLegReq.getSwellingDegree() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+        RightLeg kidId = rightLegService.getOne(new QueryWrapper<RightLeg>().eq("kid_id", rightLegReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
         }
         RightLeg rightLeg = new RightLeg();
         BeanUtils.copyProperties(rightLegReq, rightLeg);
@@ -497,6 +561,10 @@ public class ThreeJsAddController {
                 || visualReq.getColorVision() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
         }
+        Visual kidId = visualService.getOne(new QueryWrapper<Visual>().eq("kid_id", visualReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
+        }
         Visual visual = new Visual();
         BeanUtils.copyProperties(visualReq, visual);
         String json = "左眼视力" + visualReq.getLeftVision() + SPILT
@@ -519,7 +587,7 @@ public class ThreeJsAddController {
      * @param rightShoulderReq 请求参数对象
      * @return 操作结果
      */
-    @PostMapping
+    @PostMapping("/rightShoulder")
     public Result<Boolean> addRightShoulder(@RequestBody ShoulderReq rightShoulderReq) {
         // 参数校验
         if (rightShoulderReq.getKidId() == null
@@ -528,6 +596,10 @@ public class ThreeJsAddController {
                 || rightShoulderReq.getStability() == null
                 || rightShoulderReq.getMuscleStrength() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+        RightShoulder kidId = rightShoulderService.getOne(new QueryWrapper<RightShoulder>().eq("kid_id", rightShoulderReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
         }
         RightShoulder rightShoulder = new RightShoulder();
         BeanUtils.copyProperties(rightShoulderReq, rightShoulder);
@@ -552,7 +624,7 @@ public class ThreeJsAddController {
      * @param respiratoryReq
      * @return
      */
-    @PostMapping
+    @PostMapping("/respiratory")
     public Result<Boolean> addRespiratory(@RequestBody RespiratoryReq respiratoryReq) {
         if (respiratoryReq.getKidId() == null
                 || respiratoryReq.getVitalCapacity() == null
@@ -560,6 +632,10 @@ public class ThreeJsAddController {
                 || respiratoryReq.getLungAdventitiousSound() == null
                 || respiratoryReq.getAirwayPatency() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
+        }
+        Respiratory kidId = respiratoryService.getOne(new QueryWrapper<Respiratory>().eq("kid_id", respiratoryReq.getKidId()));
+        if (kidId != null) {
+            return Result.error(ResultErrorEnum.DATA_IS_LOADED.getMessage());
         }
         Respiratory respiratory = new Respiratory();
         BeanUtils.copyProperties(respiratoryReq, respiratory);

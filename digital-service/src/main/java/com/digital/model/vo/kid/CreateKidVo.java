@@ -26,6 +26,8 @@ public class CreateKidVo implements Serializable {
 
     private Integer old;
 
+    private Integer gender;
+
     private Date createTime;
 
     private Date updateTime;

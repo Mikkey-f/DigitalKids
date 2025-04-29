@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="endocrine")
 @Data
 public class Endocrine implements Serializable {
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private Long kidId;

@@ -16,5 +16,5 @@ public class VisualReq implements Serializable {
     private String leftAstigmatism;
     private String rightAstigmatism;
     private String colorVision;
-    private Integer kidId;
+    private Long kidId;
 }

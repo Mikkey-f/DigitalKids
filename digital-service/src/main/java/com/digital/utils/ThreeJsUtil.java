@@ -7,6 +7,8 @@ import com.digital.enums.ResultErrorEnum;
 import com.digital.enums.ThreeJsEnum;
 import com.digital.exception.BusinessException;
 import com.digital.model.request.question.QuestionReq;
+import com.digital.model.vo.threejs.ResponseVo;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -25,9 +27,9 @@ import reactor.core.publisher.Mono;
 public class ThreeJsUtil {
 
     private final WebClient webClientQuestion;
-    private final static String FIX = "的推荐建议，限制30字。不要复述我说的话，只给出建议。";
+    private final static String FIX = "的推荐建议，限制30字, 只给出建议。 给我答案！别给我打印检索本地知识库。";
     private final static String PREFIX = "给我";
-
+    private final static Gson gson = new Gson();
     public ThreeJsUtil(WebClient.Builder webClientBuilder) {
         this.webClientQuestion = webClientBuilder.baseUrl("http://localhost:8000").build();
     }
@@ -48,7 +50,8 @@ public class ThreeJsUtil {
 
         try {
             ResponseEntity<String> response = responseEntityMono.block();
-            return response.getBody();
+            ResponseVo responseVo = gson.fromJson(response.getBody(), ResponseVo.class);
+            return responseVo.getResponse();
         } catch (RuntimeException e) {
             WebClientResponseException.UnprocessableEntity unprocessableEntity = (WebClientResponseException.UnprocessableEntity) e;
             log.error("422 Unprocessable Entity. Status code: {}", unprocessableEntity.getStatusCode());

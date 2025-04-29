@@ -134,8 +134,8 @@ public class ThreeJsUpdateController {
         if (endocrineReq.getMetabolicRate() != null) {
             endocrine.setMetabolicRate(endocrineReq.getMetabolicRate());
         }
-        String json = "甲状腺功能" + endocrine.getThyroidFunction() + "生长激素" + endocrine.getGrowthHormone()
-                + "胰岛素" + endocrine.getInsulin() + "代谢率" + endocrine.getMetabolicRate() + "。";
+        String json = "甲状腺功能" + endocrine.getThyroidFunction() + SPILT + "生长激素" + endocrine.getGrowthHormone() + SPILT
+                + "胰岛素" + endocrine.getInsulin() + SPILT + "代谢率" + endocrine.getMetabolicRate() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.ENDOCRINE.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         endocrine.setRecommendation(recommendation);
@@ -173,9 +173,9 @@ public class ThreeJsUpdateController {
         if (entReq.getThroatCondition() != null) {
             ent.setThroatCondition(entReq.getThroatCondition());
         }
-        String json = "左耳听力" + ent.getLeftHearing() + "右耳听力" + ent.getRightHearing()
-                + "鼻窦状况" + ent.getSinusCondition() + "扁桃体状况" + ent.getTonsilCondition()
-                + "咽喉状况" + ent.getThroatCondition() + "。";
+        String json = "左耳听力" + ent.getLeftHearing() + SPILT + "右耳听力" + ent.getRightHearing()
+                + SPILT + "鼻窦状况" + ent.getSinusCondition() + SPILT + "扁桃体状况" + ent.getTonsilCondition()
+                + SPILT + "咽喉状况" + ent.getThroatCondition() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.ENT.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         ent.setRecommendation(recommendation);
@@ -209,8 +209,8 @@ public class ThreeJsUpdateController {
         if (headReq.getCognitiveTestResult() != null) {
             head.setCognitiveTestResult(headReq.getCognitiveTestResult());
         }
-        String json = "头痛频率" + head.getHeadacheFrequency() + "头晕情况" + head.getDizziness()
-                + "外伤史" + head.getTraumaHistory() + "认知测试结果" + head.getCognitiveTestResult() + "。";
+        String json = "头痛频率" + head.getHeadacheFrequency() + SPILT + "头晕情况" + head.getDizziness()
+                + SPILT + "外伤史" + head.getTraumaHistory() + SPILT + "认知测试结果" + head.getCognitiveTestResult() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.HEAD.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         head.setRecommendation(recommendation);
@@ -244,8 +244,8 @@ public class ThreeJsUpdateController {
         if (leftArmReq.getCircumferenceDifference() != null) {
             leftArm.setCircumferenceDifference(leftArmReq.getCircumferenceDifference());
         }
-        String json = "握力" + leftArm.getGripStrength() + "肘部活动范围" + leftArm.getElbowRangeOfMotion()
-                + "蒂内尔征" + leftArm.getTinelSign() + "周径差" + leftArm.getCircumferenceDifference() + "。";
+        String json = "握力" + leftArm.getGripStrength() + SPILT + "肘部活动范围" + leftArm.getElbowRangeOfMotion()
+                + SPILT + "蒂内尔征" + leftArm.getTinelSign() + SPILT + "周径差" + leftArm.getCircumferenceDifference() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.ARM.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         leftArm.setRecommendation(recommendation);
@@ -279,8 +279,8 @@ public class ThreeJsUpdateController {
         if (leftFootReq.getGaitCycleStatus() != null) {
             leftFoot.setGaitCycleStatus(leftFootReq.getGaitCycleStatus());
         }
-        String json = "足弓状态" + leftFoot.getArchStatus() + "拇外翻程度" + leftFoot.getHalluxValgusDegree()
-                + "胼胝状态" + leftFoot.getCallusStatus() + "步态周期状态" + leftFoot.getGaitCycleStatus() + "。";
+        String json = "足弓状态" + leftFoot.getArchStatus() + SPILT + "拇外翻程度" + leftFoot.getHalluxValgusDegree()
+                + SPILT + "胼胝状态" + leftFoot.getCallusStatus() + SPILT + "步态周期状态" + leftFoot.getGaitCycleStatus() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.FOOT.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         leftFoot.setRecommendation(recommendation);
@@ -314,8 +314,8 @@ public class ThreeJsUpdateController {
         if (leftHandReq.getNailBedCirculation() != null) {
             leftHand.setNailBedCirculation(leftHandReq.getNailBedCirculation());
         }
-        String json = "柔韧性" + leftHand.getFlexibility() + "关节肿胀情况" + leftHand.getJointSwelling()
-                + "两点辨别觉" + leftHand.getTwoPointDiscrimination() + "甲床循环" + leftHand.getNailBedCirculation() + "。";
+        String json = "柔韧性" + leftHand.getFlexibility() + SPILT + "关节肿胀情况" + leftHand.getJointSwelling()
+                + SPILT + "两点辨别觉" + leftHand.getTwoPointDiscrimination() + SPILT + "甲床循环" + leftHand.getNailBedCirculation() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.HAND.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         leftHand.setRecommendation(recommendation);
@@ -349,8 +349,8 @@ public class ThreeJsUpdateController {
         if (leftLegReq.getSwellingDegree() != null) {
             leftLeg.setSwellingDegree(leftLegReq.getSwellingDegree());
         }
-        String json = "腿长差" + leftLeg.getLengthDifference() + "肌肉力量" + leftLeg.getMuscleStrength()
-                + "膝反射" + leftLeg.getKneeReflex() + "肿胀程度" + leftLeg.getSwellingDegree() + "。";
+        String json = "腿长差" + leftLeg.getLengthDifference() + SPILT + "肌肉力量" + leftLeg.getMuscleStrength()
+                + SPILT + "膝反射" + leftLeg.getKneeReflex() + SPILT + "肿胀程度" + leftLeg.getSwellingDegree() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.LEG.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         leftLeg.setRecommendation(recommendation);
@@ -384,8 +384,8 @@ public class ThreeJsUpdateController {
         if (leftShoulderReq.getMuscleStrength() != null) {
             leftShoulder.setMuscleStrength(leftShoulderReq.getMuscleStrength());
         }
-        String json = "活动范围" + leftShoulder.getRangeOfMotion() + "疼痛指数" + leftShoulder.getPainIndex()
-                + "稳定性" + leftShoulder.getStability() + "肌肉力量" + leftShoulder.getMuscleStrength() + "。";
+        String json = "活动范围" + leftShoulder.getRangeOfMotion() + SPILT + "疼痛指数" + leftShoulder.getPainIndex()
+                + SPILT + "稳定性" + leftShoulder.getStability() + SPILT + "肌肉力量" + leftShoulder.getMuscleStrength() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.SHOULDER.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         leftShoulder.setRecommendation(recommendation);
@@ -422,9 +422,9 @@ public class ThreeJsUpdateController {
         if (oralReq.getOcclusion() != null) {
             oral.setOcclusion(oralReq.getOcclusion());
         }
-        String json = "乳牙情况" + oral.getDeciduousTeeth() + "恒牙情况" + oral.getPermanentTeeth()
-                + "龋齿情况" + oral.getDecayedTeeth() + "牙龈状况" + oral.getGumCondition()
-                + "咬合情况" + oral.getOcclusion() + "。";
+        String json = "乳牙情况" + oral.getDeciduousTeeth() + SPILT + "恒牙情况" + oral.getPermanentTeeth()
+                + SPILT + "龋齿情况" + oral.getDecayedTeeth() + SPILT + "牙龈状况" + oral.getGumCondition()
+                + SPILT + "咬合情况" + oral.getOcclusion() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.ORAL.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         oral.setRecommendation(recommendation);
@@ -458,8 +458,8 @@ public class ThreeJsUpdateController {
         if (respiratoryReq.getAirwayPatency() != null) {
             respiratory.setAirwayPatency(respiratoryReq.getAirwayPatency());
         }
-        String json = "肺活量" + respiratory.getVitalCapacity() + "呼吸频率" + respiratory.getRespiratoryFrequency()
-                + "肺部啰音" + respiratory.getLungAdventitiousSound() + "气道通畅度" + respiratory.getAirwayPatency() + "。";
+        String json = "肺活量" + respiratory.getVitalCapacity() + SPILT + "呼吸频率" + respiratory.getRespiratoryFrequency()
+                + SPILT + "肺部啰音" + respiratory.getLungAdventitiousSound() + SPILT + "气道通畅度" + respiratory.getAirwayPatency() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.RESPIRATORY.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         respiratory.setRecommendation(recommendation);
@@ -493,8 +493,8 @@ public class ThreeJsUpdateController {
         if (rightArmReq.getCircumferenceDifference() != null) {
             rightArm.setCircumferenceDifference(rightArmReq.getCircumferenceDifference());
         }
-        String json = "握力" + rightArm.getGripStrength() + "肘部活动范围" + rightArm.getElbowRangeOfMotion()
-                + "蒂内尔征" + rightArm.getTinelSign() + "周径差" + rightArm.getCircumferenceDifference() + "。";
+        String json = "握力" + rightArm.getGripStrength() + SPILT + "肘部活动范围" + rightArm.getElbowRangeOfMotion()
+                + SPILT + "蒂内尔征" + rightArm.getTinelSign() + SPILT + "周径差" + rightArm.getCircumferenceDifference() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.ARM.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         rightArm.setRecommendation(recommendation);
@@ -527,8 +527,8 @@ public class ThreeJsUpdateController {
         if (rightFootReq.getGaitCycleStatus() != null) {
             rightFoot.setGaitCycleStatus(rightFootReq.getGaitCycleStatus());
         }
-        String json = "足弓状态" + rightFoot.getArchStatus() + "拇外翻程度" + rightFoot.getHalluxValgusDegree()
-                + "胼胝状态" + rightFoot.getCallusStatus() + "步态周期状态" + rightFoot.getGaitCycleStatus() + "。";
+        String json = "足弓状态" + rightFoot.getArchStatus() + SPILT + "拇外翻程度" + rightFoot.getHalluxValgusDegree()
+                + SPILT + "胼胝状态" + rightFoot.getCallusStatus() + SPILT + "步态周期状态" + rightFoot.getGaitCycleStatus() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.FOOT.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         rightFoot.setRecommendation(recommendation);
@@ -562,8 +562,8 @@ public class ThreeJsUpdateController {
         if (rightHandReq.getNailBedCirculation() != null) {
             rightHand.setNailBedCirculation(rightHandReq.getNailBedCirculation());
         }
-        String json = "柔韧性" + rightHand.getFlexibility() + "关节肿胀情况" + rightHand.getJointSwelling()
-                + "两点辨别觉" + rightHand.getTwoPointDiscrimination() + "甲床循环" + rightHand.getNailBedCirculation() + "。";
+        String json = "柔韧性" + rightHand.getFlexibility() + SPILT + "关节肿胀情况" + rightHand.getJointSwelling()
+                + SPILT + "两点辨别觉" + rightHand.getTwoPointDiscrimination() + SPILT + "甲床循环" + rightHand.getNailBedCirculation() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.HAND.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         rightHand.setRecommendation(recommendation);
@@ -597,8 +597,8 @@ public class ThreeJsUpdateController {
         if (rightLegReq.getSwellingDegree() != null) {
             rightLeg.setSwellingDegree(rightLegReq.getSwellingDegree());
         }
-        String json = "腿长差" + rightLeg.getLengthDifference() + "肌肉力量" + rightLeg.getMuscleStrength()
-                + "膝反射" + rightLeg.getKneeReflex() + "肿胀程度" + rightLeg.getSwellingDegree() + "。";
+        String json = "腿长差" + rightLeg.getLengthDifference() + SPILT + "肌肉力量" + rightLeg.getMuscleStrength()
+                + SPILT + "膝反射" + rightLeg.getKneeReflex() + SPILT + "肿胀程度" + rightLeg.getSwellingDegree() + "。";
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.LEG.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
         rightLeg.setRecommendation(recommendation);
@@ -632,9 +632,9 @@ public class ThreeJsUpdateController {
         if (rightShoulderReq.getMuscleStrength() != null) {
             rightShoulder.setMuscleStrength(rightShoulderReq.getMuscleStrength());
         }
-        String json = "活动范围: " + rightShoulder.getRangeOfMotion() +
-                " 疼痛指数: " + rightShoulder.getPainIndex() +
-                " 稳定性: " + rightShoulder.getStability() +
+        String json = "活动范围: " + rightShoulder.getRangeOfMotion() + SPILT +
+                " 疼痛指数: " + rightShoulder.getPainIndex() + SPILT +
+                " 稳定性: " + rightShoulder.getStability() + SPILT +
                 " 肌肉力量: " + rightShoulder.getMuscleStrength();
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.SHOULDER.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);
@@ -672,10 +672,10 @@ public class ThreeJsUpdateController {
         if (visualReq.getColorVision() != null) {
             visual.setColorVision(visualReq.getColorVision());
         }
-        String json = "左眼视力: " + visual.getLeftVision() +
-                " 右眼视力: " + visual.getRightVision() +
-                " 左眼散光: " + visual.getLeftAstigmatism() +
-                " 右眼散光: " + visual.getRightAstigmatism() +
+        String json = "左眼视力: " + visual.getLeftVision() + SPILT +
+                " 右眼视力: " + visual.getRightVision() + SPILT +
+                " 左眼散光: " + visual.getLeftAstigmatism() + SPILT +
+                " 右眼散光: " + visual.getRightAstigmatism() + SPILT +
                 " 色觉: " + visual.getColorVision();
         String question = threeJsUtil.getQuestion(json, ThreeJsEnum.VISUAL.getCode());
         String recommendation = threeJsUtil.getRecommendation(question);

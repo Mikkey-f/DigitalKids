@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="left_leg")
 @Data
 public class LeftLeg implements Serializable {
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private Long kidId;

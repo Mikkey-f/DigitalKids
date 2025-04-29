@@ -96,7 +96,9 @@ public class ThreeJsGetController {
         map.put("核心肌力", body.getCoreStrength());
         map.put("体脂率", body.getBodyFatPercentage());
         map.put("柔韧性", body.getFlexibility());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setDescription(ThreeJsEnum.BODY.getName());
+        threeJsVo.setId("body");
         return Result.success(threeJsVo);
     }
 
@@ -118,7 +120,8 @@ public class ThreeJsGetController {
         map.put("生长激素", endocrine.getGrowthHormone());
         map.put("胰岛素", endocrine.getInsulin());
         map.put("代谢率", endocrine.getMetabolicRate());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("endocrine");
         return Result.success(threeJsVo);
     }
 
@@ -141,7 +144,8 @@ public class ThreeJsGetController {
         map.put("鼻窦情况", ent.getSinusCondition());
         map.put("扁桃体情况", ent.getTonsilCondition());
         map.put("咽喉情况", ent.getThroatCondition());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("ent");
         return Result.success(threeJsVo);
     }
 
@@ -163,7 +167,8 @@ public class ThreeJsGetController {
         map.put("头晕情况", head.getDizziness());
         map.put("外伤史", head.getTraumaHistory());
         map.put("认知测试结果", head.getCognitiveTestResult());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("head");
         return Result.success(threeJsVo);
     }
 
@@ -185,7 +190,8 @@ public class ThreeJsGetController {
         map.put("肘部活动范围", leftArm.getElbowRangeOfMotion());
         map.put("Tinel征", leftArm.getTinelSign());
         map.put("周长差异", leftArm.getCircumferenceDifference());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("left_arm");
         return Result.success(threeJsVo);
     }
 
@@ -207,7 +213,8 @@ public class ThreeJsGetController {
         map.put("拇外翻程度", leftFoot.getHalluxValgusDegree());
         map.put("胼胝状态", leftFoot.getCallusStatus());
         map.put("步态周期状态", leftFoot.getGaitCycleStatus());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("foot");
         return Result.success(threeJsVo);
     }
 
@@ -229,10 +236,16 @@ public class ThreeJsGetController {
         map.put("关节肿胀情况", leftHand.getJointSwelling());
         map.put("两点辨别觉", leftHand.getTwoPointDiscrimination());
         map.put("甲床循环情况", leftHand.getNailBedCirculation());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("left_hand");
         return Result.success(threeJsVo);
     }
 
+    /**
+     * 查看左腿
+     * @param kidId
+     * @return
+     */
     @GetMapping("/leftLeg/{kidId}")
     public Result<ThreeJsVo> getLeftLeg(@PathVariable Long kidId) {
         LeftLeg leftLeg = leftLegService.getOne(new QueryWrapper<LeftLeg>().eq("kid_id", kidId));
@@ -246,10 +259,16 @@ public class ThreeJsGetController {
         map.put("肌肉力量", leftLeg.getMuscleStrength());
         map.put("膝反射", leftLeg.getKneeReflex());
         map.put("肿胀程度", leftLeg.getSwellingDegree());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("left_leg");
         return Result.success(threeJsVo);
     }
 
+    /**
+     * 查看左肩
+     * @param kidId
+     * @return
+     */
     @GetMapping("/leftShoulder/{kidId}")
     public Result<ThreeJsVo> getLeftShoulder(@PathVariable Long kidId) {
         LeftShoulder leftShoulder = leftShoulderService.getOne(new QueryWrapper<LeftShoulder>().eq("kid_id", kidId));
@@ -263,10 +282,16 @@ public class ThreeJsGetController {
         map.put("疼痛指数", leftShoulder.getPainIndex());
         map.put("稳定性", leftShoulder.getStability());
         map.put("肌肉力量", leftShoulder.getMuscleStrength());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("left_shoulder");
         return Result.success(threeJsVo);
     }
 
+    /**
+     * 查看口腔
+     * @param kidId
+     * @return
+     */
     @GetMapping("/oral/{kidId}")
     public Result<ThreeJsVo> getOral(@PathVariable Long kidId) {
         Oral oral = oralService.getOne(new QueryWrapper<Oral>().eq("kid_id", kidId));
@@ -281,10 +306,16 @@ public class ThreeJsGetController {
         map.put("龋齿情况", oral.getDecayedTeeth());
         map.put("牙龈状况", oral.getGumCondition());
         map.put("咬合情况", oral.getOcclusion());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("oral");
         return Result.success(threeJsVo);
     }
 
+    /**
+     * 查看呼吸系统
+     * @param kidId
+     * @return
+     */
     @GetMapping("/respiratory/{kidId}")
     public Result<ThreeJsVo> getRespiratory(@PathVariable Long kidId) {
         Respiratory respiratory = respiratoryService.getOne(new QueryWrapper<Respiratory>().eq("kid_id", kidId));
@@ -298,10 +329,16 @@ public class ThreeJsGetController {
         map.put("呼吸频率", respiratory.getRespiratoryFrequency());
         map.put("肺部啰音", respiratory.getLungAdventitiousSound());
         map.put("气道通畅情况", respiratory.getAirwayPatency());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("respiratory");
         return Result.success(threeJsVo);
     }
 
+    /**
+     * 查看右臂
+     * @param kidId
+     * @return
+     */
     @GetMapping("/rightArm/{kidId}")
     public Result<ThreeJsVo> getRightArm(@PathVariable Long kidId) {
         RightArm rightArm = rightArmService.getOne(new QueryWrapper<RightArm>().eq("kid_id", kidId));
@@ -315,9 +352,16 @@ public class ThreeJsGetController {
         map.put("肘部活动范围", rightArm.getElbowRangeOfMotion());
         map.put("Tinel征", rightArm.getTinelSign());
         map.put("周长差异", rightArm.getCircumferenceDifference());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("right_arm");
         return Result.success(threeJsVo);
     }
+
+    /**
+     * 查看右脚
+     * @param kidId
+     * @return
+     */
     @GetMapping("/rightFoot/{kidId}")
     public Result<ThreeJsVo> getRightFoot(@PathVariable Long kidId) {
         RightFoot rightFoot = rightFootService.getOne(new QueryWrapper<RightFoot>().eq("kid_id", kidId));
@@ -331,10 +375,16 @@ public class ThreeJsGetController {
         map.put("拇外翻程度", rightFoot.getHalluxValgusDegree());
         map.put("胼胝状态", rightFoot.getCallusStatus());
         map.put("步态周期状态", rightFoot.getGaitCycleStatus());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("right_foot");
         return Result.success(threeJsVo);
     }
 
+    /**
+     * 查看右手
+     * @param kidId
+     * @return
+     */
     @GetMapping("/rightHand/{kidId}")
     public Result<ThreeJsVo> getRightHand(@PathVariable Long kidId) {
         RightHand rightHand = rightHandService.getOne(new QueryWrapper<RightHand>().eq("kid_id", kidId));
@@ -348,10 +398,16 @@ public class ThreeJsGetController {
         map.put("关节肿胀情况", rightHand.getJointSwelling());
         map.put("两点辨别觉", rightHand.getTwoPointDiscrimination());
         map.put("甲床循环情况", rightHand.getNailBedCirculation());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("right_hand");
         return Result.success(threeJsVo);
     }
 
+    /**
+     * 查看右腿
+     * @param kidId
+     * @return
+     */
     @GetMapping("/rightLeg/{kidId}")
     public Result<ThreeJsVo> getRightLeg(@PathVariable Long kidId) {
         RightLeg rightLeg = rightLegService.getOne(new QueryWrapper<RightLeg>().eq("kid_id", kidId));
@@ -365,10 +421,16 @@ public class ThreeJsGetController {
         map.put("肌肉力量", rightLeg.getMuscleStrength());
         map.put("膝反射", rightLeg.getKneeReflex());
         map.put("肿胀程度", rightLeg.getSwellingDegree());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("right_leg");
         return Result.success(threeJsVo);
     }
 
+    /**
+     * 查看右肩
+     * @param kidId
+     * @return
+     */
     @GetMapping("/rightShoulder/{kidId}")
     public Result<ThreeJsVo> getRightShoulder(@PathVariable Long kidId) {
         RightShoulder rightShoulder = rightShoulderService.getOne(new QueryWrapper<RightShoulder>().eq("kid_id", kidId));
@@ -382,11 +444,16 @@ public class ThreeJsGetController {
         map.put("疼痛指数", rightShoulder.getPainIndex());
         map.put("稳定性", rightShoulder.getStability());
         map.put("肌肉力量", rightShoulder.getMuscleStrength());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("right_shoulder");
         return Result.success(threeJsVo);
     }
 
-
+    /**
+     * 查看视力系统
+     * @param kidId
+     * @return
+     */
     @GetMapping("/visual/{kidId}")
     public Result<ThreeJsVo> getVisual(@PathVariable Long kidId) {
         Visual visual = visualService.getOne(new QueryWrapper<Visual>().eq("kid_id", kidId));
@@ -401,7 +468,8 @@ public class ThreeJsGetController {
         map.put("左眼散光", visual.getLeftAstigmatism());
         map.put("右眼散光", visual.getRightAstigmatism());
         map.put("色觉", visual.getColorVision());
-        threeJsVo.setMap(map);
+        threeJsVo.setData(map);
+        threeJsVo.setId("visual");
         return Result.success(threeJsVo);
     }
 }

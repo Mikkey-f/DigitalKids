@@ -14,6 +14,7 @@ import lombok.Data;
 @TableName(value ="visual")
 @Data
 public class Visual implements Serializable {
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     @TableField(value = "kid_id")
