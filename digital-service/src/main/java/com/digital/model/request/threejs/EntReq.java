@@ -14,6 +14,7 @@ public class EntReq implements Serializable {
     private String leftHearing;
     private String rightHearing;
     private String sinusCondition;
+    private String tonsilCondition;
     private String throatCondition;
     private Long kidId;
 }
