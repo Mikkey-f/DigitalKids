@@ -14,5 +14,7 @@ public class KidAddReq implements Serializable {
 
     private Integer old;
 
+    private Integer gender;
+
     private static final long serialVersionUID = 1L;
 }

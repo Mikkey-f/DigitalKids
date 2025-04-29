@@ -4,21 +4,34 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /**
  * @TableName left_leg
  */
 @TableName(value ="left_leg")
 @Data
-public class LeftLeg {
-    @TableId(value = "left_leg_id", type = IdType.AUTO)
-    private Integer leftLegId;
-    @TableField("kid_id")
-    private Long kidId;
-    @TableField("leg_length")
-    private BigDecimal legLength;
+public class LeftLeg implements Serializable {
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
+    private Long kidId;
+
+    private String lengthDifference;
+
+    private String muscleStrength;
+
+    private String kneeReflex;
+
+    private String swellingDegree;
+
+    private String recommendation;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    private static final long serialVersionUID = 1L;
 }

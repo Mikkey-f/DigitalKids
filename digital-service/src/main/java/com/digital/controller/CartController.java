@@ -41,7 +41,7 @@ public class CartController {
     @PostMapping
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<List<CartItem>> addProductForCart(@RequestBody CartItem cartItem,
-                                                    HttpServletRequest request) {
+                                    HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());
@@ -120,13 +120,12 @@ public class CartController {
     }
 
     /**
-     * 获取购物车列表
+     * 获得购物车列表
      * @param request
      * @return
      */
     @GetMapping("/list")
-    @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result<List<CartItem>> getListOfCartItems(HttpServletRequest request) {
+    public Result<List<CartItem>> getListCartItems (HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             return Result.error(ResultErrorEnum.NOT_LOGIN_USER.getMessage());

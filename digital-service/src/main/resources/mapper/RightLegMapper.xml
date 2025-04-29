@@ -5,12 +5,19 @@
 <mapper namespace="com.digital.mapper.RightLegMapper">
 
     <resultMap id="BaseResultMap" type="com.digital.model.entity.RightLeg">
-            <id property="rightLegId" column="right_leg_id" />
+            <id property="id" column="id" />
             <result property="kidId" column="kid_id" />
-            <result property="legLength" column="leg_length" />
+            <result property="lengthDifference" column="length_difference" />
+            <result property="muscleStrength" column="muscle_strength" />
+            <result property="kneeReflex" column="knee_reflex" />
+            <result property="swellingDegree" column="swelling_degree" />
+            <result property="recommendation" column="recommendation" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        right_leg_id,kid_id,leg_length
+        id,kid_id,length_difference,muscle_strength,knee_reflex,swelling_degree,
+        recommendation,create_time,update_time
     </sql>
 </mapper>

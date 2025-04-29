@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.LeftHandMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.LeftHand">
+            <id property="id" column="id" />
+            <result property="kidId" column="kid_id" />
+            <result property="flexibility" column="flexibility" />
+            <result property="jointSwelling" column="joint_swelling" />
+            <result property="twoPointDiscrimination" column="two_point_discrimination" />
+            <result property="nailBedCirculation" column="nail_bed_circulation" />
+            <result property="recommendation" column="recommendation" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,kid_id,flexibility,joint_swelling,two_point_discrimination,nail_bed_circulation,
+        recommendation,create_time,update_time
+    </sql>
+</mapper>

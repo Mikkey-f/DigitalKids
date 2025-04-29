@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.LeftFootMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.LeftFoot">
+            <id property="id" column="id" />
+            <result property="kidId" column="kid_id" />
+            <result property="archStatus" column="arch_status" />
+            <result property="halluxValgusDegree" column="hallux_valgus_degree" />
+            <result property="callusStatus" column="callus_status" />
+            <result property="gaitCycleStatus" column="gait_cycle_status" />
+            <result property="recommendation" column="recommendation" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,kid_id,arch_status,hallux_valgus_degree,callus_status,gait_cycle_status,
+        recommendation,create_time,update_time
+    </sql>
+</mapper>

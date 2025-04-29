@@ -5,12 +5,19 @@
 <mapper namespace="com.digital.mapper.RightArmMapper">
 
     <resultMap id="BaseResultMap" type="com.digital.model.entity.RightArm">
-            <id property="rightArmId" column="right_arm_id" />
+            <id property="id" column="id" />
             <result property="kidId" column="kid_id" />
-            <result property="armLength" column="arm_length" />
+            <result property="gripStrength" column="grip_strength" />
+            <result property="elbowRangeOfMotion" column="elbow_range_of_motion" />
+            <result property="tinelSign" column="tinel_sign" />
+            <result property="circumferenceDifference" column="circumference_difference" />
+            <result property="recommendation" column="recommendation" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        right_arm_id,kid_id,arm_length
+        id,kid_id,grip_strength,elbow_range_of_motion,tinel_sign,circumference_difference,
+        recommendation,create_time,update_time
     </sql>
 </mapper>

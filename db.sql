@@ -68,6 +68,7 @@ CREATE TABLE `Kid` (
                        `avatar` VARCHAR(500) COLLATE utf8mb4_bin DEFAULT '/default_avatar.png' COMMENT '头像URL',
                        `nickname` VARCHAR(50) COLLATE utf8mb4_bin NOT NULL COMMENT '昵称',
                        `old` bigint COMMENT '年龄',
+                       `gender` int COMMENT '性别',
                        `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                        `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='孩子信息表';
@@ -995,29 +996,29 @@ VALUES
 -- 创建 order 表
 CREATE TABLE `orders` (
     -- 自增主键
-                         `id` INT AUTO_INCREMENT PRIMARY KEY,
+                          `id` INT AUTO_INCREMENT PRIMARY KEY,
     -- 订单号，唯一标识订单
-                         `order_no` VARCHAR(255) NOT NULL,
+                          `order_no` VARCHAR(255) NOT NULL,
     -- 用户 ID，关联用户表
-                         `user_id` INT NOT NULL,
+                          `user_id` INT NOT NULL,
     -- 用户地址表 ID，关联用户地址表
-                         `user_address_id` INT NOT NULL,
+                          `user_address_id` INT NOT NULL,
     -- 订单总价，使用 DECIMAL 类型存储精确的小数
-                         `payment` DECIMAL(10, 2) NOT NULL,
+                          `payment` DECIMAL(10, 2) NOT NULL,
     -- 支付类型，用整数表示不同的支付方式
-                         `payment_type` INT NOT NULL,
+                          `payment_type` INT NOT NULL,
     -- 订单状态，用整数表示不同的订单状态
-                         `status` INT NOT NULL,
+                          `status` INT NOT NULL,
     -- 支付时间
-                         `payment_time` DATETIME,
+                          `payment_time` DATETIME,
     -- 寄出时间
-                         `send_time` DATETIME,
+                          `send_time` DATETIME,
     -- 结束时间
-                         `end_time` DATETIME,
+                          `end_time` DATETIME,
     -- 关闭时间
-                         `close_time` DATETIME,
-                         `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                         `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+                          `close_time` DATETIME,
+                          `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                          `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 );
 
 CREATE TABLE `user_address` (
@@ -1031,49 +1032,6 @@ CREATE TABLE `user_address` (
                                 `receiver_address` VARCHAR(255) NOT NULL,
                                 `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                 `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
-);
-
-CREATE TABLE kid_body (
-                          body_id INT AUTO_INCREMENT PRIMARY KEY,
-                          kid_id BIGINT NOT NULL,
-                          height DECIMAL(5, 2),
-                          weight DECIMAL(5, 2),
-                          heartbeat_rate INT,
-                          bmi DECIMAL(5, 2),
-                          FOREIGN KEY (kid_id) REFERENCES kid(id)
-);
-CREATE TABLE kid_head (
-                          head_id INT AUTO_INCREMENT PRIMARY KEY,
-                          kid_id BIGINT NOT NULL,
-                          hair_color VARCHAR(50),
-                          eye_color VARCHAR(50),
-                          left_eye_degree DECIMAL(5, 2),
-                          right_eye_degree DECIMAL(5, 2),
-                          FOREIGN KEY (kid_id) REFERENCES kid(id)
-);
-CREATE TABLE left_arm (
-                          left_arm_id INT AUTO_INCREMENT PRIMARY KEY,
-                          kid_id BIGINT NOT NULL,
-                          arm_length DECIMAL(5, 2),
-                          FOREIGN KEY (kid_id) REFERENCES kid(id)
-);
-CREATE TABLE right_arm (
-                           right_arm_id INT AUTO_INCREMENT PRIMARY KEY,
-                           kid_id BIGINT NOT NULL,
-                           arm_length DECIMAL(5, 2),
-                           FOREIGN KEY (kid_id) REFERENCES kid(id)
-);
-CREATE TABLE left_leg (
-                          left_leg_id INT AUTO_INCREMENT PRIMARY KEY,
-                          kid_id BIGINT NOT NULL,
-                          leg_length DECIMAL(5, 2),
-                          FOREIGN KEY (kid_id) REFERENCES kid(id)
-);
-CREATE TABLE right_leg (
-                           right_leg_id INT AUTO_INCREMENT PRIMARY KEY,
-                           kid_id BIGINT NOT NULL,
-                           leg_length DECIMAL(5, 2),
-                           FOREIGN KEY (kid_id) REFERENCES kid(id)
 );
 CREATE TABLE message (
                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -1094,3 +1052,231 @@ VALUES ('admin'), ('user'), ('guest');
 
 INSERT INTO role_permission (role_id, permission_id)
 VALUES (1, 3), (2, 1), (3, 2);
+
+CREATE TABLE left_hand (
+                           id INT AUTO_INCREMENT PRIMARY KEY,
+                           kid_id BIGINT,
+                           flexibility VARCHAR(255), -- 对应灵活性
+                           joint_swelling VARCHAR(255), -- 对应指关节肿胀
+                           two_point_discrimination VARCHAR(255), -- 对应两点辨别觉
+                           nail_bed_circulation VARCHAR(255), -- 对应甲床循环
+                           recommendation TEXT, -- 存储推荐字符串
+                           create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- 假设 kid 表的主键是 id，这里添加外键约束（如果不需要外键约束可去掉）
+                           FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE right_hand (
+                            id INT AUTO_INCREMENT PRIMARY KEY,
+                            kid_id BIGINT,
+                            flexibility VARCHAR(255), -- 对应灵活性
+                            joint_swelling VARCHAR(255), -- 对应指关节肿胀
+                            two_point_discrimination VARCHAR(255), -- 对应两点辨别觉
+                            nail_bed_circulation VARCHAR(255), -- 对应甲床循环
+                            recommendation TEXT, -- 存储推荐字符串
+                            create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- 假设 kid 表的主键是 id，这里添加外键约束（如果不需要外键约束可去掉）
+                            FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE right_foot (
+                            id INT AUTO_INCREMENT PRIMARY KEY,
+                            kid_id BIGINT,
+                            arch_status VARCHAR(255),
+                            hallux_valgus_degree VARCHAR(255),
+                            callus_status VARCHAR(255),
+                            gait_cycle_status VARCHAR(255),
+                            recommendation TEXT,
+                            create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                            FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE left_foot (
+                           id INT AUTO_INCREMENT PRIMARY KEY,
+                           kid_id BIGINT,
+                           arch_status VARCHAR(255),
+                           hallux_valgus_degree VARCHAR(255),
+                           callus_status VARCHAR(255),
+                           gait_cycle_status VARCHAR(255),
+                           recommendation TEXT,
+                           create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                           FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE body (
+                      id INT AUTO_INCREMENT PRIMARY KEY,
+                      kid_id BIGINT,
+                      scoliosis_degree VARCHAR(255),
+                      core_strength VARCHAR(255),
+                      body_fat_percentage VARCHAR(255),
+                      flexibility VARCHAR(255),
+                      recommendation TEXT,
+                      create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                      update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                      FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+
+CREATE TABLE left_arm (
+                          id INT AUTO_INCREMENT PRIMARY KEY,
+                          kid_id BIGINT,
+                          grip_strength VARCHAR(255),
+                          elbow_range_of_motion VARCHAR(255),
+                          tinel_sign VARCHAR(255),
+                          circumference_difference VARCHAR(255),
+                          recommendation TEXT,
+                          create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                          FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+
+CREATE TABLE right_arm (
+                           id INT AUTO_INCREMENT PRIMARY KEY,
+                           kid_id BIGINT,
+                           grip_strength VARCHAR(255),
+                           elbow_range_of_motion VARCHAR(255),
+                           tinel_sign VARCHAR(255),
+                           circumference_difference VARCHAR(255),
+                           recommendation TEXT,
+                           create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                           FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE head (
+                      id INT AUTO_INCREMENT PRIMARY KEY,
+                      kid_id BIGINT,
+                      headache_frequency VARCHAR(255),
+                      dizziness VARCHAR(255),
+                      trauma_history VARCHAR(255),
+                      cognitive_test_result VARCHAR(255),
+                      recommendation TEXT,
+                      create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                      update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                      FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE left_leg (
+                          id INT AUTO_INCREMENT PRIMARY KEY,
+                          kid_id BIGINT,
+                          length_difference VARCHAR(255),
+                          muscle_strength VARCHAR(255),
+                          knee_reflex VARCHAR(255),
+                          swelling_degree VARCHAR(255),
+                          recommendation TEXT,
+                          create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                          FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE right_leg (
+                           id INT AUTO_INCREMENT PRIMARY KEY,
+                           kid_id BIGINT,
+                           length_difference VARCHAR(255),
+                           muscle_strength VARCHAR(255),
+                           knee_reflex VARCHAR(255),
+                           swelling_degree VARCHAR(255),
+                           recommendation TEXT,
+                           create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                           FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE left_shoulder (
+                               id INT AUTO_INCREMENT PRIMARY KEY,
+                               kid_id BIGINT,
+                               range_of_motion VARCHAR(255),
+                               pain_index VARCHAR(255),
+                               stability VARCHAR(255),
+                               muscle_strength VARCHAR(255),
+                               recommendation TEXT,
+                               create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                               update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                               FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE right_shoulder (
+                                id INT AUTO_INCREMENT PRIMARY KEY,
+                                kid_id BIGINT,
+                                range_of_motion VARCHAR(255),
+                                pain_index VARCHAR(255),
+                                stability VARCHAR(255),
+                                muscle_strength VARCHAR(255),
+                                recommendation TEXT,
+                                create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE visual (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        kid_id BIGINT,
+                        left_vision VARCHAR(255),
+                        right_vision VARCHAR(255),
+                        left_astigmatism VARCHAR(255),
+                        right_astigmatism VARCHAR(255),
+                        color_vision VARCHAR(255),
+                        recommendation TEXT,
+                        create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE oral (
+                      id INT AUTO_INCREMENT PRIMARY KEY,
+                      kid_id BIGINT,
+                      deciduous_teeth VARCHAR(255),
+                      permanent_teeth VARCHAR(255),
+                      decayed_teeth VARCHAR(255),
+                      gum_condition VARCHAR(255),
+                      occlusion VARCHAR(255),
+                      recommendation TEXT,
+                      create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                      update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                      FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE endocrine (
+                           id INT AUTO_INCREMENT PRIMARY KEY,
+                           kid_id BIGINT,
+                           thyroid_function VARCHAR(255),
+                           growth_hormone VARCHAR(255),
+                           insulin VARCHAR(255),
+                           metabolic_rate VARCHAR(255),
+                           recommendation TEXT,
+                           create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                           update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                           FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE ent (
+                     id INT AUTO_INCREMENT PRIMARY KEY,
+                     kid_id BIGINT,
+                     left_hearing VARCHAR(255),
+                     right_hearing VARCHAR(255),
+                     sinus_condition VARCHAR(255),
+                     tonsil_condition VARCHAR(255),
+                     throat_condition VARCHAR(255),
+                     recommendation TEXT,
+                     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                     FOREIGN KEY (kid_id) REFERENCES kid(id)
+);
+
+CREATE TABLE respiratory (
+                             id INT AUTO_INCREMENT PRIMARY KEY,
+                             kid_id BIGINT,
+                             vital_capacity VARCHAR(255),
+                             respiratory_frequency VARCHAR(255),
+                             lung_adventitious_sound VARCHAR(255),
+                             airway_patency VARCHAR(255),
+                             recommendation TEXT,
+                             create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                             update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                             FOREIGN KEY (kid_id) REFERENCES kid(id)
+);

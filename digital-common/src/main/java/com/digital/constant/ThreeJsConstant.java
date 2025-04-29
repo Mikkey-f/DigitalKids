@@ -2,21 +2,42 @@ package com.digital.constant;
 
 /**
  * @Author: Mikkeyf
- * @CreateTime: 2025/4/19 21:56
- * threejs模块的常量
+ * @CreateTime: 2025/4/28 22:08
  */
 public class ThreeJsConstant {
-    public static final String High = "偏高";
-    public static final String Low = "偏低";
-    public static final String Good = "良好";
-    public static final String Long = "偏长";
-    public static final String Short = "偏短";
-    public static final String LeftEyeStatus = "左眼视力状态";
-    public static final String RightEyeStatus = "右眼视力状态";
-    public static final String HeartBeatRateStatus = "心率状态";
-    public static final String BmiStatus = "bmi状态";
-    public static final String LeftArmStatus = "左臂状态";
-    public static final String LeftLegStatus = "左腿状态";
-    public static final String RightArmStatus = "右臂状态";
-    public static final String RightLegStatus = "右腿状态";
+    //驱干
+    public static final String BODY_SCOLIOSIS_DEGREE = "脊柱侧弯";
+    public static final String BODY_CORE_STRENGTH = "核心肌力";
+    public static final String BODY_BODY_FAT_PERCENTAGE = "体脂率";
+    public static final String BODY_FLEXIBILITY = "柔韧性";
+    //内分泌
+    public static final String ENDOCRINE_THYROID_FUNCTION = "甲状腺功能";
+    public static final String ENDOCRINE_GROWTH_HORMONE = "生长激素";
+    public static final String ENDOCRINE_INSULIN = "胰岛素";
+    public static final String ENDOCRINE_METABOLIC_RATE = "代谢率";
+    //耳鼻喉
+    public static final String ENT_LEFT_HEARING = "听力（左）";
+    public static final String ENT_RIGHT_HEARING = "听力（右）";
+    public static final String ENT_SINUS_CONDITION = "鼻窦";
+    public static final String ENT_TONSIL_CONDITION = "扁桃体";
+    public static final String ENT_THROAT_CONDITION = "咽喉";
+    // 肩
+    public static final String ARM_GRIP_STRENGTH = "握力";
+    public static final String ARM_ELBOW_RANGE_OF_MOTION = "肘部动度";
+    public static final String ARM_TINEL_SIGN = "Tinel征";
+    public static final String ARM_CIRCUMFERENCE_DIFFERENCE = "周长差";
+    // T
+    public static final String FOOT_ARCH_STATUS = "足弓";
+    public static final String FOOT_HALLUX_VALGUS_DEGREE = "拇外翻";
+    public static final String FOOT_CALLUS_STATUS = "胼胝体";
+    public static final String FOOT_GAIT_CYCLE_STATUS = "步态周期";
+    // 手部
+    public static final String HAND_FLEXIBILITY = "灵活性";
+    public static final String HAND_JOINT_SWELLING = "指关节肿胀";
+    public static final String HAND_TWO_POINT_DISCRIMINATION = "两点辨别觉";
+    public static final String HAND_NAIL_BED_CIRCULATION = "甲床循环";
+    //腿部
+    public static final String LEG_LENGTH_DIFFERENCE = "长度差";
+//    public static final String LEG_MUSCLE_STR
+
 }
