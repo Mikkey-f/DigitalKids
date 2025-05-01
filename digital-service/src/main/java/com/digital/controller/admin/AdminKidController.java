@@ -62,7 +62,7 @@ public class AdminKidController {
     @PostMapping("/add")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public Result<Boolean> addKid(KidAddReq kidAddReq, Integer userId) {
-        if (kidAddReq.getOld() == null || kidAddReq.getOld() <= 0) {
+        if (kidAddReq.getOld() == null || kidAddReq.getOld() < 0) {
             return Result.error(ResultErrorEnum.W_PARAM_IS_NULL.getMessage());
         }
         if (kidAddReq.getAvatar() == null || kidAddReq.getNickname() == null) {

@@ -9,7 +9,6 @@ import com.digital.model.entity.User;
 import com.digital.model.entity.UserAddress;
 import com.digital.model.request.userAddress.UserAddressAddReq;
 import com.digital.model.request.userAddress.UserAddressUpdateReq;
-import com.digital.model.vo.product.GetProductVo;
 import com.digital.model.vo.userAddress.GetUserAddressVo;
 import com.digital.result.Result;
 import com.digital.service.UserAddressService;
@@ -41,8 +40,8 @@ public class UserAddressController {
      */
     @PostMapping("/userAddress")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result<Boolean> addUserAddressByLoginUser(@RequestBody UserAddressAddReq userAddressAddReq,
-                                            HttpServletRequest request) {
+    public Result<GetUserAddressVo> addUserAddressByLoginUser(@RequestBody UserAddressAddReq userAddressAddReq,
+                                                       HttpServletRequest request) {
         if (userAddressAddReq.getReceiverAddress() == null || userAddressAddReq.getReceiverCity() == null || userAddressAddReq.getReceiverDistrict() == null
                 || userAddressAddReq.getReceiverName() == null || userAddressAddReq.getReceiverPhone() == null) {
             return Result.error(ResultErrorEnum.PARAM_IS_ERROR.getMessage());
@@ -57,11 +56,18 @@ public class UserAddressController {
         userAddress.setUserId(Math.toIntExact(loginUser.getId()));
 
         boolean save = userAddressService.save(userAddress);
+        QueryWrapper<UserAddress> userAddressQueryWrapper = new QueryWrapper<>();
+        userAddressQueryWrapper.eq("id", userAddress.getId());
+        userAddressQueryWrapper.eq("user_id", loginUser.getId());
+        userAddress = userAddressService.getOne(userAddressQueryWrapper);
+        GetUserAddressVo getUserAddressVo = new GetUserAddressVo();
+        BeanUtils.copyProperties(userAddress, getUserAddressVo);
+
         if (!save) {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success(true);
+        return Result.success(getUserAddressVo);
     }
 
     /**
@@ -94,7 +100,7 @@ public class UserAddressController {
      */
     @PutMapping("/userAddress/{id}")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
-    public Result<Boolean> updateUserAddressById(@PathVariable Integer id,
+    public Result<GetUserAddressVo> updateUserAddressById(@PathVariable Integer id,
                                     @RequestBody UserAddressUpdateReq userAddressUpdateReq,
                                     HttpServletRequest request) {
 
@@ -119,7 +125,14 @@ public class UserAddressController {
             return Result.error(ResultErrorEnum.OPERATION_ERROR.getMessage());
         }
 
-        return Result.success(true);
+        userAddressQueryWrapper = new QueryWrapper<>();
+        userAddressQueryWrapper.eq("id", id);
+        userAddressQueryWrapper.eq("user_id", loginUser.getId());
+        userAddress = userAddressService.getOne(userAddressQueryWrapper);
+        GetUserAddressVo getUserAddressVo = new GetUserAddressVo();
+        BeanUtils.copyProperties(userAddress, getUserAddressVo);
+
+        return Result.success(getUserAddressVo);
     }
 
     /**

@@ -79,7 +79,7 @@ public class KidController {
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public Result<Kid> addKidForUser(@RequestBody KidAddReq kidAddReq, HttpServletRequest request) {
 
-        if (kidAddReq.getOld() == null || kidAddReq.getOld() <= 0) {
+        if (kidAddReq.getOld() == null || kidAddReq.getOld() < 0) {
             return Result.error(ResultErrorEnum.W_PARAM_IS_NULL.getMessage());
         }
         if (kidAddReq.getAvatar() == null || kidAddReq.getNickname() == null) {
