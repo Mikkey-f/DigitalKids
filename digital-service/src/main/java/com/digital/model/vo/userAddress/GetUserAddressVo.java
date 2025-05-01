@@ -8,6 +8,7 @@ import lombok.Data;
  */
 @Data
 public class GetUserAddressVo {
+    private Integer id;
     private String receiverName;
     private String receiverPhone;
     private String receiverProvince;
