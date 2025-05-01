@@ -155,6 +155,7 @@ public class EventConsumer {
         String[] split = message.split(":");
         String requestId = split[0];
         String question = split[1];
+        question += "。给我答案！别给我打印检索本地知识库。";
         QuestionReq questionReq = new QuestionReq(question);
 
         Mono<ResponseEntity<String>> responseEntityMono = webClientQuestion.method(HttpMethod.POST)
