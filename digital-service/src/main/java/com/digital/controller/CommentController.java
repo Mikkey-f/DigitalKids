@@ -56,7 +56,7 @@ public class CommentController {
      * 添加评论
      * @return
      */
-    @PostMapping(path = "/add}")
+    @PostMapping(path = "/add")
     public Result<Boolean> addComment(@RequestBody CommentAddReq commentAddReq,
                              HttpServletRequest request) {
         if (commentAddReq.getContent() == null || commentAddReq.getContent().trim().equals("")
