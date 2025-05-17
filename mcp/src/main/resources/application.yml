@@ -18,7 +18,7 @@ spring:
         sse-message-endpoint: /mcp/message
   ai:
     openai:
-      api-key: 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
+      api-key: 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
 
 
 server:

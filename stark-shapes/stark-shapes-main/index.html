@@ -1,0 +1,82 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stark Shapes</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Stark Shapes">
+  <meta name="description" content="Animate shapes with hand gestures">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://collidingscopes.github.io/stark-shapes/">
+  <meta property="og:title" content="Stark Shapes">
+  <meta property="og:description" content="Animate shapes with hand gestures">
+  <meta property="og:image" content="https://raw.githubusercontent.com/collidingScopes/stark-shapes/main/assets/siteOGImage.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://collidingscopes.github.io/stark-shapes/">
+  <meta property="twitter:title" content="Stark Shapes">
+  <meta property="twitter:description" content="Animate shapes with hand gestures">
+  <meta property="twitter:image" content="https://raw.githubusercontent.com/collidingScopes/stark-shapes/main/assets/siteOGImage.png">
+
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="eb59c81c-27cb-4e1d-9e8c-bfbe70c48cd9"></script>
+
+</head>
+<body>
+  <!-- Video and canvas elements for MediaPipe -->
+  <video class="input_video"></video>
+  <canvas class="output_canvas" width="640px" height="360px"></canvas> <!-- Use internal resolution -->
+
+  <div id="container"></div>
+  <div class="glow"></div>
+  <div id="patternName">Cosmic Sphere</div>
+  <!-- Updated instructions -->
+  <div id="instructions">
+    Right hand: pinch to zoom<br>
+    Left hand: rotate to orbit camera<br>
+    Clap hands together: next pattern<br>
+    (Allow webcam access)
+  </div>
+
+  <div id="instagram-link">
+    <a href="https://www.x.com/measure_plan/" target="_blank">Twitter</a>
+    <a href="https://www.instagram.com/stereo.drift/" target="_blank">Instagram</a>
+  </div>
+
+  <div id="coffee-link">
+    <a href="https://buymeacoffee.com/stereodrift" target="_blank">Support my open source work 🤍</a>
+  </div>
+
+  <!-- Core libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- Post-processing Dependencies (Shaders first) -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+
+<!-- Post-processing Core & Passes -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="chromatic-shader.js"></script>
+
+<!-- MediaPipe Hand Tracking -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+<!-- Main script -->
+<script src="geometry.js"></script>
+<script src="main.js"></script> <!-- Ensure main.js is last -->
+
+</body>
+</html>

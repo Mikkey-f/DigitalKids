@@ -1,10 +1,13 @@
 package com.digital.controller.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.digital.annotation.AuthCheck;
 import com.digital.constant.UserConstant;
 import com.digital.enums.ResultErrorEnum;
+import com.digital.model.entity.ParentingEncyclopedia;
 import com.digital.model.entity.Product;
+import com.digital.model.request.page.PageReq;
 import com.digital.model.request.product.ProductAddReq;
 import com.digital.model.request.product.ProductUpdateReq;
 import com.digital.result.Result;
@@ -111,5 +114,17 @@ public class AdminProductController {
         }
         elasticsearchService.saveProduct(product);
         return Result.success(true);
+    }
+
+    /**
+     * 管理员获得所有商品分页列表
+     * @param pageReq
+     * @return
+     */
+    @GetMapping(value = "/list")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public Result<Page<Product>> getParentingEncyclopediaList(PageReq pageReq) {
+        Page<Product> page = productService.page(new Page<>(pageReq.getCurrent(), pageReq.getPageSize()));
+        return Result.success(page);
     }
 }
