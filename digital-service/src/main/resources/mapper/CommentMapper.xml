@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.Comment">
+            <id property="id" column="id" />
+            <result property="userId" column="user_id" />
+            <result property="entityType" column="entity_type" />
+            <result property="entityId" column="entity_id" />
+            <result property="targetId" column="target_id" />
+            <result property="content" column="content" />
+            <result property="status" column="status" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,entity_type,entity_id,target_id,content,
+        status,create_time,update_time
+    </sql>
+</mapper>

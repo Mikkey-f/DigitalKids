@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.KidBodyMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.KidBody">
+            <id property="bodyId" column="body_id" />
+            <result property="kidId" column="kid_id" />
+            <result property="height" column="height" />
+            <result property="weight" column="weight" />
+            <result property="heartbeatRate" column="heartbeat_rate" />
+            <result property="bmi" column="bmi" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        body_id,kid_id,height,weight,heartbeat_rate,bmi
+    </sql>
+</mapper>

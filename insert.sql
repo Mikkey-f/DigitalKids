@@ -1,0 +1,7 @@
+INSERT INTO product (category_id, name, subtitle, main_image, sub_images, detail, price, stock, status, create_time, update_time)
+VALUES
+    (1, '儿童益智拼图', '锻炼思维能力的拼图玩具', 'https://picsum.photos/200/300?random=1', 'https://picsum.photos/200/300?random=2,https://picsum.photos/200/300?random=3', '这款拼图有多种图案和难度级别，能有效锻炼孩子的观察力和动手能力，适合 3 - 8 岁儿童。', 29.99, 80, 1, '2025-04-01 09:30:00', '2025-04-01 09:30:00'),
+    (2, '儿童卡通保温杯', '可爱外观的保温水杯', 'https://picsum.photos/200/300?random=4', 'https://picsum.photos/200/300?random=5,https://picsum.photos/200/300?random=6', '采用优质不锈钢材质，保温效果好，杯身印有孩子们喜欢的卡通图案，让孩子爱上喝水。', 49.99, 60, 1, '2025-04-10 14:15:00', '2025-04-10 14:15:00'),
+    (3, '儿童故事绘本', '丰富想象力的故事书', 'https://picsum.photos/200/300?random=7', 'https://picsum.photos/200/300?random=8,https://picsum.photos/200/300?random=9', '包含多个精彩的童话故事，配有精美插画，有助于提高孩子的阅读兴趣和语言表达能力，适合 2 - 6 岁儿童。', 19.99, 100, 1, '2025-04-15 11:45:00', '2025-04-15 11:45:00'),
+    (4, '儿童轮滑鞋', '安全舒适的轮滑装备', 'https://picsum.photos/200/300?random=10', 'https://picsum.photos/200/300?random=11,https://picsum.photos/200/300?random=12', '具备可调节尺码功能，轮子顺滑，有良好的减震效果，能保障孩子在轮滑过程中的安全。', 129.99, 40, 1, '2025-04-20 16:20:00', '2025-04-20 16:20:00'),
+    (5, '儿童卡通睡衣', '柔软舒适的睡眠服饰', 'https://picsum.photos/200/300?random=13', 'https://picsum.photos/200/300?random=14,https://picsum.photos/200/300?random=15', '选用天然棉质面料，柔软亲肤，图案可爱，让孩子拥有舒适的睡眠体验。', 39.99, 70, 1, '2025-04-25 10:00:00', '2025-04-25 10:00:00');

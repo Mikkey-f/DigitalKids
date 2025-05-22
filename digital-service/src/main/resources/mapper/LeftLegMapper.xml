@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.digital.mapper.LeftLegMapper">
+
+    <resultMap id="BaseResultMap" type="com.digital.model.entity.LeftLeg">
+            <id property="id" column="id" />
+            <result property="kidId" column="kid_id" />
+            <result property="lengthDifference" column="length_difference" />
+            <result property="muscleStrength" column="muscle_strength" />
+            <result property="kneeReflex" column="knee_reflex" />
+            <result property="swellingDegree" column="swelling_degree" />
+            <result property="recommendation" column="recommendation" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,kid_id,length_difference,muscle_strength,knee_reflex,swelling_degree,
+        recommendation,create_time,update_time
+    </sql>
+</mapper>
